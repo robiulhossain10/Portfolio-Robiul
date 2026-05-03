@@ -1,0 +1,1355 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Robiul Hossain — Java Developer & Tech Enthusiast</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        neonGreen: '#00FF00',
+                        neonBlue: '#00D7FF',
+                        darkBg: '#1e1e1e',
+                        darkSurface: '#252526',
+                        darkBorder: '#333333',
+                        lightBg: '#f5f5f5',
+                        lightSurface: '#ffffff',
+                        lightBorder: '#e0e0e0',
+                    },
+                    fontFamily: {
+                        sans: ['Roboto', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        body { font-family: 'Roboto', sans-serif; }
+        code, pre, .mono { font-family: 'JetBrains Mono', monospace; }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        .dark ::-webkit-scrollbar-thumb { background: #333; border-radius: 3px; }
+        .dark ::-webkit-scrollbar-thumb:hover { background: #555; }
+        ::-webkit-scrollbar-thumb { background: #ccc; border-radius: 3px; }
+
+        /* Terminal cursor blink */
+        @keyframes blink { 0%, 50% { opacity: 1; } 51%, 100% { opacity: 0; } }
+        .cursor-blink { animation: blink 1s infinite; }
+
+        /* Typing animation */
+        @keyframes typing { from { width: 0; } to { width: 100%; } }
+        @keyframes blink-caret { from, to { border-color: transparent; } 50% { border-color: #00FF00; } }
+        .typing-effect {
+            overflow: hidden;
+            white-space: nowrap;
+            border-right: 2px solid #00FF00;
+            animation: typing 3s steps(40, end), blink-caret 0.75s step-end infinite;
+            max-width: fit-content;
+        }
+
+        /* Glow effects */
+        .glow-green { text-shadow: 0 0 10px rgba(0,255,0,0.5), 0 0 20px rgba(0,255,0,0.2); }
+        .glow-blue { text-shadow: 0 0 10px rgba(0,215,255,0.5), 0 0 20px rgba(0,215,255,0.2); }
+        .box-glow-green { box-shadow: 0 0 15px rgba(0,255,0,0.15), inset 0 0 15px rgba(0,255,0,0.05); }
+        .box-glow-blue { box-shadow: 0 0 15px rgba(0,215,255,0.15), inset 0 0 15px rgba(0,215,255,0.05); }
+
+        /* Code syntax colors */
+        .token-keyword { color: #569cd6; }
+        .token-string { color: #ce9178; }
+        .token-comment { color: #6a9955; font-style: italic; }
+        .token-type { color: #4ec9b0; }
+        .token-number { color: #b5cea8; }
+        .token-function { color: #dcdcaa; }
+        .token-annotation { color: #dcdcaa; }
+        .token-operator { color: #d4d4d4; }
+        .token-paren { color: #ffd700; }
+        .token-plain { color: #d4d4d4; }
+
+        .light-mode .token-keyword { color: #0000ff; }
+        .light-mode .token-string { color: #a31515; }
+        .light-mode .token-comment { color: #008000; font-style: italic; }
+        .light-mode .token-type { color: #267f99; }
+        .light-mode .token-number { color: #098658; }
+        .light-mode .token-function { color: #795e26; }
+        .light-mode .token-annotation { color: #795e26; }
+        .light-mode .token-operator { color: #000000; }
+        .light-mode .token-paren { color: #8b0000; }
+        .light-mode .token-plain { color: #000000; }
+
+        /* Transition */
+        .theme-transition, .theme-transition * {
+            transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease !important;
+        }
+
+        /* Nav active indicator */
+        .nav-link.active { position: relative; }
+        .nav-link.active::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, #00FF00, #00D7FF);
+            border-radius: 1px;
+        }
+
+        /* Article card hover */
+        .article-card { transition: transform 0.2s ease, box-shadow 0.2s ease; }
+        .article-card:hover { transform: translateY(-2px); }
+
+        /* Tag active state */
+        .tag-btn.active-tag {
+            background: linear-gradient(135deg, rgba(0,255,0,0.2), rgba(0,215,255,0.2));
+            border-color: #00FF00;
+            color: #00FF00;
+        }
+        .light .tag-btn.active-tag {
+            background: linear-gradient(135deg, rgba(0,128,0,0.1), rgba(0,150,200,0.1));
+            border-color: #008800;
+            color: #008800;
+        }
+
+        /* GitHub card */
+        .github-card { transition: transform 0.2s ease; }
+        .github-card:hover { transform: scale(1.02); }
+
+        /* Skill bar animation */
+        @keyframes fillBar { from { width: 0%; } }
+        .skill-bar-fill { animation: fillBar 1.5s ease-out forwards; }
+
+        /* Toast */
+        @keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+        @keyframes slideOut { from { transform: translateX(0); opacity: 1; } to { transform: translateX(100%); opacity: 0; } }
+        .toast-in { animation: slideIn 0.3s ease forwards; }
+        .toast-out { animation: slideOut 0.3s ease forwards; }
+
+        /* Particle background */
+        .particle {
+            position: absolute;
+            border-radius: 50%;
+            pointer-events: none;
+            opacity: 0.3;
+        }
+
+        /* Mobile menu */
+        .mobile-menu { transform: translateX(100%); transition: transform 0.3s ease; }
+        .mobile-menu.open { transform: translateX(0); }
+
+        /* Code block line numbers */
+        .line-num { 
+            display: inline-block; 
+            width: 3em; 
+            text-align: right; 
+            padding-right: 1em; 
+            color: #555; 
+            user-select: none;
+        }
+        .light-mode .line-num { color: #aaa; }
+    </style>
+</head>
+<body class="dark:bg-[#111111] bg-lightBg dark:text-[#e6e6e6] text-gray-900 theme-transition">
+
+    <!-- Toast Container -->
+    <div id="toast-container" class="fixed top-4 right-4 z-[100] flex flex-col gap-2"></div>
+
+    <!-- Navigation -->
+    <nav id="navbar" class="fixed top-0 left-0 right-0 z-50 dark:bg-[#1e1e1e]/90 bg-white/90 backdrop-blur-md border-b dark:border-darkBorder border-lightBorder theme-transition">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
+            <!-- Logo -->
+            <a href="#home" class="flex items-center gap-2 group">
+                <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-neonGreen to-neonBlue flex items-center justify-center">
+                    <span class="dark:text-black text-white font-bold text-sm">RH</span>
+                </div>
+                <span class="font-mono text-sm dark:text-[#e6e6e6] text-gray-900 hidden sm:inline">
+                    <span class="text-neonGreen">$</span> robiul.dev
+                </span>
+            </a>
+
+            <!-- Desktop Nav -->
+            <div class="hidden md:flex items-center gap-6">
+                <a href="#home" class="nav-link active text-sm font-medium dark:text-[#e6e6e6] text-gray-700 hover:text-neonGreen dark:hover:text-neonGreen transition-colors">Home</a>
+                <a href="#articles" class="nav-link text-sm font-medium dark:text-gray-400 text-gray-500 hover:text-neonGreen dark:hover:text-neonGreen transition-colors">Articles</a>
+                <a href="#projects" class="nav-link text-sm font-medium dark:text-gray-400 text-gray-500 hover:text-neonGreen dark:hover:text-neonGreen transition-colors">Projects</a>
+                <a href="#about" class="nav-link text-sm font-medium dark:text-gray-400 text-gray-500 hover:text-neonGreen dark:hover:text-neonGreen transition-colors">About</a>
+            </div>
+
+            <!-- Right side -->
+            <div class="flex items-center gap-3">
+                <!-- Theme Toggle -->
+                <button id="theme-toggle" class="w-9 h-9 rounded-lg dark:bg-darkSurface bg-gray-100 dark:border-darkBorder border-lightBorder border flex items-center justify-center hover:border-neonGreen transition-colors" title="Toggle theme">
+                    <i data-lucide="sun" class="w-4 h-4 dark:text-neonGreen text-gray-600 hidden dark:block"></i>
+                    <i data-lucide="moon" class="w-4 h-4 text-gray-600 dark:hidden block"></i>
+                </button>
+
+                <!-- Mobile Menu Button -->
+                <button id="mobile-menu-btn" class="md:hidden w-9 h-9 rounded-lg dark:bg-darkSurface bg-gray-100 dark:border-darkBorder border-lightBorder border flex items-center justify-center">
+                    <i data-lucide="menu" class="w-4 h-4 dark:text-[#e6e6e6] text-gray-700"></i>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Mobile Menu -->
+    <div id="mobile-menu" class="mobile-menu fixed top-0 right-0 bottom-0 w-64 z-[60] dark:bg-darkBg bg-white border-l dark:border-darkBorder border-lightBorder p-6 theme-transition">
+        <div class="flex justify-between items-center mb-8">
+            <span class="font-mono text-sm text-neonGreen">Navigation</span>
+            <button id="mobile-menu-close" class="w-8 h-8 rounded-lg dark:bg-darkSurface bg-gray-100 flex items-center justify-center">
+                <i data-lucide="x" class="w-4 h-4"></i>
+            </button>
+        </div>
+        <div class="flex flex-col gap-4">
+            <a href="#home" class="mobile-nav-link text-base font-medium dark:text-[#e6e6e6] text-gray-700 hover:text-neonGreen transition-colors py-2 border-b dark:border-darkBorder border-lightBorder">Home</a>
+            <a href="#articles" class="mobile-nav-link text-base font-medium dark:text-gray-400 text-gray-500 hover:text-neonGreen transition-colors py-2 border-b dark:border-darkBorder border-lightBorder">Articles</a>
+            <a href="#projects" class="mobile-nav-link text-base font-medium dark:text-gray-400 text-gray-500 hover:text-neonGreen transition-colors py-2 border-b dark:border-darkBorder border-lightBorder">Projects</a>
+            <a href="#about" class="mobile-nav-link text-base font-medium dark:text-gray-400 text-gray-500 hover:text-neonGreen transition-colors py-2">About</a>
+        </div>
+    </div>
+    <div id="mobile-overlay" class="fixed inset-0 bg-black/50 z-[55] hidden"></div>
+
+    <!-- ==================== HERO SECTION ==================== -->
+    <section id="home" class="relative min-h-screen flex items-center justify-center overflow-hidden pt-16">
+        <!-- Background particles -->
+        <div id="particles" class="absolute inset-0 overflow-hidden pointer-events-none"></div>
+        <!-- Grid background -->
+        <div class="absolute inset-0 opacity-[0.03]" style="background-image: linear-gradient(#00FF00 1px, transparent 1px), linear-gradient(90deg, #00FF00 1px, transparent 1px); background-size: 60px 60px;"></div>
+        
+        <div class="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 w-full">
+            <div class="flex flex-col lg:flex-row items-center gap-12 lg:gap-16">
+                <!-- Left: Text -->
+                <div class="flex-1 text-center lg:text-left">
+                    <!-- Terminal-style greeting -->
+                    <div class="dark:bg-darkSurface/80 bg-gray-100 rounded-lg p-3 mb-6 inline-flex items-center gap-2 font-mono text-xs border dark:border-darkBorder border-lightBorder">
+                        <span class="w-3 h-3 rounded-full bg-red-500/80"></span>
+                        <span class="w-3 h-3 rounded-full bg-yellow-500/80"></span>
+                        <span class="w-3 h-3 rounded-full bg-green-500/80"></span>
+                        <span class="ml-2 dark:text-gray-400 text-gray-500">terminal</span>
+                    </div>
+
+                    <div class="font-mono text-sm dark:text-gray-400 text-gray-500 mb-2">
+                        <span class="text-neonGreen">robiul@dev</span><span class="dark:text-gray-500 text-gray-400">:</span><span class="text-neonBlue">~</span><span class="dark:text-gray-500 text-gray-400">$</span> cat intro.md
+                    </div>
+                    
+                    <h1 class="text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight mb-4">
+                        <span class="dark:text-[#e6e6e6] text-gray-900">Hi, I'm </span>
+                        <span class="bg-gradient-to-r from-neonGreen to-neonBlue bg-clip-text text-transparent">Robiul Hossain</span>
+                    </h1>
+                    
+                    <p class="text-lg sm:text-xl dark:text-gray-400 text-gray-500 mb-2 font-mono">
+                        <span class="text-neonGreen">&gt;</span> Java Developer <span class="dark:text-gray-600 text-gray-300">|</span> Tech Enthusiast <span class="dark:text-gray-600 text-gray-300">|</span> Open Source
+                    </p>
+                    
+                    <p class="dark:text-gray-500 text-gray-400 text-base max-w-lg mx-auto lg:mx-0 mb-8 leading-relaxed">
+                        Crafting robust backend systems with Java & Spring Boot. Passionate about clean code, 
+                        system design, and sharing knowledge with the developer community.
+                    </p>
+
+                    <!-- Terminal prompt with typing effect -->
+                    <div class="dark:bg-darkSurface/60 bg-gray-100 rounded-lg p-4 mb-8 max-w-lg mx-auto lg:mx-0 border dark:border-darkBorder border-lightBorder">
+                        <div class="font-mono text-sm">
+                            <span class="text-neonGreen">robiul@dev</span><span class="dark:text-gray-500 text-gray-400">:</span><span class="text-neonBlue">~</span><span class="dark:text-gray-500 text-gray-400">$</span>
+                            <span class="dark:text-[#e6e6e6] text-gray-800 typing-effect"> java -version &amp;&amp; echo "Ready to code!"</span>
+                            <span class="cursor-blink text-neonGreen">▋</span>
+                        </div>
+                        <div class="font-mono text-xs dark:text-gray-500 text-gray-400 mt-2">
+                            openjdk version "21.0.2" 2024-01-16<br>
+                            Ready to code!
+                        </div>
+                    </div>
+
+                    <!-- Social Links -->
+                    <div class="flex items-center gap-3 justify-center lg:justify-start">
+                        <a href="#" class="w-10 h-10 rounded-lg dark:bg-darkSurface bg-gray-100 border dark:border-darkBorder border-lightBorder flex items-center justify-center dark:text-gray-400 text-gray-500 hover:text-neonGreen hover:border-neonGreen transition-all group" title="GitHub">
+                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+                        </a>
+                        <a href="#" class="w-10 h-10 rounded-lg dark:bg-darkSurface bg-gray-100 border dark:border-darkBorder border-lightBorder flex items-center justify-center dark:text-gray-400 text-gray-500 hover:text-neonBlue hover:border-neonBlue transition-all group" title="LinkedIn">
+                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+                        </a>
+                        <a href="#" class="w-10 h-10 rounded-lg dark:bg-darkSurface bg-gray-100 border dark:border-darkBorder border-lightBorder flex items-center justify-center dark:text-gray-400 text-gray-500 hover:text-neonGreen hover:border-neonGreen transition-all group" title="Twitter/X">
+                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+                        </a>
+                        <a href="#" class="w-10 h-10 rounded-lg dark:bg-darkSurface bg-gray-100 border dark:border-darkBorder border-lightBorder flex items-center justify-center dark:text-gray-400 text-gray-500 hover:text-neonBlue hover:border-neonBlue transition-all group" title="Email">
+                            <i data-lucide="mail" class="w-5 h-5"></i>
+                        </a>
+                        <a href="#" class="w-10 h-10 rounded-lg dark:bg-darkSurface bg-gray-100 border dark:border-darkBorder border-lightBorder flex items-center justify-center dark:text-gray-400 text-gray-500 hover:text-neonGreen hover:border-neonGreen transition-all group" title="RSS Feed">
+                            <i data-lucide="rss" class="w-5 h-5"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Right: Avatar & Code Card -->
+                <div class="flex-shrink-0">
+                    <div class="relative">
+                        <!-- Avatar -->
+                        <div class="w-48 h-48 sm:w-56 sm:h-56 rounded-2xl overflow-hidden border-2 dark:border-darkBorder border-lightBorder mx-auto box-glow-green">
+                            <img src="https://picsum.photos/seed/robiul-avatar/400/400.jpg" alt="Robiul Hossain" class="w-full h-full object-cover">
+                        </div>
+                        <!-- Status badge -->
+                        <div class="absolute -bottom-2 -right-2 dark:bg-darkBg bg-white rounded-lg px-3 py-1.5 border dark:border-darkBorder border-lightBorder font-mono text-xs flex items-center gap-1.5">
+                            <span class="w-2 h-2 rounded-full bg-neonGreen animate-pulse"></span>
+                            <span class="dark:text-gray-400 text-gray-500">Available</span>
+                        </div>
+                        <!-- Decorative brackets -->
+                        <div class="absolute -top-4 -left-4 text-neonGreen/30 text-4xl font-mono font-bold">{</div>
+                        <div class="absolute -bottom-4 -right-4 text-neonBlue/30 text-4xl font-mono font-bold">}</div>
+                    </div>
+
+                    <!-- Mini code card -->
+                    <div class="mt-6 dark:bg-darkSurface/80 bg-gray-100 rounded-xl p-4 border dark:border-darkBorder border-lightBorder max-w-[280px] mx-auto">
+                        <div class="flex items-center gap-1.5 mb-3">
+                            <span class="w-2.5 h-2.5 rounded-full bg-red-500/70"></span>
+                            <span class="w-2.5 h-2.5 rounded-full bg-yellow-500/70"></span>
+                            <span class="w-2.5 h-2.5 rounded-full bg-green-500/70"></span>
+                            <span class="ml-auto text-[10px] dark:text-gray-500 text-gray-400 font-mono">Developer.java</span>
+                        </div>
+                        <pre class="font-mono text-xs leading-5"><code><span class="token-keyword">public class</span> <span class="token-type">Developer</span> <span class="token-paren">{</span>
+  <span class="token-type">String</span> name = <span class="token-string">"Robiul"</span>;
+  <span class="token-type">String</span> role = <span class="token-string">"Java Dev"</span>;
+  <span class="token-type">int</span> coffee = <span class="token-number">999</span>;
+<span class="token-paren">}</span></code></pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Scroll indicator -->
+        <div class="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2">
+            <span class="text-[10px] font-mono dark:text-gray-500 text-gray-400 uppercase tracking-widest">Scroll</span>
+            <div class="w-5 h-8 rounded-full border dark:border-gray-600 border-gray-300 flex justify-center pt-1.5">
+                <div class="w-1 h-2 rounded-full bg-neonGreen animate-bounce"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== ARTICLES SECTION ==================== -->
+    <section id="articles" class="py-24 px-4 sm:px-6">
+        <div class="max-w-6xl mx-auto">
+            <!-- Section Header -->
+            <div class="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 mb-10">
+                <div>
+                    <div class="font-mono text-xs text-neonGreen mb-2 flex items-center gap-2">
+                        <span class="w-8 h-px bg-neonGreen"></span>
+                        ./articles
+                    </div>
+                    <h2 class="text-3xl sm:text-4xl font-bold dark:text-[#e6e6e6] text-gray-900 tracking-tight">Latest Articles</h2>
+                    <p class="dark:text-gray-500 text-gray-400 mt-2 text-sm">Thoughts on Java, system design, and developer tools</p>
+                </div>
+                <!-- Tag Filters -->
+                <div class="flex gap-2 flex-wrap" id="tag-filters">
+                    <button class="tag-btn active-tag px-3 py-1.5 rounded-lg text-xs font-mono border dark:border-darkBorder border-lightBorder dark:text-gray-400 text-gray-500 hover:border-neonGreen transition-all" data-tag="all">All</button>
+                    <button class="tag-btn px-3 py-1.5 rounded-lg text-xs font-mono border dark:border-darkBorder border-lightBorder dark:text-gray-400 text-gray-500 hover:border-neonGreen transition-all" data-tag="backend">Back End</button>
+                    <button class="tag-btn px-3 py-1.5 rounded-lg text-xs font-mono border dark:border-darkBorder border-lightBorder dark:text-gray-400 text-gray-500 hover:border-neonGreen transition-all" data-tag="frontend">Front End</button>
+                    <button class="tag-btn px-3 py-1.5 rounded-lg text-xs font-mono border dark:border-darkBorder border-lightBorder dark:text-gray-400 text-gray-500 hover:border-neonGreen transition-all" data-tag="tools">Tools</button>
+                </div>
+            </div>
+
+            <!-- Articles Grid -->
+            <div id="articles-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+                <!-- Article 1 -->
+                <article class="article-card dark:bg-darkSurface/60 bg-white rounded-xl border dark:border-darkBorder border-lightBorder overflow-hidden cursor-pointer group" data-tag="backend" data-article="1">
+                    <div class="h-40 overflow-hidden relative">
+                        <img src="https://picsum.photos/seed/java-spring/600/300.jpg" alt="Spring Boot" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
+                        <div class="absolute top-3 left-3 px-2 py-0.5 rounded text-[10px] font-mono font-medium bg-neonGreen/20 text-neonGreen border border-neonGreen/30">BACK END</div>
+                    </div>
+                    <div class="p-5">
+                        <div class="flex items-center gap-2 text-[10px] font-mono dark:text-gray-500 text-gray-400 mb-2">
+                            <span>2024-12-15</span>
+                            <span>·</span>
+                            <span>8 min read</span>
+                        </div>
+                        <h3 class="font-bold dark:text-[#e6e6e6] text-gray-900 mb-2 group-hover:text-neonGreen transition-colors">Mastering Spring Boot 3: A Deep Dive into Virtual Threads</h3>
+                        <p class="text-sm dark:text-gray-500 text-gray-400 line-clamp-2">Explore how Project Loom's virtual threads revolutionize Spring Boot applications, with practical examples and performance benchmarks.</p>
+                        <div class="flex gap-2 mt-3">
+                            <span class="px-2 py-0.5 rounded text-[10px] font-mono dark:bg-darkBg bg-gray-100 dark:text-gray-400 text-gray-500">Java 21</span>
+                            <span class="px-2 py-0.5 rounded text-[10px] font-mono dark:bg-darkBg bg-gray-100 dark:text-gray-400 text-gray-500">Spring Boot</span>
+                            <span class="px-2 py-0.5 rounded text-[10px] font-mono dark:bg-darkBg bg-gray-100 dark:text-gray-400 text-gray-500">Concurrency</span>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- Article 2 -->
+                <article class="article-card dark:bg-darkSurface/60 bg-white rounded-xl border dark:border-darkBorder border-lightBorder overflow-hidden cursor-pointer group" data-tag="backend" data-article="2">
+                    <div class="h-40 overflow-hidden relative">
+                        <img src="https://picsum.photos/seed/jvm-internals/600/300.jpg" alt="JVM" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
+                        <div class="absolute top-3 left-3 px-2 py-0.5 rounded text-[10px] font-mono font-medium bg-neonGreen/20 text-neonGreen border border-neonGreen/30">BACK END</div>
+                    </div>
+                    <div class="p-5">
+                        <div class="flex items-center gap-2 text-[10px] font-mono dark:text-gray-500 text-gray-400 mb-2">
+                            <span>2024-11-28</span>
+                            <span>·</span>
+                            <span>12 min read</span>
+                        </div>
+                        <h3 class="font-bold dark:text-[#e6e6e6] text-gray-900 mb-2 group-hover:text-neonGreen transition-colors">JVM Internals: Understanding GC Algorithms from Scratch</h3>
+                        <p class="text-sm dark:text-gray-500 text-gray-400 line-clamp-2">A comprehensive guide to garbage collection in the JVM — G1, ZGC, Shenandoah, and when to use each one in production.</p>
+                        <div class="flex gap-2 mt-3">
+                            <span class="px-2 py-0.5 rounded text-[10px] font-mono dark:bg-darkBg bg-gray-100 dark:text-gray-400 text-gray-500">JVM</span>
+                            <span class="px-2 py-0.5 rounded text-[10px] font-mono dark:bg-darkBg bg-gray-100 dark:text-gray-400 text-gray-500">GC</span>
+                            <span class="px-2 py-0.5 rounded text-[10px] font-mono dark:bg-darkBg bg-gray-100 dark:text-gray-400 text-gray-500">Performance</span>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- Article 3 -->
+                <article class="article-card dark:bg-darkSurface/60 bg-white rounded-xl border dark:border-darkBorder border-lightBorder overflow-hidden cursor-pointer group" data-tag="tools" data-article="3">
+                    <div class="h-40 overflow-hidden relative">
+                        <img src="https://picsum.photos/seed/docker-k8s/600/300.jpg" alt="Docker" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
+                        <div class="absolute top-3 left-3 px-2 py-0.5 rounded text-[10px] font-mono font-medium bg-neonBlue/20 text-neonBlue border border-neonBlue/30">TOOLS</div>
+                    </div>
+                    <div class="p-5">
+                        <div class="flex items-center gap-2 text-[10px] font-mono dark:text-gray-500 text-gray-400 mb-2">
+                            <span>2024-11-10</span>
+                            <span>·</span>
+                            <span>6 min read</span>
+                        </div>
+                        <h3 class="font-bold dark:text-[#e6e6e6] text-gray-900 mb-2 group-hover:text-neonGreen transition-colors">Docker Compose for Java Microservices: A Practical Guide</h3>
+                        <p class="text-sm dark:text-gray-500 text-gray-400 line-clamp-2">Set up a complete microservices architecture with Docker Compose, including service discovery and health checks.</p>
+                        <div class="flex gap-2 mt-3">
+                            <span class="px-2 py-0.5 rounded text-[10px] font-mono dark:bg-darkBg bg-gray-100 dark:text-gray-400 text-gray-500">Docker</span>
+                            <span class="px-2 py-0.5 rounded text-[10px] font-mono dark:bg-darkBg bg-gray-100 dark:text-gray-400 text-gray-500">Microservices</span>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- Article 4 -->
+                <article class="article-card dark:bg-darkSurface/60 bg-white rounded-xl border dark:border-darkBorder border-lightBorder overflow-hidden cursor-pointer group" data-tag="frontend" data-article="4">
+                    <div class="h-40 overflow-hidden relative">
+                        <img src="https://picsum.photos/seed/react-typescript/600/300.jpg" alt="React" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
+                        <div class="absolute top-3 left-3 px-2 py-0.5 rounded text-[10px] font-mono font-medium bg-purple-500/20 text-purple-400 border border-purple-500/30">FRONT END</div>
+                    </div>
+                    <div class="p-5">
+                        <div class="flex items-center gap-2 text-[10px] font-mono dark:text-gray-500 text-gray-400 mb-2">
+                            <span>2024-10-22</span>
+                            <span>·</span>
+                            <span>10 min read</span>
+                        </div>
+                        <h3 class="font-bold dark:text-[#e6e6e6] text-gray-900 mb-2 group-hover:text-neonGreen transition-colors">Building Type-Safe APIs with React Query & TypeScript</h3>
+                        <p class="text-sm dark:text-gray-500 text-gray-400 line-clamp-2">How to create fully type-safe API layers in React using TypeScript generics and React Query's inference capabilities.</p>
+                        <div class="flex gap-2 mt-3">
+                            <span class="px-2 py-0.5 rounded text-[10px] font-mono dark:bg-darkBg bg-gray-100 dark:text-gray-400 text-gray-500">React</span>
+                            <span class="px-2 py-0.5 rounded text-[10px] font-mono dark:bg-darkBg bg-gray-100 dark:text-gray-400 text-gray-500">TypeScript</span>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- Article 5 -->
+                <article class="article-card dark:bg-darkSurface/60 bg-white rounded-xl border dark:border-darkBorder border-lightBorder overflow-hidden cursor-pointer group" data-tag="backend" data-article="5">
+                    <div class="h-40 overflow-hidden relative">
+                        <img src="https://picsum.photos/seed/kafka-event/600/300.jpg" alt="Kafka" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
+                        <div class="absolute top-3 left-3 px-2 py-0.5 rounded text-[10px] font-mono font-medium bg-neonGreen/20 text-neonGreen border border-neonGreen/30">BACK END</div>
+                    </div>
+                    <div class="p-5">
+                        <div class="flex items-center gap-2 text-[10px] font-mono dark:text-gray-500 text-gray-400 mb-2">
+                            <span>2024-10-05</span>
+                            <span>·</span>
+                            <span>15 min read</span>
+                        </div>
+                        <h3 class="font-bold dark:text-[#e6e6e6] text-gray-900 mb-2 group-hover:text-neonGreen transition-colors">Event-Driven Architecture with Kafka & Spring Cloud Stream</h3>
+                        <p class="text-sm dark:text-gray-500 text-gray-400 line-clamp-2">Design resilient event-driven systems using Apache Kafka, with dead letter queues and exactly-once semantics.</p>
+                        <div class="flex gap-2 mt-3">
+                            <span class="px-2 py-0.5 rounded text-[10px] font-mono dark:bg-darkBg bg-gray-100 dark:text-gray-400 text-gray-500">Kafka</span>
+                            <span class="px-2 py-0.5 rounded text-[10px] font-mono dark:bg-darkBg bg-gray-100 dark:text-gray-400 text-gray-500">EDA</span>
+                            <span class="px-2 py-0.5 rounded text-[10px] font-mono dark:bg-darkBg bg-gray-100 dark:text-gray-400 text-gray-500">Spring</span>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- Article 6 -->
+                <article class="article-card dark:bg-darkSurface/60 bg-white rounded-xl border dark:border-darkBorder border-lightBorder overflow-hidden cursor-pointer group" data-tag="tools" data-article="6">
+                    <div class="h-40 overflow-hidden relative">
+                        <img src="https://picsum.photos/seed/neovim-dev/600/300.jpg" alt="Neovim" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
+                        <div class="absolute top-3 left-3 px-2 py-0.5 rounded text-[10px] font-mono font-medium bg-neonBlue/20 text-neonBlue border border-neonBlue/30">TOOLS</div>
+                    </div>
+                    <div class="p-5">
+                        <div class="flex items-center gap-2 text-[10px] font-mono dark:text-gray-500 text-gray-400 mb-2">
+                            <span>2024-09-18</span>
+                            <span>·</span>
+                            <span>7 min read</span>
+                        </div>
+                        <h3 class="font-bold dark:text-[#e6e6e6] text-gray-900 mb-2 group-hover:text-neonGreen transition-colors">My Neovim Setup for Java Development in 2024</h3>
+                        <p class="text-sm dark:text-gray-500 text-gray-400 line-clamp-2">From lazy.nvim to jdtls — how I configured Neovim as a full-fledged Java IDE with LSP, debugging, and testing.</p>
+                        <div class="flex gap-2 mt-3">
+                            <span class="px-2 py-0.5 rounded text-[10px] font-mono dark:bg-darkBg bg-gray-100 dark:text-gray-400 text-gray-500">Neovim</span>
+                            <span class="px-2 py-0.5 rounded text-[10px] font-mono dark:bg-darkBg bg-gray-100 dark:text-gray-400 text-gray-500">LSP</span>
+                        </div>
+                    </div>
+                </article>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== ARTICLE DETAIL (MODAL) ==================== -->
+    <div id="article-modal" class="fixed inset-0 z-[70] hidden">
+        <div class="absolute inset-0 bg-black/80 backdrop-blur-sm" id="article-modal-overlay"></div>
+        <div class="relative z-10 h-full overflow-y-auto">
+            <div class="max-w-3xl mx-auto px-4 sm:px-6 py-16">
+                <!-- Close button -->
+                <button id="article-close" class="fixed top-4 right-4 w-10 h-10 rounded-full dark:bg-darkSurface bg-white border dark:border-darkBorder border-lightBorder flex items-center justify-center dark:text-[#e6e6e6] text-gray-900 hover:border-neonGreen transition-colors z-20">
+                    <i data-lucide="x" class="w-5 h-5"></i>
+                </button>
+
+                <article id="article-content" class="dark:bg-darkBg/95 bg-white/95 rounded-2xl border dark:border-darkBorder border-lightBorder overflow-hidden theme-transition">
+                    <!-- Content will be injected by JS -->
+                </article>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== FEATURED CODE SECTION ==================== -->
+    <section class="py-16 px-4 sm:px-6">
+        <div class="max-w-6xl mx-auto">
+            <div class="dark:bg-darkSurface/40 bg-gray-50 rounded-2xl border dark:border-darkBorder border-lightBorder p-6 sm:p-10">
+                <div class="font-mono text-xs text-neonGreen mb-4 flex items-center gap-2">
+                    <span class="w-8 h-px bg-neonGreen"></span>
+                    ./featured-snippet
+                </div>
+                <h2 class="text-2xl sm:text-3xl font-bold dark:text-[#e6e6e6] text-gray-900 mb-2 tracking-tight">Code Snippet of the Week</h2>
+                <p class="dark:text-gray-500 text-gray-400 text-sm mb-6">A reusable pattern for building type-safe REST responses in Spring Boot</p>
+
+                <div class="dark:bg-[#1a1a1a] bg-[#fafafa] rounded-xl border dark:border-darkBorder border-lightBorder overflow-hidden">
+                    <div class="flex items-center justify-between px-4 py-2.5 border-b dark:border-darkBorder border-lightBorder">
+                        <div class="flex items-center gap-1.5">
+                            <span class="w-3 h-3 rounded-full bg-red-500/70"></span>
+                            <span class="w-3 h-3 rounded-full bg-yellow-500/70"></span>
+                            <span class="w-3 h-3 rounded-full bg-green-500/70"></span>
+                        </div>
+                        <span class="text-[10px] font-mono dark:text-gray-500 text-gray-400">ApiResponse.java</span>
+                        <button onclick="copyCode(this)" class="text-[10px] font-mono dark:text-gray-500 text-gray-400 hover:text-neonGreen transition-colors flex items-center gap-1">
+                            <i data-lucide="copy" class="w-3 h-3"></i> Copy
+                        </button>
+                    </div>
+                    <div class="p-4 overflow-x-auto">
+                        <pre class="font-mono text-xs sm:text-sm leading-6"><code><span class="line-num"> 1</span><span class="token-keyword">public class</span> <span class="token-type">ApiResponse</span>&lt;<span class="token-type">T</span>&gt; <span class="token-paren">{</span>
+<span class="line-num"> 2</span>    <span class="token-keyword">private final</span> <span class="token-type">boolean</span> success;
+<span class="line-num"> 3</span>    <span class="token-keyword">private final</span> <span class="token-type">T</span> data;
+<span class="line-num"> 4</span>    <span class="token-keyword">private final</span> <span class="token-type">String</span> message;
+<span class="line-num"> 5</span>    <span class="token-keyword">private final</span> <span class="token-type">LocalDateTime</span> timestamp;
+<span class="line-num"> 6</span>
+<span class="line-num"> 7</span>    <span class="token-comment">// Private constructor — use factory methods</span>
+<span class="line-num"> 8</span>    <span class="token-keyword">private</span> <span class="token-function">ApiResponse</span><span class="token-paren">(</span><span class="token-type">boolean</span> success, <span class="token-type">T</span> data, <span class="token-type">String</span> msg<span class="token-paren">)</span> <span class="token-paren">{</span>
+<span class="line-num"> 9</span>        <span class="token-keyword">this</span>.success = success;
+<span class="line-num">10</span>        <span class="token-keyword">this</span>.data = data;
+<span class="line-num">11</span>        <span class="token-keyword">this</span>.message = msg;
+<span class="line-num">12</span>        <span class="token-keyword">this</span>.timestamp = <span class="token-type">LocalDateTime</span>.<span class="token-function">now</span><span class="token-paren">()</span>;
+<span class="line-num">13</span>    <span class="token-paren">}</span>
+<span class="line-num">14</span>
+<span class="line-num">15</span>    <span class="token-keyword">public static</span> &lt;<span class="token-type">T</span>&gt; <span class="token-type">ApiResponse</span>&lt;<span class="token-type">T</span>&gt; <span class="token-function">ok</span><span class="token-paren">(</span><span class="token-type">T</span> data<span class="token-paren">)</span> <span class="token-paren">{</span>
+<span class="line-num">16</span>        <span class="token-keyword">return new</span> <span class="token-type">ApiResponse</span>&lt;&gt;<span class="token-paren">(</span><span class="token-keyword">true</span>, data, <span class="token-string">"Success"</span><span class="token-paren">)</span>;
+<span class="line-num">17</span>    <span class="token-paren">}</span>
+<span class="line-num">18</span>
+<span class="line-num">19</span>    <span class="token-keyword">public static</span> &lt;<span class="token-type">T</span>&gt; <span class="token-type">ApiResponse</span>&lt;<span class="token-type">T</span>&gt; <span class="token-function">error</span><span class="token-paren">(</span><span class="token-type">String</span> msg<span class="token-paren">)</span> <span class="token-paren">{</span>
+<span class="line-num">20</span>        <span class="token-keyword">return new</span> <span class="token-type">ApiResponse</span>&lt;&gt;<span class="token-paren">(</span><span class="token-keyword">false</span>, <span class="token-keyword">null</span>, msg<span class="token-paren">)</span>;
+<span class="line-num">21</span>    <span class="token-paren">}</span>
+<span class="line-num">22</span><span class="token-paren">}</span></code></pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== PROJECTS SECTION ==================== -->
+    <section id="projects" class="py-24 px-4 sm:px-6">
+        <div class="max-w-6xl mx-auto">
+            <div class="font-mono text-xs text-neonBlue mb-2 flex items-center gap-2">
+                <span class="w-8 h-px bg-neonBlue"></span>
+                ./projects
+            </div>
+            <h2 class="text-3xl sm:text-4xl font-bold dark:text-[#e6e6e6] text-gray-900 tracking-tight mb-2">Open Source Projects</h2>
+            <p class="dark:text-gray-500 text-gray-400 text-sm mb-10">Selected repositories from my GitHub profile</p>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                <!-- Project 1 -->
+                <div class="github-card dark:bg-darkSurface/60 bg-white rounded-xl border dark:border-darkBorder border-lightBorder p-5 hover:border-neonGreen/50 transition-all">
+                    <div class="flex items-start justify-between mb-3">
+                        <div class="flex items-center gap-2">
+                            <i data-lucide="book-open" class="w-4 h-4 text-neonGreen"></i>
+                            <a href="#" class="font-mono text-sm font-bold dark:text-neonBlue text-blue-600 hover:underline">spring-boot-starter-cache</a>
+                        </div>
+                        <span class="px-2 py-0.5 rounded text-[10px] font-mono dark:bg-neonGreen/10 bg-green-50 dark:text-neonGreen text-green-700 border dark:border-neonGreen/20 border-green-200">Public</span>
+                    </div>
+                    <p class="text-sm dark:text-gray-400 text-gray-500 mb-4">A custom Spring Boot starter for multi-layer caching with Redis and Caffeine. Supports TTL, cache invalidation, and metrics.</p>
+                    <div class="flex items-center gap-4 text-xs font-mono dark:text-gray-500 text-gray-400">
+                        <span class="flex items-center gap-1"><span class="w-2.5 h-2.5 rounded-full bg-orange-500"></span> Java</span>
+                        <span class="flex items-center gap-1"><i data-lucide="star" class="w-3 h-3"></i> 248</span>
+                        <span class="flex items-center gap-1"><i data-lucide="git-fork" class="w-3 h-3"></i> 56</span>
+                        <span class="ml-auto">Updated 3 days ago</span>
+                    </div>
+                </div>
+
+                <!-- Project 2 -->
+                <div class="github-card dark:bg-darkSurface/60 bg-white rounded-xl border dark:border-darkBorder border-lightBorder p-5 hover:border-neonBlue/50 transition-all">
+                    <div class="flex items-start justify-between mb-3">
+                        <div class="flex items-center gap-2">
+                            <i data-lucide="zap" class="w-4 h-4 text-neonBlue"></i>
+                            <a href="#" class="font-mono text-sm font-bold dark:text-neonBlue text-blue-600 hover:underline">jvm-benchmarker</a>
+                        </div>
+                        <span class="px-2 py-0.5 rounded text-[10px] font-mono dark:bg-neonGreen/10 bg-green-50 dark:text-neonGreen text-green-700 border dark:border-neonGreen/20 border-green-200">Public</span>
+                    </div>
+                    <p class="text-sm dark:text-gray-400 text-gray-500 mb-4">Microbenchmarking toolkit for JVM applications. Wraps JMH with sensible defaults and beautiful HTML report generation.</p>
+                    <div class="flex items-center gap-4 text-xs font-mono dark:text-gray-500 text-gray-400">
+                        <span class="flex items-center gap-1"><span class="w-2.5 h-2.5 rounded-full bg-orange-500"></span> Java</span>
+                        <span class="flex items-center gap-1"><i data-lucide="star" class="w-3 h-3"></i> 182</span>
+                        <span class="flex items-center gap-1"><i data-lucide="git-fork" class="w-3 h-3"></i> 31</span>
+                        <span class="ml-auto">Updated 1 week ago</span>
+                    </div>
+                </div>
+
+                <!-- Project 3 -->
+                <div class="github-card dark:bg-darkSurface/60 bg-white rounded-xl border dark:border-darkBorder border-lightBorder p-5 hover:border-neonGreen/50 transition-all">
+                    <div class="flex items-start justify-between mb-3">
+                        <div class="flex items-center gap-2">
+                            <i data-lucide="database" class="w-4 h-4 text-neonGreen"></i>
+                            <a href="#" class="font-mono text-sm font-bold dark:text-neonBlue text-blue-600 hover:underline">query-optimizer</a>
+                        </div>
+                        <span class="px-2 py-0.5 rounded text-[10px] font-mono dark:bg-neonGreen/10 bg-green-50 dark:text-neonGreen text-green-700 border dark:border-neonGreen/20 border-green-200">Public</span>
+                    </div>
+                    <p class="text-sm dark:text-gray-400 text-gray-500 mb-4">SQL query optimizer that analyzes execution plans and suggests indexes. Supports PostgreSQL and MySQL explain output parsing.</p>
+                    <div class="flex items-center gap-4 text-xs font-mono dark:text-gray-500 text-gray-400">
+                        <span class="flex items-center gap-1"><span class="w-2.5 h-2.5 rounded-full bg-blue-500"></span> TypeScript</span>
+                        <span class="flex items-center gap-1"><i data-lucide="star" class="w-3 h-3"></i> 97</span>
+                        <span class="flex items-center gap-1"><i data-lucide="git-fork" class="w-3 h-3"></i> 14</span>
+                        <span class="ml-auto">Updated 2 weeks ago</span>
+                    </div>
+                </div>
+
+                <!-- Project 4 -->
+                <div class="github-card dark:bg-darkSurface/60 bg-white rounded-xl border dark:border-darkBorder border-lightBorder p-5 hover:border-neonBlue/50 transition-all">
+                    <div class="flex items-start justify-between mb-3">
+                        <div class="flex items-center gap-2">
+                            <i data-lucide="terminal" class="w-4 h-4 text-neonBlue"></i>
+                            <a href="#" class="font-mono text-sm font-bold dark:text-neonBlue text-blue-600 hover:underline">dotfiles</a>
+                        </div>
+                        <span class="px-2 py-0.5 rounded text-[10px] font-mono dark:bg-gray-500/10 bg-gray-50 dark:text-gray-400 text-gray-600 border dark:border-gray-500/20 border-gray-200">Dotfiles</span>
+                    </div>
+                    <p class="text-sm dark:text-gray-400 text-gray-500 mb-4">My personal Neovim, tmux, zsh, and Alacritty configuration. Fully documented with install scripts for Ubuntu and macOS.</p>
+                    <div class="flex items-center gap-4 text-xs font-mono dark:text-gray-500 text-gray-400">
+                        <span class="flex items-center gap-1"><span class="w-2.5 h-2.5 rounded-full bg-green-500"></span> Shell</span>
+                        <span class="flex items-center gap-1"><i data-lucide="star" class="w-3 h-3"></i> 64</span>
+                        <span class="flex items-center gap-1"><i data-lucide="git-fork" class="w-3 h-3"></i> 8</span>
+                        <span class="ml-auto">Updated yesterday</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- GitHub Stats -->
+            <div class="mt-10 dark:bg-darkSurface/40 bg-gray-50 rounded-xl border dark:border-darkBorder border-lightBorder p-6">
+                <div class="grid grid-cols-2 sm:grid-cols-4 gap-6 text-center">
+                    <div>
+                        <div class="text-2xl sm:text-3xl font-bold text-neonGreen font-mono">42</div>
+                        <div class="text-xs dark:text-gray-500 text-gray-400 font-mono mt-1">Repositories</div>
+                    </div>
+                    <div>
+                        <div class="text-2xl sm:text-3xl font-bold text-neonBlue font-mono">1.2k</div>
+                        <div class="text-xs dark:text-gray-500 text-gray-400 font-mono mt-1">Stars Earned</div>
+                    </div>
+                    <div>
+                        <div class="text-2xl sm:text-3xl font-bold text-neonGreen font-mono">156</div>
+                        <div class="text-xs dark:text-gray-500 text-gray-400 font-mono mt-1">Contributions (2024)</div>
+                    </div>
+                    <div>
+                        <div class="text-2xl sm:text-3xl font-bold text-neonBlue font-mono">23</div>
+                        <div class="text-xs dark:text-gray-500 text-gray-400 font-mono mt-1">Open Source PRs</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== ABOUT SECTION ==================== -->
+    <section id="about" class="py-24 px-4 sm:px-6">
+        <div class="max-w-6xl mx-auto">
+            <div class="font-mono text-xs text-neonGreen mb-2 flex items-center gap-2">
+                <span class="w-8 h-px bg-neonGreen"></span>
+                ./about
+            </div>
+            <h2 class="text-3xl sm:text-4xl font-bold dark:text-[#e6e6e6] text-gray-900 tracking-tight mb-10">About Me</h2>
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                <!-- Bio -->
+                <div class="lg:col-span-2">
+                    <div class="dark:bg-darkSurface/60 bg-white rounded-xl border dark:border-darkBorder border-lightBorder p-6 sm:p-8 mb-6">
+                        <h3 class="font-bold text-lg dark:text-[#e6e6e6] text-gray-900 mb-4 flex items-center gap-2">
+                            <i data-lucide="user" class="w-5 h-5 text-neonGreen"></i> Who I Am
+                        </h3>
+                        <div class="dark:text-gray-400 text-gray-500 text-sm leading-relaxed space-y-3">
+                            <p>I'm <strong class="dark:text-[#e6e6e6] text-gray-900">Robiul Hossain</strong>, a Java developer with 5+ years of experience building scalable backend systems. I specialize in Spring Boot microservices, event-driven architectures, and high-performance JVM applications.</p>
+                            <p>Currently, I work on distributed systems processing millions of events daily. I'm deeply interested in JVM internals, garbage collection tuning, and applying computer science fundamentals to real-world problems.</p>
+                            <p>When I'm not coding, I write technical articles, contribute to open source, and explore new tools in the Linux ecosystem. I believe in sharing knowledge — every article I write is something I wish I had found earlier in my career.</p>
+                        </div>
+                    </div>
+
+                    <!-- Experience Timeline -->
+                    <div class="dark:bg-darkSurface/60 bg-white rounded-xl border dark:border-darkBorder border-lightBorder p-6 sm:p-8">
+                        <h3 class="font-bold text-lg dark:text-[#e6e6e6] text-gray-900 mb-6 flex items-center gap-2">
+                            <i data-lucide="briefcase" class="w-5 h-5 text-neonBlue"></i> Experience
+                        </h3>
+                        <div class="space-y-6 relative before:absolute before:left-[7px] before:top-2 before:bottom-2 before:w-px before:dark:bg-darkBorder before:bg-lightBorder">
+                            <div class="flex gap-4 relative">
+                                <div class="w-[15px] h-[15px] rounded-full bg-neonGreen mt-1 flex-shrink-0 z-10 ring-4 dark:ring-darkSurface ring-white"></div>
+                                <div>
+                                    <div class="font-mono text-xs text-neonGreen mb-1">2022 — Present</div>
+                                    <div class="font-bold dark:text-[#e6e6e6] text-gray-900 text-sm">Senior Java Developer</div>
+                                    <div class="dark:text-gray-500 text-gray-400 text-xs">TechCorp Solutions — Remote</div>
+                                    <p class="dark:text-gray-400 text-gray-500 text-xs mt-1">Leading a team of 5 developers building event-driven microservices with Spring Boot, Kafka, and Kubernetes.</p>
+                                </div>
+                            </div>
+                            <div class="flex gap-4 relative">
+                                <div class="w-[15px] h-[15px] rounded-full bg-neonBlue mt-1 flex-shrink-0 z-10 ring-4 dark:ring-darkSurface ring-white"></div>
+                                <div>
+                                    <div class="font-mono text-xs text-neonBlue mb-1">2020 — 2022</div>
+                                    <div class="font-bold dark:text-[#e6e6e6] text-gray-900 text-sm">Java Developer</div>
+                                    <div class="dark:text-gray-500 text-gray-400 text-xs">Digital Innovations Ltd — Dhaka</div>
+                                    <p class="dark:text-gray-400 text-gray-500 text-xs mt-1">Built REST APIs and migrated legacy monolith to Spring Cloud microservices architecture.</p>
+                                </div>
+                            </div>
+                            <div class="flex gap-4 relative">
+                                <div class="w-[15px] h-[15px] rounded-full dark:bg-darkBorder bg-lightBorder mt-1 flex-shrink-0 z-10 ring-4 dark:ring-darkSurface ring-white"></div>
+                                <div>
+                                    <div class="font-mono text-xs dark:text-gray-500 text-gray-400 mb-1">2019 — 2020</div>
+                                    <div class="font-bold dark:text-[#e6e6e6] text-gray-900 text-sm">Junior Developer</div>
+                                    <div class="dark:text-gray-500 text-gray-400 text-xs">StartUp Hub — Dhaka</div>
+                                    <p class="dark:text-gray-400 text-gray-500 text-xs mt-1">Full-stack development with Java, Spring MVC, and basic React. First taste of production systems.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tech Stack -->
+                <div class="space-y-6">
+                    <!-- Skills -->
+                    <div class="dark:bg-darkSurface/60 bg-white rounded-xl border dark:border-darkBorder border-lightBorder p-6">
+                        <h3 class="font-bold text-lg dark:text-[#e6e6e6] text-gray-900 mb-5 flex items-center gap-2">
+                            <i data-lucide="layers" class="w-5 h-5 text-neonGreen"></i> Tech Stack
+                        </h3>
+                        <div class="space-y-4">
+                            <div>
+                                <div class="flex justify-between text-xs font-mono mb-1.5">
+                                    <span class="dark:text-gray-300 text-gray-600">Java / JVM</span>
+                                    <span class="text-neonGreen">95%</span>
+                                </div>
+                                <div class="h-1.5 dark:bg-darkBg bg-gray-100 rounded-full overflow-hidden">
+                                    <div class="skill-bar-fill h-full rounded-full bg-gradient-to-r from-neonGreen to-neonBlue" style="width: 95%"></div>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="flex justify-between text-xs font-mono mb-1.5">
+                                    <span class="dark:text-gray-300 text-gray-600">Spring Boot / Cloud</span>
+                                    <span class="text-neonGreen">90%</span>
+                                </div>
+                                <div class="h-1.5 dark:bg-darkBg bg-gray-100 rounded-full overflow-hidden">
+                                    <div class="skill-bar-fill h-full rounded-full bg-gradient-to-r from-neonGreen to-neonBlue" style="width: 90%"></div>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="flex justify-between text-xs font-mono mb-1.5">
+                                    <span class="dark:text-gray-300 text-gray-600">Kafka / Messaging</span>
+                                    <span class="text-neonBlue">85%</span>
+                                </div>
+                                <div class="h-1.5 dark:bg-darkBg bg-gray-100 rounded-full overflow-hidden">
+                                    <div class="skill-bar-fill h-full rounded-full bg-gradient-to-r from-neonBlue to-neonGreen" style="width: 85%"></div>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="flex justify-between text-xs font-mono mb-1.5">
+                                    <span class="dark:text-gray-300 text-gray-600">Docker / Kubernetes</span>
+                                    <span class="text-neonBlue">80%</span>
+                                </div>
+                                <div class="h-1.5 dark:bg-darkBg bg-gray-100 rounded-full overflow-hidden">
+                                    <div class="skill-bar-fill h-full rounded-full bg-gradient-to-r from-neonBlue to-neonGreen" style="width: 80%"></div>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="flex justify-between text-xs font-mono mb-1.5">
+                                    <span class="dark:text-gray-300 text-gray-600">PostgreSQL / Redis</span>
+                                    <span class="text-neonGreen">82%</span>
+                                </div>
+                                <div class="h-1.5 dark:bg-darkBg bg-gray-100 rounded-full overflow-hidden">
+                                    <div class="skill-bar-fill h-full rounded-full bg-gradient-to-r from-neonGreen to-neonBlue" style="width: 82%"></div>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="flex justify-between text-xs font-mono mb-1.5">
+                                    <span class="dark:text-gray-300 text-gray-600">TypeScript / React</span>
+                                    <span class="text-neonBlue">65%</span>
+                                </div>
+                                <div class="h-1.5 dark:bg-darkBg bg-gray-100 rounded-full overflow-hidden">
+                                    <div class="skill-bar-fill h-full rounded-full bg-gradient-to-r from-neonBlue to-neonGreen" style="width: 65%"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Tools -->
+                    <div class="dark:bg-darkSurface/60 bg-white rounded-xl border dark:border-darkBorder border-lightBorder p-6">
+                        <h3 class="font-bold text-sm dark:text-[#e6e6e6] text-gray-900 mb-4 flex items-center gap-2">
+                            <i data-lucide="wrench" class="w-4 h-4 text-neonBlue"></i> Daily Tools
+                        </h3>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="px-2.5 py-1 rounded-lg text-[11px] font-mono dark:bg-darkBg bg-gray-100 dark:text-gray-300 text-gray-600 border dark:border-darkBorder border-lightBorder">IntelliJ IDEA</span>
+                            <span class="px-2.5 py-1 rounded-lg text-[11px] font-mono dark:bg-darkBg bg-gray-100 dark:text-gray-300 text-gray-600 border dark:border-darkBorder border-lightBorder">Neovim</span>
+                            <span class="px-2.5 py-1 rounded-lg text-[11px] font-mono dark:bg-darkBg bg-gray-100 dark:text-gray-300 text-gray-600 border dark:border-darkBorder border-lightBorder">Git</span>
+                            <span class="px-2.5 py-1 rounded-lg text-[11px] font-mono dark:bg-darkBg bg-gray-100 dark:text-gray-300 text-gray-600 border dark:border-darkBorder border-lightBorder">Docker</span>
+                            <span class="px-2.5 py-1 rounded-lg text-[11px] font-mono dark:bg-darkBg bg-gray-100 dark:text-gray-300 text-gray-600 border dark:border-darkBorder border-lightBorder">Postman</span>
+                            <span class="px-2.5 py-1 rounded-lg text-[11px] font-mono dark:bg-darkBg bg-gray-100 dark:text-gray-300 text-gray-600 border dark:border-darkBorder border-lightBorder">Linux</span>
+                            <span class="px-2.5 py-1 rounded-lg text-[11px] font-mono dark:bg-darkBg bg-gray-100 dark:text-gray-300 text-gray-600 border dark:border-darkBorder border-lightBorder">tmux</span>
+                            <span class="px-2.5 py-1 rounded-lg text-[11px] font-mono dark:bg-darkBg bg-gray-100 dark:text-gray-300 text-gray-600 border dark:border-darkBorder border-lightBorder">Gradle</span>
+                            <span class="px-2.5 py-1 rounded-lg text-[11px] font-mono dark:bg-darkBg bg-gray-100 dark:text-gray-300 text-gray-600 border dark:border-darkBorder border-lightBorder">JMeter</span>
+                            <span class="px-2.5 py-1 rounded-lg text-[11px] font-mono dark:bg-darkBg bg-gray-100 dark:text-gray-300 text-gray-600 border dark:border-darkBorder border-lightBorder">Obsidian</span>
+                        </div>
+                    </div>
+
+                    <!-- Contact -->
+                    <div class="dark:bg-darkSurface/60 bg-white rounded-xl border dark:border-darkBorder border-lightBorder p-6">
+                        <h3 class="font-bold text-sm dark:text-[#e6e6e6] text-gray-900 mb-4 flex items-center gap-2">
+                            <i data-lucide="mail" class="w-4 h-4 text-neonGreen"></i> Get in Touch
+                        </h3>
+                        <div class="space-y-3">
+                            <a href="mailto:robiul@example.com" class="flex items-center gap-2 text-xs font-mono dark:text-gray-400 text-gray-500 hover:text-neonGreen transition-colors group">
+                                <i data-lucide="mail" class="w-3.5 h-3.5"></i>
+                                robiul@example.com
+                                <i data-lucide="arrow-up-right" class="w-3 h-3 opacity-0 group-hover:opacity-100 transition-opacity"></i>
+                            </a>
+                            <a href="#" class="flex items-center gap-2 text-xs font-mono dark:text-gray-400 text-gray-500 hover:text-neonBlue transition-colors group">
+                                <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+                                github.com/robiulhossain
+                                <i data-lucide="arrow-up-right" class="w-3 h-3 opacity-0 group-hover:opacity-100 transition-opacity"></i>
+                            </a>
+                            <a href="#" class="flex items-center gap-2 text-xs font-mono dark:text-gray-400 text-gray-500 hover:text-neonGreen transition-colors group">
+                                <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+                                linkedin.com/in/robiulhossain
+                                <i data-lucide="arrow-up-right" class="w-3 h-3 opacity-0 group-hover:opacity-100 transition-opacity"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== FOOTER ==================== -->
+    <footer class="border-t dark:border-darkBorder border-lightBorder py-10 px-4 sm:px-6">
+        <div class="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div class="font-mono text-xs dark:text-gray-500 text-gray-400 flex items-center gap-2">
+                <span class="text-neonGreen">$</span> echo "© 2024 Robiul Hossain. Built with ☕ and Java"
+            </div>
+            <div class="font-mono text-xs dark:text-gray-600 text-gray-300 flex items-center gap-1">
+                <span class="w-2 h-2 rounded-full bg-neonGreen animate-pulse"></span>
+                All systems operational
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Initialize Lucide icons
+        lucide.createIcons();
+
+        // ===== THEME TOGGLE =====
+        const html = document.documentElement;
+        const themeToggle = document.getElementById('theme-toggle');
+        
+        function setTheme(dark) {
+            if (dark) {
+                html.classList.add('dark');
+                html.classList.remove('light');
+                document.body.classList.remove('light-mode');
+            } else {
+                html.classList.remove('dark');
+                html.classList.add('light');
+                document.body.classList.add('light-mode');
+            }
+            localStorage.setItem('theme', dark ? 'dark' : 'light');
+        }
+
+        // Load saved theme
+        const savedTheme = localStorage.getItem('theme');
+        if (savedTheme === 'light') {
+            setTheme(false);
+        }
+
+        themeToggle.addEventListener('click', () => {
+            const isDark = html.classList.contains('dark');
+            setTheme(!isDark);
+            // Re-init icons after theme change
+            lucide.createIcons();
+        });
+
+        // ===== MOBILE MENU =====
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+        const mobileMenuClose = document.getElementById('mobile-menu-close');
+        const mobileOverlay = document.getElementById('mobile-overlay');
+
+        function openMobileMenu() {
+            mobileMenu.classList.add('open');
+            mobileOverlay.classList.remove('hidden');
+        }
+        function closeMobileMenu() {
+            mobileMenu.classList.remove('open');
+            mobileOverlay.classList.add('hidden');
+        }
+
+        mobileMenuBtn.addEventListener('click', openMobileMenu);
+        mobileMenuClose.addEventListener('click', closeMobileMenu);
+        mobileOverlay.addEventListener('click', closeMobileMenu);
+        document.querySelectorAll('.mobile-nav-link').forEach(link => {
+            link.addEventListener('click', closeMobileMenu);
+        });
+
+        // ===== NAV ACTIVE STATE =====
+        const sections = document.querySelectorAll('section[id]');
+        const navLinks = document.querySelectorAll('.nav-link');
+
+        window.addEventListener('scroll', () => {
+            let current = '';
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop - 100;
+                if (scrollY >= sectionTop) {
+                    current = section.getAttribute('id');
+                }
+            });
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                link.classList.remove('dark:text-[#e6e6e6]', 'text-gray-700');
+                link.classList.add('dark:text-gray-400', 'text-gray-500');
+                if (link.getAttribute('href') === `#${current}`) {
+                    link.classList.add('active');
+                    link.classList.add('dark:text-[#e6e6e6]', 'text-gray-700');
+                    link.classList.remove('dark:text-gray-400', 'text-gray-500');
+                }
+            });
+
+            // Navbar shadow on scroll
+            const navbar = document.getElementById('navbar');
+            if (window.scrollY > 10) {
+                navbar.classList.add('shadow-lg');
+            } else {
+                navbar.classList.remove('shadow-lg');
+            }
+        });
+
+        // ===== TAG FILTERS =====
+        const tagBtns = document.querySelectorAll('.tag-btn');
+        const articleCards = document.querySelectorAll('.article-card');
+
+        tagBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                tagBtns.forEach(b => b.classList.remove('active-tag'));
+                btn.classList.add('active-tag');
+                const tag = btn.dataset.tag;
+                
+                articleCards.forEach(card => {
+                    if (tag === 'all' || card.dataset.tag === tag) {
+                        card.style.display = '';
+                        card.style.opacity = '0';
+                        card.style.transform = 'translateY(10px)';
+                        requestAnimationFrame(() => {
+                            card.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
+                            card.style.opacity = '1';
+                            card.style.transform = 'translateY(0)';
+                        });
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+            });
+        });
+
+        // ===== ARTICLE MODAL =====
+        const articleModal = document.getElementById('article-modal');
+        const articleContent = document.getElementById('article-content');
+        const articleClose = document.getElementById('article-close');
+        const articleModalOverlay = document.getElementById('article-modal-overlay');
+
+        const articles = {
+            1: {
+                title: 'Mastering Spring Boot 3: A Deep Dive into Virtual Threads',
+                date: 'December 15, 2024',
+                readTime: '8 min read',
+                tags: ['Java 21', 'Spring Boot', 'Concurrency'],
+                tagColor: 'neonGreen',
+                content: `
+                    <p>Java 21 introduced <strong>virtual threads</strong> as a preview feature (now stable), and Spring Boot 3.2+ has first-class support for them. This changes everything about how we write concurrent Java applications.</p>
+                    
+                    <h3>What Are Virtual Threads?</h3>
+                    <p>Virtual threads are lightweight threads managed by the JVM rather than the OS. They allow you to create millions of threads without exhausting system resources.</p>
+                    
+                    <h3>Enabling Virtual Threads in Spring Boot</h3>
+                    <p>Simply add this to your <code>application.properties</code>:</p>
+                    
+<pre><code><span class="line-num">1</span><span class="token-comment"># Enable virtual threads</span>
+<span class="line-num">2</span>spring.threads.virtual.enabled=<span class="token-keyword">true</span></code></pre>
+
+                    <h3>Writing Blocking Code the Right Way</h3>
+                    <p>With virtual threads, blocking I/O is no longer a bottleneck. Here's a practical example:</p>
+
+<pre><code><span class="line-num"> 1</span><span class="token-annotation">@RestController</span>
+<span class="line-num"> 2</span><span class="token-keyword">public class</span> <span class="token-type">UserController</span> <span class="token-paren">{</span>
+<span class="line-num"> 3</span>
+<span class="line-num"> 4</span>    <span class="token-annotation">@GetMapping</span>(<span class="token-string">"/users/{id}"</span>)
+<span class="line-num"> 5</span>    <span class="token-keyword">public</span> <span class="token-type">ResponseEntity</span>&lt;<span class="token-type">UserDTO</span>&gt; <span class="token-function">getUser</span><span class="token-paren">(</span><span class="token-annotation">@PathVariable</span> <span class="token-type">Long</span> id<span class="token-paren">)</span> <span class="token-paren">{</span>
+<span class="line-num"> 6</span>        <span class="token-comment">// This blocking call is now cheap!</span>
+<span class="line-num"> 7</span>        <span class="token-type">User</span> user = userService.<span class="token-function">findById</span><span class="token-paren">(</span>id<span class="token-paren">)</span>;
+<span class="line-num"> 8</span>        <span class="token-type">Profile</span> profile = profileClient.<span class="token-function">fetch</span><span class="token-paren">(</span>id<span class="token-paren">)</span>;
+<span class="line-num"> 9</span>        <span class="token-keyword">return</span> <span class="token-type">ResponseEntity</span>.<span class="token-function">ok</span><span class="token-paren">(</span>
+<span class="line-num">10</span>            <span class="token-keyword">new</span> <span class="token-type">UserDTO</span><span class="token-paren">(</span>user, profile<span class="token-paren">)</span>
+<span class="line-num">11</span>        <span class="token-paren">)</span>;
+<span class="line-num">12</span>    <span class="token-paren">}</span>
+<span class="line-num">13</span><span class="token-paren">}</span></code></pre>
+
+                    <h3>Performance Benchmarks</h3>
+                    <p>In my benchmarks with 10,000 concurrent requests:</p>
+                    <ul>
+                        <li><strong>Platform threads (200):</strong> ~45s total, many timeouts</li>
+                        <li><strong>Virtual threads:</strong> ~3.2s total, zero timeouts</li>
+                    </ul>
+                    <p>The difference is staggering. Virtual threads handled 14x more throughput with the same hardware.</p>
+
+                    <h3>When Not to Use Virtual Threads</h3>
+                    <p>Avoid virtual threads when:</p>
+                    <ul>
+                        <li>Using <code>synchronized</code> blocks extensively (pinning issue)</li>
+                        <li>Running CPU-bound tasks (no benefit over platform threads)</li>
+                        <li>Using native code that pins the carrier thread</li>
+                    </ul>
+
+                    <p>Virtual threads are a game-changer for I/O-heavy Spring Boot applications. Start experimenting today — the future of Java concurrency is here.</p>
+                `
+            },
+            2: {
+                title: 'JVM Internals: Understanding GC Algorithms from Scratch',
+                date: 'November 28, 2024',
+                readTime: '12 min read',
+                tags: ['JVM', 'GC', 'Performance'],
+                tagColor: 'neonGreen',
+                content: `
+                    <p>Garbage collection is one of the most misunderstood aspects of the JVM. In this article, we'll build intuition from the ground up.</p>
+                    
+                    <h3>The Heap Layout</h3>
+                    <p>The JVM heap is divided into generations:</p>
+<pre><code><span class="line-num">1</span><span class="token-comment">// JVM Memory Model (simplified)</span>
+<span class="line-num">2</span><span class="token-paren">{</span>
+<span class="line-num">3</span>  <span class="token-string">"Young Gen"</span>:  <span class="token-paren">{</span>
+<span class="line-num">4</span>    <span class="token-string">"Eden"</span>:      <span class="token-string">"New objects go here"</span>,
+<span class="line-num">5</span>    <span class="token-string">"Survivor 0"</span>: <span class="token-string">"After first GC"</span>,
+<span class="line-num">6</span>    <span class="token-string">"Survivor 1"</span>: <span class="token-string">"After second GC"</span>
+<span class="line-num">7</span>  <span class="token-paren">}</span>,
+<span class="line-num">8</span>  <span class="token-string">"Old Gen"</span>:    <span class="token-string">"Long-lived objects"</span>
+<span class="line-num">9</span><span class="token-paren">}</span></code></pre>
+
+                    <h3>G1 Garbage Collector</h3>
+                    <p>G1 divides the heap into equal-sized regions (1-32MB each). It's the default since Java 9 and excels at minimizing pause times.</p>
+                    <p>Key flags I recommend for production:</p>
+<pre><code><span class="line-num">1</span>-XX:+UseG1GC
+<span class="line-num">2</span>-XX:MaxGCPauseMillis=<span class="token-number">200</span>
+<span class="line-num">3</span>-XX:G1HeapRegionSize=<span class="token-number">8m</span>
+<span class="line-num">4</span>-XX:InitiatingHeapOccupancyPercent=<span class="token-number">45</span></code></pre>
+
+                    <h3>ZGC: Sub-Millisecond Pauses</h3>
+                    <p>ZGC (Z Garbage Collector) performs all heavy work concurrently, keeping pause times under 1ms regardless of heap size. It became production-ready in Java 15.</p>
+
+                    <h3>Choosing the Right GC</h3>
+                    <p><strong>Use G1</strong> for general workloads with heap sizes up to 16GB. <strong>Use ZGC</strong> for large heaps (16GB+) or when low latency is critical. <strong>Use Shenandoah</strong> if you're on OpenJDK and want an alternative to ZGC.</p>
+                `
+            },
+            3: {
+                title: 'Docker Compose for Java Microservices: A Practical Guide',
+                date: 'November 10, 2024',
+                readTime: '6 min read',
+                tags: ['Docker', 'Microservices'],
+                tagColor: 'neonBlue',
+                content: `
+                    <p>Setting up a local development environment for microservices can be painful. Docker Compose makes it reproducible and simple.</p>
+                    
+                    <h3>The Dockerfile</h3>
+<pre><code><span class="line-num"> 1</span><span class="token-comment"># Multi-stage build for Java apps</span>
+<span class="line-num"> 2</span><span class="token-keyword">FROM</span> eclipse-temurin:<span class="token-number">21</span>-jdk-alpine <span class="token-keyword">AS</span> build
+<span class="line-num"> 3</span><span class="token-keyword">WORKDIR</span> /app
+<span class="line-num"> 4</span><span class="token-keyword">COPY</span> . .
+<span class="line-num"> 5</span><span class="token-keyword">RUN</span> ./gradlew bootJar --no-daemon
+<span class="line-num"> 6</span>
+<span class="line-num"> 7</span><span class="token-keyword">FROM</span> eclipse-temurin:<span class="token-number">21</span>-jre-alpine
+<span class="line-num"> 8</span><span class="token-keyword">COPY</span> --from=build /app/build/libs/*.jar app.jar
+<span class="line-num"> 9</span><span class="token-keyword">EXPOSE</span> <span class="token-number">8080</span>
+<span class="line-num">10</span><span class="token-keyword">ENTRYPOINT</span> [<span class="token-string">"java"</span>, <span class="token-string">"-jar"</span>, <span class="token-string">"app.jar"</span>]</code></pre>
+
+                    <h3>The Compose File</h3>
+                    <p>Orchestrate multiple services with health checks and dependency ordering. This approach eliminates "works on my machine" issues and makes onboarding new developers trivial.</p>
+                `
+            },
+            4: {
+                title: 'Building Type-Safe APIs with React Query & TypeScript',
+                date: 'October 22, 2024',
+                readTime: '10 min read',
+                tags: ['React', 'TypeScript'],
+                tagColor: 'purple-400',
+                content: `
+                    <p>As a backend developer who occasionally writes frontend code, type safety across the API boundary is my top priority. Here's how I achieve it.</p>
+                    
+                    <h3>The Problem</h3>
+                    <p>When your Java backend and React frontend disagree on types, bugs slip through. Manual type definitions drift apart from the API.</p>
+                    
+                    <h3>The Solution: Generics + Inference</h3>
+<pre><code><span class="line-num">1</span><span class="token-keyword">function</span> <span class="token-function">useApi</span>&lt;<span class="token-type">T</span>&gt;<span class="token-paren">(</span>
+<span class="line-num">2</span>  key: <span class="token-type">string</span>[], 
+<span class="line-num">3</span>  fn: () =&gt; <span class="token-type">Promise</span>&lt;<span class="token-type">ApiResponse</span>&lt;<span class="token-type">T</span>&gt;&gt;
+<span class="line-num">4</span><span class="token-paren">)</span> <span class="token-paren">{</span>
+<span class="line-num">5</span>  <span class="token-keyword">return</span> <span class="token-function">useQuery</span><span class="token-paren">(</span>
+<span class="line-num">6</span>    key, 
+<span class="line-num">7</span>    <span class="token-keyword">async</span> () =&gt; <span class="token-paren">{</span>
+<span class="line-num">8</span>      <span class="token-keyword">const</span> res = <span class="token-keyword">await</span> <span class="token-function">fn</span><span class="token-paren">()</span>;
+<span class="line-num">9</span>      <span class="token-keyword">if</span> (!res.success) <span class="token-keyword">throw new</span> <span class="token-type">Error</span>(res.message);
+<span class="line-num">10</span>      <span class="token-keyword">return</span> res.data; <span class="token-comment">// Type is T, not ApiResponse</span>
+<span class="line-num">11</span>    <span class="token-paren">}</span>
+<span class="line-num">12</span>  <span class="token-paren">)</span>;
+<span class="line-num">13</span><span class="token-paren">}</span></code></pre>
+                    <p>This pattern ensures your frontend types always match your backend's response shape, catching mismatches at compile time.</p>
+                `
+            },
+            5: {
+                title: 'Event-Driven Architecture with Kafka & Spring Cloud Stream',
+                date: 'October 5, 2024',
+                readTime: '15 min read',
+                tags: ['Kafka', 'EDA', 'Spring'],
+                tagColor: 'neonGreen',
+                content: `
+                    <p>Event-driven architecture (EDA) is the backbone of modern microservices. Here's how to implement it correctly with Kafka and Spring Cloud Stream.</p>
+                    
+                    <h3>Core Concepts</h3>
+                    <p>Unlike request-response, EDA services communicate through events. A service produces an event without knowing who will consume it. This decouples services and enables asynchronous processing.</p>
+                    
+                    <h3>Exactly-Once Semantics</h3>
+<pre><code><span class="line-num"> 1</span><span class="token-annotation">@Configuration</span>
+<span class="line-num"> 2</span><span class="token-keyword">public class</span> <span class="token-type">KafkaConfig</span> <span class="token-paren">{</span>
+<span class="line-num"> 3</span>
+<span class="line-num"> 4</span>    <span class="token-annotation">@Bean</span>
+<span class="line-num"> 5</span>    <span class="token-keyword">public</span> <span class="token-type">ProducerFactory</span>&lt;<span class="token-type">String</span>, <span class="token-type">Event</span>&gt; <span class="token-function">producerFactory</span><span class="token-paren">()</span> <span class="token-paren">{</span>
+<span class="line-num"> 6</span>        <span class="token-type">Map</span>&lt;<span class="token-type">String</span>, <span class="token-type">Object</span>&gt; config = <span class="token-keyword">new</span> <span class="token-type">HashMap</span>&lt;&gt;();
+<span class="line-num"> 7</span>        config.<span class="token-function">put</span>(<span class="token-string">"enable.idempotence"</span>, <span class="token-keyword">true</span>);
+<span class="line-num"> 8</span>        config.<span class="token-function">put</span>(<span class="token-string">"acks"</span>, <span class="token-string">"all"</span>);
+<span class="line-num"> 9</span>        config.<span class="token-function">put</span>(<span class="token-string">"transactional.id"</span>, <span class="token-string">"event-producer-tx"</span>);
+<span class="line-num">10</span>        <span class="token-keyword">return new</span> <span class="token-type">DefaultKafkaProducerFactory</span>&lt;&gt;(config);
+<span class="line-num">11</span>    <span class="token-paren">}</span>
+<span class="line-num">12</span><span class="token-paren">}</span></code></pre>
+                    <p>With idempotent producers and transactional IDs, Kafka guarantees exactly-once delivery even in the face of retries and network failures.</p>
+                `
+            },
+            6: {
+                title: 'My Neovim Setup for Java Development in 2024',
+                date: 'September 18, 2024',
+                readTime: '7 min read',
+                tags: ['Neovim', 'LSP'],
+                tagColor: 'neonBlue',
+                content: `
+                    <p>After years of IntelliJ IDEA, I switched to Neovim for Java development. Here's my complete setup that makes it possible.</p>
+                    
+                    <h3>Why Neovim for Java?</h3>
+                    <p>Speed, keyboard-centric workflow, and the ability to customize everything. With jdtls (Eclipse JDT Language Server), you get the same code intelligence as IntelliJ.</p>
+                    
+                    <h3>Key Plugins</h3>
+<pre><code><span class="line-num"> 1</span><span class="token-comment">-- lazy.nvim plugin spec</span>
+<span class="line-num"> 2</span><span class="token-keyword">return</span> <span class="token-paren">{</span>
+<span class="line-num"> 3</span>  <span class="token-paren">{</span> <span class="token-string">"neovim/nvim-lspconfig"</span> <span class="token-paren">}</span>,
+<span class="line-num"> 4</span>  <span class="token-paren">{</span> <span class="token-string">"mfussenegger/nvim-jdtls"</span> <span class="token-paren">}</span>,
+<span class="line-num"> 5</span>  <span class="token-paren">{</span> <span class="token-string">"nvim-treesitter/nvim-treesitter"</span> <span class="token-paren">}</span>,
+<span class="line-num"> 6</span>  <span class="token-paren">{</span> <span class="token-string">"mfussenegger/nvim-dap"</span> <span class="token-paren">}</span>,    <span class="token-comment">-- Debugging</span>
+<span class="line-num"> 7</span>  <span class="token-paren">{</span> <span class="token-string">"rcarriga/nvim-dap-ui"</span> <span class="token-paren">}</span>,
+<span class="line-num"> 8</span>  <span class="token-paren">{</span> <span class="token-string">"nvim-neotest/neotest"</span> <span class="token-paren">}</span>,  <span class="token-comment">-- Test runner</span>
+<span class="line-num"> 9</span><span class="token-paren">}</span></code></pre>
+                    <p>The setup takes about 30 minutes but saves hours of IDE overhead every week. Debugging, testing, and refactoring all work seamlessly.</p>
+                `
+            }
+        };
+
+        // Open article
+        document.querySelectorAll('.article-card').forEach(card => {
+            card.addEventListener('click', () => {
+                const id = card.dataset.article;
+                const article = articles[id];
+                if (!article) return;
+
+                const isDark = html.classList.contains('dark');
+                const tagColorMap = {
+                    neonGreen: isDark ? 'bg-neonGreen/20 text-neonGreen border-neonGreen/30' : 'bg-green-100 text-green-700 border-green-200',
+                    neonBlue: isDark ? 'bg-neonBlue/20 text-neonBlue border-neonBlue/30' : 'bg-blue-100 text-blue-700 border-blue-200',
+                    'purple-400': isDark ? 'bg-purple-500/20 text-purple-400 border-purple-500/30' : 'bg-purple-100 text-purple-700 border-purple-200'
+                };
+
+                articleContent.innerHTML = `
+                    <div class="h-48 sm:h-64 overflow-hidden relative">
+                        <img src="https://picsum.photos/seed/article-${id}/1200/400.jpg" alt="${article.title}" class="w-full h-full object-cover">
+                        <div class="absolute inset-0 bg-gradient-to-t ${isDark ? 'from-[#1e1e1e]' : 'from-white'} via-transparent to-transparent"></div>
+                    </div>
+                    <div class="p-6 sm:p-10 -mt-12 relative">
+                        <div class="flex items-center gap-2 mb-3 flex-wrap">
+                            ${article.tags.map(tag => `<span class="px-2 py-0.5 rounded text-[10px] font-mono border ${tagColorMap[article.tagColor] || tagColorMap.neonGreen}">${tag}</span>`).join('')}
+                        </div>
+                        <h1 class="text-2xl sm:text-3xl font-bold ${isDark ? 'text-[#e6e6e6]' : 'text-gray-900'} mb-2 tracking-tight">${article.title}</h1>
+                        <div class="flex items-center gap-3 text-xs font-mono ${isDark ? 'text-gray-500' : 'text-gray-400'} mb-8">
+                            <span>${article.date}</span>
+                            <span>·</span>
+                            <span>${article.readTime}</span>
+                            <span>·</span>
+                            <span>By Robiul Hossain</span>
+                        </div>
+                        <div class="prose-custom ${isDark ? 'text-gray-400' : 'text-gray-500'} text-sm leading-relaxed space-y-4">
+                            ${article.content}
+                        </div>
+                        <div class="mt-10 pt-6 border-t ${isDark ? 'border-darkBorder' : 'border-lightBorder'} flex items-center justify-between">
+                            <div class="flex items-center gap-3">
+                                <div class="w-8 h-8 rounded-full overflow-hidden">
+                                    <img src="https://picsum.photos/seed/robiul-avatar/100/100.jpg" alt="Robiul" class="w-full h-full object-cover">
+                                </div>
+                                <div>
+                                    <div class="text-xs font-bold ${isDark ? 'text-[#e6e6e6]' : 'text-gray-900'}">Robiul Hossain</div>
+                                    <div class="text-[10px] font-mono ${isDark ? 'text-gray-500' : 'text-gray-400'}">Java Developer</div>
+                                </div>
+                            </div>
+                            <div class="flex gap-2">
+                                <button onclick="showToast('Link copied to clipboard!')" class="px-3 py-1.5 rounded-lg text-xs font-mono ${isDark ? 'bg-darkSurface border-darkBorder text-gray-400' : 'bg-gray-100 border-lightBorder text-gray-500'} border hover:border-neonGreen transition-colors flex items-center gap-1">
+                                    <i data-lucide="link" class="w-3 h-3"></i> Share
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+
+                // Style the article content
+                const proseEl = articleContent.querySelector('.prose-custom');
+                if (proseEl) {
+                    proseEl.querySelectorAll('h3').forEach(h => {
+                        h.className = `text-lg font-bold ${isDark ? 'text-[#e6e6e6]' : 'text-gray-900'} mt-6 mb-2`;
+                    });
+                    proseEl.querySelectorAll('p').forEach(p => {
+                        p.className = `${isDark ? 'text-gray-400' : 'text-gray-500'} text-sm leading-relaxed`;
+                    });
+                    proseEl.querySelectorAll('ul').forEach(ul => {
+                        ul.className = `list-disc pl-5 space-y-1 ${isDark ? 'text-gray-400' : 'text-gray-500'} text-sm`;
+                    });
+                    proseEl.querySelectorAll('li').forEach(li => {
+                        li.className = `${isDark ? 'text-gray-400' : 'text-gray-500'} text-sm`;
+                    });
+                    proseEl.querySelectorAll('code:not(pre code)').forEach(c => {
+                        c.className = `font-mono text-xs px-1.5 py-0.5 rounded ${isDark ? 'bg-darkBg text-neonGreen' : 'bg-gray-100 text-green-700'}`;
+                    });
+                    proseEl.querySelectorAll('pre').forEach(pre => {
+                        pre.className = `${isDark ? 'bg-[#1a1a1a] border-darkBorder' : 'bg-[#fafafa] border-lightBorder'} rounded-lg border p-4 overflow-x-auto my-4`;
+                    });
+                    proseEl.querySelectorAll('pre code').forEach(code => {
+                        code.className = 'font-mono text-xs sm:text-sm leading-6';
+                    });
+                    proseEl.querySelectorAll('strong').forEach(s => {
+                        s.className = `${isDark ? 'text-[#e6e6e6]' : 'text-gray-900'} font-semibold`;
+                    });
+                }
+
+                articleModal.classList.remove('hidden');
+                document.body.style.overflow = 'hidden';
+                lucide.createIcons();
+            });
+        });
+
+        function closeArticleModal() {
+            articleModal.classList.add('hidden');
+            document.body.style.overflow = '';
+        }
+
+        articleClose.addEventListener('click', closeArticleModal);
+        articleModalOverlay.addEventListener('click', closeArticleModal);
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') closeArticleModal();
+        });
+
+        // ===== COPY CODE =====
+        function copyCode(btn) {
+            const codeBlock = btn.closest('.dark\\:bg-\\[\\#1a1a1a\\], .bg-\\[\\#fafafa\\]') || btn.closest('div').parentElement;
+            const code = codeBlock.querySelector('code').innerText;
+            navigator.clipboard.writeText(code).then(() => {
+                showToast('Code copied to clipboard!');
+                btn.innerHTML = '<i data-lucide="check" class="w-3 h-3"></i> Copied!';
+                lucide.createIcons();
+                setTimeout(() => {
+                    btn.innerHTML = '<i data-lucide="copy" class="w-3 h-3"></i> Copy';
+                    lucide.createIcons();
+                }, 2000);
+            });
+        }
+
+        // ===== TOAST =====
+        function showToast(message) {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            const isDark = html.classList.contains('dark');
+            toast.className = `toast-in flex items-center gap-2 px-4 py-2.5 rounded-lg text-xs font-mono border ${isDark ? 'bg-darkSurface border-darkBorder text-[#e6e6e6]' : 'bg-white border-lightBorder text-gray-900'} shadow-xl`;
+            toast.innerHTML = `<i data-lucide="check-circle" class="w-4 h-4 text-neonGreen flex-shrink-0"></i>${message}`;
+            container.appendChild(toast);
+            lucide.createIcons();
+
+            setTimeout(() => {
+                toast.classList.remove('toast-in');
+                toast.classList.add('toast-out');
+                setTimeout(() => toast.remove(), 300);
+            }, 2500);
+        }
+
+        // ===== PARTICLES =====
+        function createParticles() {
+            const container = document.getElementById('particles');
+            const count = window.innerWidth < 768 ? 15 : 30;
+            
+            for (let i = 0; i < count; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                const isGreen = Math.random() > 0.5;
+                const size = Math.random() * 3 + 1;
+                particle.style.cssText = `
+                    width: ${size}px;
+                    height: ${size}px;
+                    background: ${isGreen ? '#00FF00' : '#00D7FF'};
+                    left: ${Math.random() * 100}%;
+                    top: ${Math.random() * 100}%;
+                    animation: float${i % 3} ${10 + Math.random() * 20}s infinite linear;
+                    opacity: ${Math.random() * 0.3 + 0.1};
+                `;
+                container.appendChild(particle);
+            }
+
+            // Add float animations
+            const style = document.createElement('style');
+            style.textContent = `
+                @keyframes float0 {
+                    0% { transform: translate(0, 0); }
+                    25% { transform: translate(30px, -50px); }
+                    50% { transform: translate(-20px, -100px); }
+                    75% { transform: translate(40px, -50px); }
+                    100% { transform: translate(0, 0); }
+                }
+                @keyframes float1 {
+                    0% { transform: translate(0, 0); }
+                    33% { transform: translate(-40px, -70px); }
+                    66% { transform: translate(20px, -30px); }
+                    100% { transform: translate(0, 0); }
+                }
+                @keyframes float2 {
+                    0% { transform: translate(0, 0); }
+                    50% { transform: translate(50px, -80px); }
+                    100% { transform: translate(0, 0); }
+                }
+            `;
+            document.head.appendChild(style);
+        }
+        createParticles();
+    </script>
+</body>
+</html>
