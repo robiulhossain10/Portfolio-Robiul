@@ -32,229 +32,101 @@
         }
     </script>
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        html { scroll-behavior: smooth; }
-        body { font-family: 'Roboto', sans-serif; }
-        code, pre, .mono { font-family: 'JetBrains Mono', monospace; }
+        *{margin:0;padding:0;box-sizing:border-box}
+        html{scroll-behavior:smooth}
+        body{font-family:'Roboto',sans-serif}
+        code,pre,.mono{font-family:'JetBrains Mono',monospace}
+        ::-webkit-scrollbar{width:6px}
+        ::-webkit-scrollbar-track{background:transparent}
+        .dark ::-webkit-scrollbar-thumb{background:#333;border-radius:3px}
+        ::-webkit-scrollbar-thumb{background:#ccc;border-radius:3px}
 
-        ::-webkit-scrollbar { width: 6px; }
-        ::-webkit-scrollbar-track { background: transparent; }
-        .dark ::-webkit-scrollbar-thumb { background: #333; border-radius: 3px; }
-        .dark ::-webkit-scrollbar-thumb:hover { background: #555; }
-        ::-webkit-scrollbar-thumb { background: #ccc; border-radius: 3px; }
+        @keyframes blink{0%,50%{opacity:1}51%,100%{opacity:0}}
+        .cursor-blink{animation:blink 1s infinite}
+        @keyframes typing{from{width:0}to{width:100%}}
+        @keyframes blink-caret{from,to{border-color:transparent}50%{border-color:#00FF00}}
+        .typing-effect{overflow:hidden;white-space:nowrap;border-right:2px solid #00FF00;animation:typing 3s steps(40,end),blink-caret .75s step-end infinite;max-width:fit-content}
 
-        @keyframes blink { 0%, 50% { opacity: 1; } 51%, 100% { opacity: 0; } }
-        .cursor-blink { animation: blink 1s infinite; }
+        .token-keyword{color:#569cd6}.token-string{color:#ce9178}.token-comment{color:#6a9955;font-style:italic}
+        .token-type{color:#4ec9b0}.token-number{color:#b5cea8}.token-function{color:#dcdcaa}
+        .token-annotation{color:#dcdcaa}.token-paren{color:#ffd700}.token-plain{color:#d4d4d4}
+        .light-mode .token-keyword{color:#0000ff}.light-mode .token-string{color:#a31515}
+        .light-mode .token-comment{color:#008000;font-style:italic}.light-mode .token-type{color:#267f99}
+        .light-mode .token-number{color:#098658}.light-mode .token-function{color:#795e26}
+        .light-mode .token-annotation{color:#795e26}.light-mode .token-paren{color:#8b0000}
+        .light-mode .token-plain{color:#000000}
 
-        @keyframes typing { from { width: 0; } to { width: 100%; } }
-        @keyframes blink-caret { from, to { border-color: transparent; } 50% { border-color: #00FF00; } }
-        .typing-effect {
-            overflow: hidden;
-            white-space: nowrap;
-            border-right: 2px solid #00FF00;
-            animation: typing 3s steps(40, end), blink-caret 0.75s step-end infinite;
-            max-width: fit-content;
-        }
+        .theme-transition,.theme-transition *{transition:background-color .3s ease,color .3s ease,border-color .3s ease,box-shadow .3s ease!important}
+        .nav-link.active{position:relative}
+        .nav-link.active::after{content:'';position:absolute;bottom:-4px;left:0;right:0;height:2px;background:linear-gradient(90deg,#00FF00,#00D7FF);border-radius:1px}
+        .article-card{transition:transform .2s ease,box-shadow .2s ease}.article-card:hover{transform:translateY(-2px)}
+        .tag-btn.active-tag{background:linear-gradient(135deg,rgba(0,255,0,.2),rgba(0,215,255,.2));border-color:#00FF00;color:#00FF00}
+        .light .tag-btn.active-tag{background:linear-gradient(135deg,rgba(0,128,0,.1),rgba(0,150,200,.1));border-color:#008800;color:#008800}
+        .github-card{transition:transform .2s ease}.github-card:hover{transform:scale(1.01)}
+        @keyframes fillBar{from{width:0%}}.skill-bar-fill{animation:fillBar 1.5s ease-out forwards}
+        @keyframes slideIn{from{transform:translateX(100%);opacity:0}to{transform:translateX(0);opacity:1}}
+        @keyframes slideOut{from{transform:translateX(0);opacity:1}to{transform:translateX(100%);opacity:0}}
+        .toast-in{animation:slideIn .3s ease forwards}.toast-out{animation:slideOut .3s ease forwards}
+        .particle{position:absolute;border-radius:50%;pointer-events:none;opacity:.3}
+        .mobile-menu{transform:translateX(100%);transition:transform .3s ease}.mobile-menu.open{transform:translateX(0)}
+        .line-num{display:inline-block;width:3em;text-align:right;padding-right:1em;color:#555;user-select:none}
+        .light-mode .line-num{color:#aaa}
 
-        .glow-green { text-shadow: 0 0 10px rgba(0,255,0,0.5), 0 0 20px rgba(0,255,0,0.2); }
-        .glow-blue { text-shadow: 0 0 10px rgba(0,215,255,0.5), 0 0 20px rgba(0,215,255,0.2); }
-        .box-glow-green { box-shadow: 0 0 15px rgba(0,255,0,0.15), inset 0 0 15px rgba(0,255,0,0.05); }
-        .box-glow-blue { box-shadow: 0 0 15px rgba(0,215,255,0.15), inset 0 0 15px rgba(0,215,255,0.05); }
+        /* LIS gradient border */
+        .lis-border{position:relative}
+        .lis-border::before{content:'';position:absolute;inset:-1px;border-radius:inherit;padding:1px;background:linear-gradient(135deg,#00FF00,#00D7FF,#00FF00);background-size:200% 200%;animation:borderShift 4s ease infinite;-webkit-mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);-webkit-mask-composite:xor;mask-composite:exclude;pointer-events:none}
+        @keyframes borderShift{0%,100%{background-position:0% 50%}50%{background-position:100% 50%}}
 
-        .token-keyword { color: #569cd6; }
-        .token-string { color: #ce9178; }
-        .token-comment { color: #6a9955; font-style: italic; }
-        .token-type { color: #4ec9b0; }
-        .token-number { color: #b5cea8; }
-        .token-function { color: #dcdcaa; }
-        .token-annotation { color: #dcdcaa; }
-        .token-operator { color: #d4d4d4; }
-        .token-paren { color: #ffd700; }
-        .token-plain { color: #d4d4d4; }
-
-        .light-mode .token-keyword { color: #0000ff; }
-        .light-mode .token-string { color: #a31515; }
-        .light-mode .token-comment { color: #008000; font-style: italic; }
-        .light-mode .token-type { color: #267f99; }
-        .light-mode .token-number { color: #098658; }
-        .light-mode .token-function { color: #795e26; }
-        .light-mode .token-annotation { color: #795e26; }
-        .light-mode .token-operator { color: #000000; }
-        .light-mode .token-paren { color: #8b0000; }
-        .light-mode .token-plain { color: #000000; }
-
-        .theme-transition, .theme-transition * {
-            transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease !important;
-        }
-
-        .nav-link.active { position: relative; }
-        .nav-link.active::after {
-            content: '';
-            position: absolute;
-            bottom: -4px;
-            left: 0;
-            right: 0;
-            height: 2px;
-            background: linear-gradient(90deg, #00FF00, #00D7FF);
-            border-radius: 1px;
-        }
-
-        .article-card { transition: transform 0.2s ease, box-shadow 0.2s ease; }
-        .article-card:hover { transform: translateY(-2px); }
-
-        .tag-btn.active-tag {
-            background: linear-gradient(135deg, rgba(0,255,0,0.2), rgba(0,215,255,0.2));
-            border-color: #00FF00;
-            color: #00FF00;
-        }
-        .light .tag-btn.active-tag {
-            background: linear-gradient(135deg, rgba(0,128,0,0.1), rgba(0,150,200,0.1));
-            border-color: #008800;
-            color: #008800;
-        }
-
-        .github-card { transition: transform 0.2s ease; }
-        .github-card:hover { transform: scale(1.02); }
-
-        @keyframes fillBar { from { width: 0%; } }
-        .skill-bar-fill { animation: fillBar 1.5s ease-out forwards; }
-
-        @keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
-        @keyframes slideOut { from { transform: translateX(0); opacity: 1; } to { transform: translateX(100%); opacity: 0; } }
-        .toast-in { animation: slideIn 0.3s ease forwards; }
-        .toast-out { animation: slideOut 0.3s ease forwards; }
-
-        .particle {
-            position: absolute;
-            border-radius: 50%;
-            pointer-events: none;
-            opacity: 0.3;
-        }
-
-        .mobile-menu { transform: translateX(100%); transition: transform 0.3s ease; }
-        .mobile-menu.open { transform: translateX(0); }
-
-        .line-num { 
-            display: inline-block; 
-            width: 3em; 
-            text-align: right; 
-            padding-right: 1em; 
-            color: #555; 
-            user-select: none;
-        }
-        .light-mode .line-num { color: #aaa; }
-
-        /* Architecture flow lines */
-        .arch-connector {
-            position: relative;
-        }
-        .arch-connector::after {
-            content: '';
-            position: absolute;
-            top: 50%;
-            right: -24px;
-            width: 24px;
-            height: 2px;
-            background: linear-gradient(90deg, #00FF00, #00D7FF);
-        }
-        @media (max-width: 768px) {
-            .arch-connector::after {
-                top: auto;
-                bottom: -16px;
-                right: 50%;
-                transform: translateX(50%);
-                width: 2px;
-                height: 16px;
-            }
-        }
-
-        /* Analyzer card pulse */
-        @keyframes analyzerPulse {
-            0%, 100% { box-shadow: 0 0 0 0 rgba(0,255,0,0.2); }
-            50% { box-shadow: 0 0 0 6px rgba(0,255,0,0); }
-        }
-        .analyzer-online { animation: analyzerPulse 2s infinite; }
-
-        /* Data flow animation */
-        @keyframes dataFlow {
-            0% { transform: translateX(-100%); opacity: 0; }
-            20% { opacity: 1; }
-            80% { opacity: 1; }
-            100% { transform: translateX(100%); opacity: 0; }
-        }
-        .data-flow-dot {
-            animation: dataFlow 2s infinite;
-        }
+        /* Analyzer pulse */
+        @keyframes analyzerPulse{0%,100%{box-shadow:0 0 0 0 rgba(0,255,0,.15)}50%{box-shadow:0 0 0 5px rgba(0,255,0,0)}}
+        .analyzer-online{animation:analyzerPulse 2s infinite}
 
         /* Status LED */
-        @keyframes ledBlink {
-            0%, 90%, 100% { opacity: 1; }
-            95% { opacity: 0.3; }
-        }
-        .led-online { animation: ledBlink 3s infinite; }
+        @keyframes ledBlink{0%,90%,100%{opacity:1}95%{opacity:.3}}
+        .led-online{animation:ledBlink 3s infinite}
 
-        /* Arch node hover */
-        .arch-node { transition: all 0.2s ease; }
-        .arch-node:hover { transform: translateY(-2px); }
+        /* Arch node hover - only on non-touch */
+        @media(hover:hover){.arch-node:hover{transform:translateY(-2px)}}
+        .arch-node{transition:transform .2s ease}
 
-        /* LIS Hero gradient border */
-        .lis-border {
-            position: relative;
-        }
-        .lis-border::before {
-            content: '';
-            position: absolute;
-            inset: -1px;
-            border-radius: inherit;
-            padding: 1px;
-            background: linear-gradient(135deg, #00FF00, #00D7FF, #00FF00);
-            background-size: 200% 200%;
-            animation: borderShift 4s ease infinite;
-            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-            -webkit-mask-composite: xor;
-            mask-composite: exclude;
-            pointer-events: none;
-        }
-        @keyframes borderShift {
-            0%, 100% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-        }
+        /* Vertical flow arrow */
+        .flow-arrow-v{display:flex;flex-direction:column;align-items:center;padding:4px 0}
+        .flow-arrow-v .arrow-line{width:2px;height:16px;background:linear-gradient(to bottom,#00FF00,#00D7FF)}
+        .flow-arrow-v .arrow-label{font-size:9px;font-family:'JetBrains Mono',monospace}
 
-        /* WebSocket pulse */
-        @keyframes wsPulse {
-            0% { r: 4; opacity: 0.8; }
-            100% { r: 16; opacity: 0; }
+        /* Horizontal flow arrow for desktop */
+        @media(min-width:640px){
+            .flow-arrow-h{display:flex;align-items:center;padding:0 8px}
+            .flow-arrow-h .arrow-line{height:2px;width:20px;background:linear-gradient(to right,#00FF00,#00D7FF)}
         }
+        .flow-arrow-h{display:none}
     </style>
 </head>
 <body class="dark:bg-[#111111] bg-lightBg dark:text-[#e6e6e6] text-gray-900 theme-transition">
 
-    <!-- Toast Container -->
     <div id="toast-container" class="fixed top-4 right-4 z-[100] flex flex-col gap-2"></div>
 
     <!-- Navigation -->
     <nav id="navbar" class="fixed top-0 left-0 right-0 z-50 dark:bg-[#1e1e1e]/90 bg-white/90 backdrop-blur-md border-b dark:border-darkBorder border-lightBorder theme-transition">
-        <div class="max-w-6xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
-            <a href="#home" class="flex items-center gap-2 group">
-                <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-neonGreen to-neonBlue flex items-center justify-center">
-                    <span class="dark:text-black text-white font-bold text-sm">RH</span>
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 h-14 sm:h-16 flex items-center justify-between">
+            <a href="#home" class="flex items-center gap-2">
+                <div class="w-7 h-7 sm:w-8 sm:h-8 rounded-lg bg-gradient-to-br from-neonGreen to-neonBlue flex items-center justify-center">
+                    <span class="dark:text-black text-white font-bold text-xs sm:text-sm">RH</span>
                 </div>
-                <span class="font-mono text-sm dark:text-[#e6e6e6] text-gray-900 hidden sm:inline">
-                    <span class="text-neonGreen">$</span> robiul.dev
-                </span>
+                <span class="font-mono text-xs sm:text-sm dark:text-[#e6e6e6] text-gray-900 hidden sm:inline"><span class="text-neonGreen">$</span> robiul.dev</span>
             </a>
             <div class="hidden md:flex items-center gap-6">
-                <a href="#home" class="nav-link active text-sm font-medium dark:text-[#e6e6e6] text-gray-700 hover:text-neonGreen dark:hover:text-neonGreen transition-colors">Home</a>
-                <a href="#articles" class="nav-link text-sm font-medium dark:text-gray-400 text-gray-500 hover:text-neonGreen dark:hover:text-neonGreen transition-colors">Articles</a>
-                <a href="#projects" class="nav-link text-sm font-medium dark:text-gray-400 text-gray-500 hover:text-neonGreen dark:hover:text-neonGreen transition-colors">Projects</a>
-                <a href="#about" class="nav-link text-sm font-medium dark:text-gray-400 text-gray-500 hover:text-neonGreen dark:hover:text-neonGreen transition-colors">About</a>
+                <a href="#home" class="nav-link active text-sm font-medium dark:text-[#e6e6e6] text-gray-700 hover:text-neonGreen transition-colors">Home</a>
+                <a href="#articles" class="nav-link text-sm font-medium dark:text-gray-400 text-gray-500 hover:text-neonGreen transition-colors">Articles</a>
+                <a href="#projects" class="nav-link text-sm font-medium dark:text-gray-400 text-gray-500 hover:text-neonGreen transition-colors">Projects</a>
+                <a href="#about" class="nav-link text-sm font-medium dark:text-gray-400 text-gray-500 hover:text-neonGreen transition-colors">About</a>
             </div>
-            <div class="flex items-center gap-3">
-                <button id="theme-toggle" class="w-9 h-9 rounded-lg dark:bg-darkSurface bg-gray-100 dark:border-darkBorder border-lightBorder border flex items-center justify-center hover:border-neonGreen transition-colors" title="Toggle theme">
+            <div class="flex items-center gap-2 sm:gap-3">
+                <button id="theme-toggle" class="w-8 h-8 sm:w-9 sm:h-9 rounded-lg dark:bg-darkSurface bg-gray-100 dark:border-darkBorder border-lightBorder border flex items-center justify-center hover:border-neonGreen transition-colors">
                     <i data-lucide="sun" class="w-4 h-4 dark:text-neonGreen text-gray-600 hidden dark:block"></i>
                     <i data-lucide="moon" class="w-4 h-4 text-gray-600 dark:hidden block"></i>
                 </button>
-                <button id="mobile-menu-btn" class="md:hidden w-9 h-9 rounded-lg dark:bg-darkSurface bg-gray-100 dark:border-darkBorder border-lightBorder border flex items-center justify-center">
+                <button id="mobile-menu-btn" class="md:hidden w-8 h-8 sm:w-9 sm:h-9 rounded-lg dark:bg-darkSurface bg-gray-100 dark:border-darkBorder border-lightBorder border flex items-center justify-center">
                     <i data-lucide="menu" class="w-4 h-4 dark:text-[#e6e6e6] text-gray-700"></i>
                 </button>
             </div>
@@ -262,717 +134,603 @@
     </nav>
 
     <!-- Mobile Menu -->
-    <div id="mobile-menu" class="mobile-menu fixed top-0 right-0 bottom-0 w-64 z-[60] dark:bg-darkBg bg-white border-l dark:border-darkBorder border-lightBorder p-6 theme-transition">
-        <div class="flex justify-between items-center mb-8">
-            <span class="font-mono text-sm text-neonGreen">Navigation</span>
-            <button id="mobile-menu-close" class="w-8 h-8 rounded-lg dark:bg-darkSurface bg-gray-100 flex items-center justify-center">
-                <i data-lucide="x" class="w-4 h-4"></i>
-            </button>
+    <div id="mobile-menu" class="mobile-menu fixed top-0 right-0 bottom-0 w-60 z-[60] dark:bg-darkBg bg-white border-l dark:border-darkBorder border-lightBorder p-5">
+        <div class="flex justify-between items-center mb-6">
+            <span class="font-mono text-sm text-neonGreen">Nav</span>
+            <button id="mobile-menu-close" class="w-8 h-8 rounded-lg dark:bg-darkSurface bg-gray-100 flex items-center justify-center"><i data-lucide="x" class="w-4 h-4"></i></button>
         </div>
-        <div class="flex flex-col gap-4">
-            <a href="#home" class="mobile-nav-link text-base font-medium dark:text-[#e6e6e6] text-gray-700 hover:text-neonGreen transition-colors py-2 border-b dark:border-darkBorder border-lightBorder">Home</a>
-            <a href="#articles" class="mobile-nav-link text-base font-medium dark:text-gray-400 text-gray-500 hover:text-neonGreen transition-colors py-2 border-b dark:border-darkBorder border-lightBorder">Articles</a>
-            <a href="#projects" class="mobile-nav-link text-base font-medium dark:text-gray-400 text-gray-500 hover:text-neonGreen transition-colors py-2 border-b dark:border-darkBorder border-lightBorder">Projects</a>
-            <a href="#about" class="mobile-nav-link text-base font-medium dark:text-gray-400 text-gray-500 hover:text-neonGreen transition-colors py-2">About</a>
+        <div class="flex flex-col gap-1">
+            <a href="#home" class="mobile-nav-link text-sm font-medium dark:text-[#e6e6e6] text-gray-700 hover:text-neonGreen transition-colors py-2.5 px-3 rounded-lg hover:dark:bg-darkSurface hover:bg-gray-50">Home</a>
+            <a href="#articles" class="mobile-nav-link text-sm font-medium dark:text-gray-400 text-gray-500 hover:text-neonGreen transition-colors py-2.5 px-3 rounded-lg hover:dark:bg-darkSurface hover:bg-gray-50">Articles</a>
+            <a href="#projects" class="mobile-nav-link text-sm font-medium dark:text-gray-400 text-gray-500 hover:text-neonGreen transition-colors py-2.5 px-3 rounded-lg hover:dark:bg-darkSurface hover:bg-gray-50">Projects</a>
+            <a href="#about" class="mobile-nav-link text-sm font-medium dark:text-gray-400 text-gray-500 hover:text-neonGreen transition-colors py-2.5 px-3 rounded-lg hover:dark:bg-darkSurface hover:bg-gray-50">About</a>
         </div>
     </div>
     <div id="mobile-overlay" class="fixed inset-0 bg-black/50 z-[55] hidden"></div>
 
-    <!-- ==================== HERO SECTION ==================== -->
-    <section id="home" class="relative min-h-screen flex items-center justify-center overflow-hidden pt-16">
+    <!-- HERO -->
+    <section id="home" class="relative min-h-screen flex items-center justify-center overflow-hidden pt-14 sm:pt-16">
         <div id="particles" class="absolute inset-0 overflow-hidden pointer-events-none"></div>
-        <div class="absolute inset-0 opacity-[0.03]" style="background-image: linear-gradient(#00FF00 1px, transparent 1px), linear-gradient(90deg, #00FF00 1px, transparent 1px); background-size: 60px 60px;"></div>
-        
-        <div class="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 w-full">
-            <div class="flex flex-col lg:flex-row items-center gap-12 lg:gap-16">
+        <div class="absolute inset-0 opacity-[0.03]" style="background-image:linear-gradient(#00FF00 1px,transparent 1px),linear-gradient(90deg,#00FF00 1px,transparent 1px);background-size:60px 60px"></div>
+        <div class="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 w-full py-10">
+            <div class="flex flex-col lg:flex-row items-center gap-8 lg:gap-16">
                 <div class="flex-1 text-center lg:text-left">
-                    <div class="dark:bg-darkSurface/80 bg-gray-100 rounded-lg p-3 mb-6 inline-flex items-center gap-2 font-mono text-xs border dark:border-darkBorder border-lightBorder">
-                        <span class="w-3 h-3 rounded-full bg-red-500/80"></span>
-                        <span class="w-3 h-3 rounded-full bg-yellow-500/80"></span>
-                        <span class="w-3 h-3 rounded-full bg-green-500/80"></span>
-                        <span class="ml-2 dark:text-gray-400 text-gray-500">terminal</span>
+                    <div class="dark:bg-darkSurface/80 bg-gray-100 rounded-lg p-2.5 mb-5 inline-flex items-center gap-2 font-mono text-[10px] sm:text-xs border dark:border-darkBorder border-lightBorder">
+                        <span class="w-2.5 h-2.5 rounded-full bg-red-500/80"></span>
+                        <span class="w-2.5 h-2.5 rounded-full bg-yellow-500/80"></span>
+                        <span class="w-2.5 h-2.5 rounded-full bg-green-500/80"></span>
+                        <span class="ml-1 dark:text-gray-400 text-gray-500">terminal</span>
                     </div>
-                    <div class="font-mono text-sm dark:text-gray-400 text-gray-500 mb-2">
+                    <div class="font-mono text-xs sm:text-sm dark:text-gray-400 text-gray-500 mb-2">
                         <span class="text-neonGreen">robiul@dev</span><span class="dark:text-gray-500 text-gray-400">:</span><span class="text-neonBlue">~</span><span class="dark:text-gray-500 text-gray-400">$</span> cat intro.md
                     </div>
-                    <h1 class="text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight mb-4">
+                    <h1 class="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight mb-3 sm:mb-4">
                         <span class="dark:text-[#e6e6e6] text-gray-900">Hi, I'm </span>
                         <span class="bg-gradient-to-r from-neonGreen to-neonBlue bg-clip-text text-transparent">Robiul Hossain</span>
                     </h1>
-                    <p class="text-lg sm:text-xl dark:text-gray-400 text-gray-500 mb-2 font-mono">
-                        <span class="text-neonGreen">&gt;</span> Java Developer <span class="dark:text-gray-600 text-gray-300">|</span> Tech Enthusiast <span class="dark:text-gray-600 text-gray-300">|</span> Open Source
+                    <p class="text-sm sm:text-lg md:text-xl dark:text-gray-400 text-gray-500 mb-1.5 font-mono">
+                        <span class="text-neonGreen">&gt;</span> Java Developer <span class="dark:text-gray-600 text-gray-300">|</span> LIS Engineer <span class="dark:text-gray-600 text-gray-300">|</span> Open Source
                     </p>
-                    <p class="dark:text-gray-500 text-gray-400 text-base max-w-lg mx-auto lg:mx-0 mb-8 leading-relaxed">
+                    <p class="dark:text-gray-500 text-gray-400 text-sm sm:text-base max-w-lg mx-auto lg:mx-0 mb-6 leading-relaxed">
                         Crafting robust backend systems with Java & Spring Boot. Currently building Laboratory Information Systems integrating medical analyzers.
                     </p>
-                    <div class="dark:bg-darkSurface/60 bg-gray-100 rounded-lg p-4 mb-8 max-w-lg mx-auto lg:mx-0 border dark:border-darkBorder border-lightBorder">
-                        <div class="font-mono text-sm">
+                    <div class="dark:bg-darkSurface/60 bg-gray-100 rounded-lg p-3 sm:p-4 mb-6 max-w-lg mx-auto lg:mx-0 border dark:border-darkBorder border-lightBorder">
+                        <div class="font-mono text-xs sm:text-sm overflow-hidden">
                             <span class="text-neonGreen">robiul@dev</span><span class="dark:text-gray-500 text-gray-400">:</span><span class="text-neonBlue">~</span><span class="dark:text-gray-500 text-gray-400">$</span>
-                            <span class="dark:text-[#e6e6e6] text-gray-800 typing-effect"> java -version &amp;&amp; echo "Ready to code!"</span>
+                            <span class="dark:text-[#e6e6e6] text-gray-800 typing-effect">java -version</span>
                             <span class="cursor-blink text-neonGreen">▋</span>
                         </div>
-                        <div class="font-mono text-xs dark:text-gray-500 text-gray-400 mt-2">
-                            openjdk version "17.0.9" 2023-10-17<br>
-                            Ready to code!
-                        </div>
+                        <div class="font-mono text-[10px] sm:text-xs dark:text-gray-500 text-gray-400 mt-1.5">openjdk 17.0.9 — Ready to code!</div>
                     </div>
-                    <div class="flex items-center gap-3 justify-center lg:justify-start">
-                        <a href="#" class="w-10 h-10 rounded-lg dark:bg-darkSurface bg-gray-100 border dark:border-darkBorder border-lightBorder flex items-center justify-center dark:text-gray-400 text-gray-500 hover:text-neonGreen hover:border-neonGreen transition-all" title="GitHub">
-                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+                    <div class="flex items-center gap-2 sm:gap-3 justify-center lg:justify-center">
+                        <a href="#" class="w-9 h-9 sm:w-10 sm:h-10 rounded-lg dark:bg-darkSurface bg-gray-100 border dark:border-darkBorder border-lightBorder flex items-center justify-center dark:text-gray-400 text-gray-500 hover:text-neonGreen hover:border-neonGreen transition-all">
+                            <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
                         </a>
-                        <a href="#" class="w-10 h-10 rounded-lg dark:bg-darkSurface bg-gray-100 border dark:border-darkBorder border-lightBorder flex items-center justify-center dark:text-gray-400 text-gray-500 hover:text-neonBlue hover:border-neonBlue transition-all" title="LinkedIn">
-                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+                        <a href="#" class="w-9 h-9 sm:w-10 sm:h-10 rounded-lg dark:bg-darkSurface bg-gray-100 border dark:border-darkBorder border-lightBorder flex items-center justify-center dark:text-gray-400 text-gray-500 hover:text-neonBlue hover:border-neonBlue transition-all">
+                            <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
                         </a>
-                        <a href="#" class="w-10 h-10 rounded-lg dark:bg-darkSurface bg-gray-100 border dark:border-darkBorder border-lightBorder flex items-center justify-center dark:text-gray-400 text-gray-500 hover:text-neonGreen hover:border-neonGreen transition-all" title="Twitter/X">
-                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
-                        </a>
-                        <a href="#" class="w-10 h-10 rounded-lg dark:bg-darkSurface bg-gray-100 border dark:border-darkBorder border-lightBorder flex items-center justify-center dark:text-gray-400 text-gray-500 hover:text-neonBlue hover:border-neonBlue transition-all" title="Email">
-                            <i data-lucide="mail" class="w-5 h-5"></i>
+                        <a href="#" class="w-9 h-9 sm:w-10 sm:h-10 rounded-lg dark:bg-darkSurface bg-gray-100 border dark:border-darkBorder border-lightBorder flex items-center justify-center dark:text-gray-400 text-gray-500 hover:text-neonGreen hover:border-neonGreen transition-all">
+                            <i data-lucide="mail" class="w-4 h-4 sm:w-5 sm:h-5"></i>
                         </a>
                     </div>
                 </div>
                 <div class="flex-shrink-0">
                     <div class="relative">
-                        <div class="w-48 h-48 sm:w-56 sm:h-56 rounded-2xl overflow-hidden border-2 dark:border-darkBorder border-lightBorder mx-auto box-glow-green">
+                        <div class="w-40 h-40 sm:w-48 sm:h-48 lg:w-56 lg:h-56 rounded-2xl overflow-hidden border-2 dark:border-darkBorder border-lightBorder mx-auto">
                             <img src="https://i.ibb.co.com/MDdFbSHC/P-P.jpg" alt="Robiul Hossain" class="w-full h-full object-cover">
                         </div>
-                        <div class="absolute -bottom-2 -right-2 dark:bg-darkBg bg-white rounded-lg px-3 py-1.5 border dark:border-darkBorder border-lightBorder font-mono text-xs flex items-center gap-1.5">
-                            <span class="w-2 h-2 rounded-full bg-neonGreen animate-pulse"></span>
+                        <div class="absolute -bottom-2 -right-2 dark:bg-darkBg bg-white rounded-lg px-2.5 py-1 border dark:border-darkBorder border-lightBorder font-mono text-[10px] flex items-center gap-1.5">
+                            <span class="w-1.5 h-1.5 rounded-full bg-neonGreen animate-pulse"></span>
                             <span class="dark:text-gray-400 text-gray-500">Available</span>
                         </div>
-                        <div class="absolute -top-4 -left-4 text-neonGreen/30 text-4xl font-mono font-bold">{</div>
-                        <div class="absolute -bottom-4 -right-4 text-neonBlue/30 text-4xl font-mono font-bold">}</div>
                     </div>
-                    <div class="mt-6 dark:bg-darkSurface/80 bg-gray-100 rounded-xl p-4 border dark:border-darkBorder border-lightBorder max-w-[280px] mx-auto">
-                        <div class="flex items-center gap-1.5 mb-3">
-                            <span class="w-2.5 h-2.5 rounded-full bg-red-500/70"></span>
-                            <span class="w-2.5 h-2.5 rounded-full bg-yellow-500/70"></span>
-                            <span class="w-2.5 h-2.5 rounded-full bg-green-500/70"></span>
-                            <span class="ml-auto text-[10px] dark:text-gray-500 text-gray-400 font-mono">LisSystem.java</span>
+                    <div class="mt-4 sm:mt-6 dark:bg-darkSurface/80 bg-gray-100 rounded-xl p-3 sm:p-4 border dark:border-darkBorder border-lightBorder max-w-[240px] sm:max-w-[280px] mx-auto">
+                        <div class="flex items-center gap-1.5 mb-2">
+                            <span class="w-2 h-2 rounded-full bg-red-500/70"></span>
+                            <span class="w-2 h-2 rounded-full bg-yellow-500/70"></span>
+                            <span class="w-2 h-2 rounded-full bg-green-500/70"></span>
+                            <span class="ml-auto text-[9px] sm:text-[10px] dark:text-gray-500 text-gray-400 font-mono">LisSystem.java</span>
                         </div>
-                        <pre class="font-mono text-xs leading-5"><code><span class="token-keyword">public class</span> <span class="token-type">LisSystem</span> <span class="token-paren">{</span>
-  <span class="token-type">String</span> name = <span class="token-string">"LabSys Pro"</span>;
-  <span class="token-type">int</span> analyzers = <span class="token-number">4</span>;
+                        <pre class="font-mono text-[10px] sm:text-xs leading-4 sm:leading-5"><code><span class="token-keyword">public class</span> <span class="token-type">LisSystem</span> <span class="token-paren">{</span>
+  <span class="token-type">String</span> name=<span class="token-string">"LabSys"</span>;
+  <span class="token-type">int</span> analyzers=<span class="token-number">4</span>;
   <span class="token-annotation">@WebSocket</span>
-  <span class="token-type">boolean</span> live = <span class="token-keyword">true</span>;
+  <span class="token-type">boolean</span> live=<span class="token-keyword">true</span>;
 <span class="token-paren">}</span></code></pre>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2">
-            <span class="text-[10px] font-mono dark:text-gray-500 text-gray-400 uppercase tracking-widest">Scroll</span>
-            <div class="w-5 h-8 rounded-full border dark:border-gray-600 border-gray-300 flex justify-center pt-1.5">
+        <div class="absolute bottom-6 sm:bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-1.5">
+            <span class="text-[9px] sm:text-[10px] font-mono dark:text-gray-500 text-gray-400 uppercase tracking-widest">Scroll</span>
+            <div class="w-5 h-7 rounded-full border dark:border-gray-600 border-gray-300 flex justify-center pt-1.5">
                 <div class="w-1 h-2 rounded-full bg-neonGreen animate-bounce"></div>
             </div>
         </div>
     </section>
 
-    <!-- ==================== ARTICLES SECTION ==================== -->
-    <section id="articles" class="py-24 px-4 sm:px-6">
+    <!-- ARTICLES -->
+    <section id="articles" class="py-16 sm:py-24 px-4 sm:px-6">
         <div class="max-w-6xl mx-auto">
-            <div class="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 mb-10">
+            <div class="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-3 sm:gap-4 mb-8 sm:mb-10">
                 <div>
-                    <div class="font-mono text-xs text-neonGreen mb-2 flex items-center gap-2">
-                        <span class="w-8 h-px bg-neonGreen"></span>
-                        ./articles
-                    </div>
-                    <h2 class="text-3xl sm:text-4xl font-bold dark:text-[#e6e6e6] text-gray-900 tracking-tight">Latest Articles</h2>
-                    <p class="dark:text-gray-500 text-gray-400 mt-2 text-sm">Thoughts on Java, system design, and developer tools</p>
+                    <div class="font-mono text-[10px] sm:text-xs text-neonGreen mb-1.5 flex items-center gap-2"><span class="w-6 sm:w-8 h-px bg-neonGreen"></span>./articles</div>
+                    <h2 class="text-2xl sm:text-3xl md:text-4xl font-bold dark:text-[#e6e6e6] text-gray-900 tracking-tight">Latest Articles</h2>
                 </div>
-                <div class="flex gap-2 flex-wrap" id="tag-filters">
-                    <button class="tag-btn active-tag px-3 py-1.5 rounded-lg text-xs font-mono border dark:border-darkBorder border-lightBorder dark:text-gray-400 text-gray-500 hover:border-neonGreen transition-all" data-tag="all">All</button>
-                    <button class="tag-btn px-3 py-1.5 rounded-lg text-xs font-mono border dark:border-darkBorder border-lightBorder dark:text-gray-400 text-gray-500 hover:border-neonGreen transition-all" data-tag="backend">Back End</button>
-                    <button class="tag-btn px-3 py-1.5 rounded-lg text-xs font-mono border dark:border-darkBorder border-lightBorder dark:text-gray-400 text-gray-500 hover:border-neonGreen transition-all" data-tag="frontend">Front End</button>
-                    <button class="tag-btn px-3 py-1.5 rounded-lg text-xs font-mono border dark:border-darkBorder border-lightBorder dark:text-gray-400 text-gray-500 hover:border-neonGreen transition-all" data-tag="tools">Tools</button>
+                <div class="flex gap-1.5 sm:gap-2 flex-wrap" id="tag-filters">
+                    <button class="tag-btn active-tag px-2.5 py-1 sm:px-3 sm:py-1.5 rounded-lg text-[10px] sm:text-xs font-mono border dark:border-darkBorder border-lightBorder dark:text-gray-400 text-gray-500" data-tag="all">All</button>
+                    <button class="tag-btn px-2.5 py-1 sm:px-3 sm:py-1.5 rounded-lg text-[10px] sm:text-xs font-mono border dark:border-darkBorder border-lightBorder dark:text-gray-400 text-gray-500" data-tag="backend">Backend</button>
+                    <button class="tag-btn px-2.5 py-1 sm:px-3 sm:py-1.5 rounded-lg text-[10px] sm:text-xs font-mono border dark:border-darkBorder border-lightBorder dark:text-gray-400 text-gray-500" data-tag="frontend">Frontend</button>
+                    <button class="tag-btn px-2.5 py-1 sm:px-3 sm:py-1.5 rounded-lg text-[10px] sm:text-xs font-mono border dark:border-darkBorder border-lightBorder dark:text-gray-400 text-gray-500" data-tag="tools">Tools</button>
                 </div>
             </div>
-            <div id="articles-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-                <article class="article-card dark:bg-darkSurface/60 bg-white rounded-xl border dark:border-darkBorder border-lightBorder overflow-hidden cursor-pointer group" data-tag="backend" data-article="1">
-                    <div class="h-40 overflow-hidden relative">
-                        <img src="https://picsum.photos/seed/java-spring/600/300.jpg" alt="Spring Boot" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
-                        <div class="absolute top-3 left-3 px-2 py-0.5 rounded text-[10px] font-mono font-medium bg-neonGreen/20 text-neonGreen border border-neonGreen/30">BACK END</div>
-                    </div>
-                    <div class="p-5">
-                        <div class="flex items-center gap-2 text-[10px] font-mono dark:text-gray-500 text-gray-400 mb-2">
-                            <span>2024-12-15</span><span>·</span><span>8 min read</span>
-                        </div>
-                        <h3 class="font-bold dark:text-[#e6e6e6] text-gray-900 mb-2 group-hover:text-neonGreen transition-colors">Mastering Spring Boot 3: Virtual Threads Deep Dive</h3>
-                        <p class="text-sm dark:text-gray-500 text-gray-400 line-clamp-2">Explore how Project Loom's virtual threads revolutionize Spring Boot applications with practical benchmarks.</p>
-                        <div class="flex gap-2 mt-3">
-                            <span class="px-2 py-0.5 rounded text-[10px] font-mono dark:bg-darkBg bg-gray-100 dark:text-gray-400 text-gray-500">Java 17</span>
-                            <span class="px-2 py-0.5 rounded text-[10px] font-mono dark:bg-darkBg bg-gray-100 dark:text-gray-400 text-gray-500">Spring Boot 3</span>
-                        </div>
-                    </div>
-                </article>
-                <article class="article-card dark:bg-darkSurface/60 bg-white rounded-xl border dark:border-darkBorder border-lightBorder overflow-hidden cursor-pointer group" data-tag="backend" data-article="2">
-                    <div class="h-40 overflow-hidden relative">
+            <div id="articles-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5">
+                <article class="article-card dark:bg-darkSurface/60 bg-white rounded-xl border dark:border-darkBorder border-lightBorder overflow-hidden cursor-pointer group" data-tag="backend">
+                    <div class="h-36 sm:h-40 overflow-hidden relative">
                         <img src="https://picsum.photos/seed/lab-analyzer/600/300.jpg" alt="LIS" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
-                        <div class="absolute top-3 left-3 px-2 py-0.5 rounded text-[10px] font-mono font-medium bg-neonGreen/20 text-neonGreen border border-neonGreen/30">BACK END</div>
+                        <div class="absolute top-2.5 left-2.5 px-1.5 py-0.5 rounded text-[9px] sm:text-[10px] font-mono font-medium bg-neonGreen/20 text-neonGreen border border-neonGreen/30">BACKEND</div>
                     </div>
-                    <div class="p-5">
-                        <div class="flex items-center gap-2 text-[10px] font-mono dark:text-gray-500 text-gray-400 mb-2">
-                            <span>2024-11-28</span><span>·</span><span>12 min read</span>
-                        </div>
-                        <h3 class="font-bold dark:text-[#e6e6e6] text-gray-900 mb-2 group-hover:text-neonGreen transition-colors">Building a LIS: Integrating Medical Analyzers via HL7</h3>
-                        <p class="text-sm dark:text-gray-500 text-gray-400 line-clamp-2">Real-world experience connecting Mini VIDAS, Siemens EXL, and Sysmex analyzers to a Spring Boot backend.</p>
-                        <div class="flex gap-2 mt-3">
-                            <span class="px-2 py-0.5 rounded text-[10px] font-mono dark:bg-darkBg bg-gray-100 dark:text-gray-400 text-gray-500">HL7</span>
-                            <span class="px-2 py-0.5 rounded text-[10px] font-mono dark:bg-darkBg bg-gray-100 dark:text-gray-400 text-gray-500">WebSocket</span>
-                        </div>
+                    <div class="p-4 sm:p-5">
+                        <div class="flex items-center gap-2 text-[9px] sm:text-[10px] font-mono dark:text-gray-500 text-gray-400 mb-1.5"><span>2024-12-15</span><span>·</span><span>8 min</span></div>
+                        <h3 class="font-bold text-sm sm:text-base dark:text-[#e6e6e6] text-gray-900 mb-1.5 group-hover:text-neonGreen transition-colors leading-snug">Building LIS: Integrating Medical Analyzers via HL7</h3>
+                        <p class="text-xs sm:text-sm dark:text-gray-500 text-gray-400 line-clamp-2">Connecting Mini VIDAS, Siemens EXL, Sysmex analyzers to a Spring Boot backend.</p>
+                        <div class="flex gap-1.5 mt-2.5 flex-wrap"><span class="px-1.5 py-0.5 rounded text-[9px] font-mono dark:bg-darkBg bg-gray-100 dark:text-gray-400 text-gray-500">HL7</span><span class="px-1.5 py-0.5 rounded text-[9px] font-mono dark:bg-darkBg bg-gray-100 dark:text-gray-400 text-gray-500">WebSocket</span></div>
                     </div>
                 </article>
-                <article class="article-card dark:bg-darkSurface/60 bg-white rounded-xl border dark:border-darkBorder border-lightBorder overflow-hidden cursor-pointer group" data-tag="tools" data-article="3">
-                    <div class="h-40 overflow-hidden relative">
-                        <img src="https://picsum.photos/seed/docker-k8s/600/300.jpg" alt="Docker" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
-                        <div class="absolute top-3 left-3 px-2 py-0.5 rounded text-[10px] font-mono font-medium bg-neonBlue/20 text-neonBlue border border-neonBlue/30">TOOLS</div>
+                <article class="article-card dark:bg-darkSurface/60 bg-white rounded-xl border dark:border-darkBorder border-lightBorder overflow-hidden cursor-pointer group" data-tag="backend">
+                    <div class="h-36 sm:h-40 overflow-hidden relative">
+                        <img src="https://picsum.photos/seed/spring-virtual/600/300.jpg" alt="Spring" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
+                        <div class="absolute top-2.5 left-2.5 px-1.5 py-0.5 rounded text-[9px] sm:text-[10px] font-mono font-medium bg-neonGreen/20 text-neonGreen border border-neonGreen/30">BACKEND</div>
                     </div>
-                    <div class="p-5">
-                        <div class="flex items-center gap-2 text-[10px] font-mono dark:text-gray-500 text-gray-400 mb-2">
-                            <span>2024-11-10</span><span>·</span><span>6 min read</span>
-                        </div>
-                        <h3 class="font-bold dark:text-[#e6e6e6] text-gray-900 mb-2 group-hover:text-neonGreen transition-colors">SQLite + Oracle: Dual Database Strategy in Production</h3>
-                        <p class="text-sm dark:text-gray-500 text-gray-400 line-clamp-2">How we use SQLite for local config/cache and Oracle with stored procedures for transactional data.</p>
-                        <div class="flex gap-2 mt-3">
-                            <span class="px-2 py-0.5 rounded text-[10px] font-mono dark:bg-darkBg bg-gray-100 dark:text-gray-400 text-gray-500">SQLite</span>
-                            <span class="px-2 py-0.5 rounded text-[10px] font-mono dark:bg-darkBg bg-gray-100 dark:text-gray-400 text-gray-500">Oracle</span>
-                        </div>
+                    <div class="p-4 sm:p-5">
+                        <div class="flex items-center gap-2 text-[9px] sm:text-[10px] font-mono dark:text-gray-500 text-gray-400 mb-1.5"><span>2024-11-28</span><span>·</span><span>12 min</span></div>
+                        <h3 class="font-bold text-sm sm:text-base dark:text-[#e6e6e6] text-gray-900 mb-1.5 group-hover:text-neonGreen transition-colors leading-snug">Spring Boot 3 + Virtual Threads Deep Dive</h3>
+                        <p class="text-xs sm:text-sm dark:text-gray-500 text-gray-400 line-clamp-2">How virtual threads revolutionize Spring Boot with practical benchmarks.</p>
+                        <div class="flex gap-1.5 mt-2.5 flex-wrap"><span class="px-1.5 py-0.5 rounded text-[9px] font-mono dark:bg-darkBg bg-gray-100 dark:text-gray-400 text-gray-500">Java 17</span><span class="px-1.5 py-0.5 rounded text-[9px] font-mono dark:bg-darkBg bg-gray-100 dark:text-gray-400 text-gray-500">Spring Boot 3</span></div>
                     </div>
                 </article>
-                <article class="article-card dark:bg-darkSurface/60 bg-white rounded-xl border dark:border-darkBorder border-lightBorder overflow-hidden cursor-pointer group" data-tag="frontend" data-article="4">
-                    <div class="h-40 overflow-hidden relative">
-                        <img src="https://picsum.photos/seed/react-typescript/600/300.jpg" alt="React" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
-                        <div class="absolute top-3 left-3 px-2 py-0.5 rounded text-[10px] font-mono font-medium bg-purple-500/20 text-purple-400 border border-purple-500/30">FRONT END</div>
+                <article class="article-card dark:bg-darkSurface/60 bg-white rounded-xl border dark:border-darkBorder border-lightBorder overflow-hidden cursor-pointer group" data-tag="tools">
+                    <div class="h-36 sm:h-40 overflow-hidden relative">
+                        <img src="https://picsum.photos/seed/sqlite-oracle/600/300.jpg" alt="DB" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
+                        <div class="absolute top-2.5 left-2.5 px-1.5 py-0.5 rounded text-[9px] sm:text-[10px] font-mono font-medium bg-neonBlue/20 text-neonBlue border border-neonBlue/30">TOOLS</div>
                     </div>
-                    <div class="p-5">
-                        <div class="flex items-center gap-2 text-[10px] font-mono dark:text-gray-500 text-gray-400 mb-2">
-                            <span>2024-10-22</span><span>·</span><span>10 min read</span>
-                        </div>
-                        <h3 class="font-bold dark:text-[#e6e6e6] text-gray-900 mb-2 group-hover:text-neonGreen transition-colors">Building Type-Safe APIs with React Query & TypeScript</h3>
-                        <p class="text-sm dark:text-gray-500 text-gray-400 line-clamp-2">Create fully type-safe API layers in React using TypeScript generics and React Query's inference.</p>
-                        <div class="flex gap-2 mt-3">
-                            <span class="px-2 py-0.5 rounded text-[10px] font-mono dark:bg-darkBg bg-gray-100 dark:text-gray-400 text-gray-500">React</span>
-                            <span class="px-2 py-0.5 rounded text-[10px] font-mono dark:bg-darkBg bg-gray-100 dark:text-gray-400 text-gray-500">TypeScript</span>
-                        </div>
+                    <div class="p-4 sm:p-5">
+                        <div class="flex items-center gap-2 text-[9px] sm:text-[10px] font-mono dark:text-gray-500 text-gray-400 mb-1.5"><span>2024-11-10</span><span>·</span><span>6 min</span></div>
+                        <h3 class="font-bold text-sm sm:text-base dark:text-[#e6e6e6] text-gray-900 mb-1.5 group-hover:text-neonGreen transition-colors leading-snug">SQLite + Oracle: Dual Database Strategy</h3>
+                        <p class="text-xs sm:text-sm dark:text-gray-500 text-gray-400 line-clamp-2">Using SQLite for config and Oracle stored procedures for transactional data.</p>
+                        <div class="flex gap-1.5 mt-2.5 flex-wrap"><span class="px-1.5 py-0.5 rounded text-[9px] font-mono dark:bg-darkBg bg-gray-100 dark:text-gray-400 text-gray-500">SQLite</span><span class="px-1.5 py-0.5 rounded text-[9px] font-mono dark:bg-darkBg bg-gray-100 dark:text-gray-400 text-gray-500">Oracle</span></div>
                     </div>
                 </article>
-                <article class="article-card dark:bg-darkSurface/60 bg-white rounded-xl border dark:border-darkBorder border-lightBorder overflow-hidden cursor-pointer group" data-tag="backend" data-article="5">
-                    <div class="h-40 overflow-hidden relative">
-                        <img src="https://picsum.photos/seed/websocket-live/600/300.jpg" alt="WebSocket" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
-                        <div class="absolute top-3 left-3 px-2 py-0.5 rounded text-[10px] font-mono font-medium bg-neonGreen/20 text-neonGreen border border-neonGreen/30">BACK END</div>
+                <article class="article-card dark:bg-darkSurface/60 bg-white rounded-xl border dark:border-darkBorder border-lightBorder overflow-hidden cursor-pointer group" data-tag="frontend">
+                    <div class="h-36 sm:h-40 overflow-hidden relative">
+                        <img src="https://picsum.photos/seed/react-ts/600/300.jpg" alt="React" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
+                        <div class="absolute top-2.5 left-2.5 px-1.5 py-0.5 rounded text-[9px] sm:text-[10px] font-mono font-medium bg-purple-500/20 text-purple-400 border border-purple-500/30">FRONTEND</div>
                     </div>
-                    <div class="p-5">
-                        <div class="flex items-center gap-2 text-[10px] font-mono dark:text-gray-500 text-gray-400 mb-2">
-                            <span>2024-10-05</span><span>·</span><span>15 min read</span>
-                        </div>
-                        <h3 class="font-bold dark:text-[#e6e6e6] text-gray-900 mb-2 group-hover:text-neonGreen transition-colors">Real-Time Lab Results: WebSocket Architecture in Spring</h3>
-                        <p class="text-sm dark:text-gray-500 text-gray-400 line-clamp-2">Push analyzer results to multiple client screens in real-time using STOMP over WebSocket with Spring Boot.</p>
-                        <div class="flex gap-2 mt-3">
-                            <span class="px-2 py-0.5 rounded text-[10px] font-mono dark:bg-darkBg bg-gray-100 dark:text-gray-400 text-gray-500">WebSocket</span>
-                            <span class="px-2 py-0.5 rounded text-[10px] font-mono dark:bg-darkBg bg-gray-100 dark:text-gray-400 text-gray-500">STOMP</span>
-                        </div>
+                    <div class="p-4 sm:p-5">
+                        <div class="flex items-center gap-2 text-[9px] sm:text-[10px] font-mono dark:text-gray-500 text-gray-400 mb-1.5"><span>2024-10-22</span><span>·</span><span>10 min</span></div>
+                        <h3 class="font-bold text-sm sm:text-base dark:text-[#e6e6e6] text-gray-900 mb-1.5 group-hover:text-neonGreen transition-colors leading-snug">Type-Safe APIs with React Query & TypeScript</h3>
+                        <p class="text-xs sm:text-sm dark:text-gray-500 text-gray-400 line-clamp-2">Create fully type-safe API layers using generics and inference.</p>
+                        <div class="flex gap-1.5 mt-2.5 flex-wrap"><span class="px-1.5 py-0.5 rounded text-[9px] font-mono dark:bg-darkBg bg-gray-100 dark:text-gray-400 text-gray-500">React</span><span class="px-1.5 py-0.5 rounded text-[9px] font-mono dark:bg-darkBg bg-gray-100 dark:text-gray-400 text-gray-500">TypeScript</span></div>
                     </div>
                 </article>
-                <article class="article-card dark:bg-darkSurface/60 bg-white rounded-xl border dark:border-darkBorder border-lightBorder overflow-hidden cursor-pointer group" data-tag="tools" data-article="6">
-                    <div class="h-40 overflow-hidden relative">
-                        <img src="https://picsum.photos/seed/license-system/600/300.jpg" alt="License" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
-                        <div class="absolute top-3 left-3 px-2 py-0.5 rounded text-[10px] font-mono font-medium bg-neonBlue/20 text-neonBlue border border-neonBlue/30">TOOLS</div>
+                <article class="article-card dark:bg-darkSurface/60 bg-white rounded-xl border dark:border-darkBorder border-lightBorder overflow-hidden cursor-pointer group" data-tag="backend">
+                    <div class="h-36 sm:h-40 overflow-hidden relative">
+                        <img src="https://picsum.photos/seed/ws-live/600/300.jpg" alt="WebSocket" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
+                        <div class="absolute top-2.5 left-2.5 px-1.5 py-0.5 rounded text-[9px] sm:text-[10px] font-mono font-medium bg-neonGreen/20 text-neonGreen border border-neonGreen/30">BACKEND</div>
                     </div>
-                    <div class="p-5">
-                        <div class="flex items-center gap-2 text-[10px] font-mono dark:text-gray-500 text-gray-400 mb-2">
-                            <span>2024-09-18</span><span>·</span><span>7 min read</span>
-                        </div>
-                        <h3 class="font-bold dark:text-[#e6e6e6] text-gray-900 mb-2 group-hover:text-neonGreen transition-colors">Implementing a License System for Desktop Java Apps</h3>
-                        <p class="text-sm dark:text-gray-500 text-gray-400 line-clamp-2">Hardware fingerprinting, RSA signature validation, and trial management for enterprise software distribution.</p>
-                        <div class="flex gap-2 mt-3">
-                            <span class="px-2 py-0.5 rounded text-[10px] font-mono dark:bg-darkBg bg-gray-100 dark:text-gray-400 text-gray-500">Security</span>
-                            <span class="px-2 py-0.5 rounded text-[10px] font-mono dark:bg-darkBg bg-gray-100 dark:text-gray-400 text-gray-500">RSA</span>
-                        </div>
+                    <div class="p-4 sm:p-5">
+                        <div class="flex items-center gap-2 text-[9px] sm:text-[10px] font-mono dark:text-gray-500 text-gray-400 mb-1.5"><span>2024-10-05</span><span>·</span><span>15 min</span></div>
+                        <h3 class="font-bold text-sm sm:text-base dark:text-[#e6e6e6] text-gray-900 mb-1.5 group-hover:text-neonGreen transition-colors leading-snug">Real-Time Lab Results: WebSocket in Spring</h3>
+                        <p class="text-xs sm:text-sm dark:text-gray-500 text-gray-400 line-clamp-2">Push analyzer results to screens in real-time using STOMP over WebSocket.</p>
+                        <div class="flex gap-1.5 mt-2.5 flex-wrap"><span class="px-1.5 py-0.5 rounded text-[9px] font-mono dark:bg-darkBg bg-gray-100 dark:text-gray-400 text-gray-500">WebSocket</span><span class="px-1.5 py-0.5 rounded text-[9px] font-mono dark:bg-darkBg bg-gray-100 dark:text-gray-400 text-gray-500">STOMP</span></div>
+                    </div>
+                </article>
+                <article class="article-card dark:bg-darkSurface/60 bg-white rounded-xl border dark:border-darkBorder border-lightBorder overflow-hidden cursor-pointer group" data-tag="tools">
+                    <div class="h-36 sm:h-40 overflow-hidden relative">
+                        <img src="https://picsum.photos/seed/license-sys/600/300.jpg" alt="License" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
+                        <div class="absolute top-2.5 left-2.5 px-1.5 py-0.5 rounded text-[9px] sm:text-[10px] font-mono font-medium bg-neonBlue/20 text-neonBlue border border-neonBlue/30">TOOLS</div>
+                    </div>
+                    <div class="p-4 sm:p-5">
+                        <div class="flex items-center gap-2 text-[9px] sm:text-[10px] font-mono dark:text-gray-500 text-gray-400 mb-1.5"><span>2024-09-18</span><span>·</span><span>7 min</span></div>
+                        <h3 class="font-bold text-sm sm:text-base dark:text-[#e6e6e6] text-gray-900 mb-1.5 group-hover:text-neonGreen transition-colors leading-snug">License System for Desktop Java Apps</h3>
+                        <p class="text-xs sm:text-sm dark:text-gray-500 text-gray-400 line-clamp-2">Hardware fingerprinting, RSA validation, and trial management.</p>
+                        <div class="flex gap-1.5 mt-2.5 flex-wrap"><span class="px-1.5 py-0.5 rounded text-[9px] font-mono dark:bg-darkBg bg-gray-100 dark:text-gray-400 text-gray-500">Security</span><span class="px-1.5 py-0.5 rounded text-[9px] font-mono dark:bg-darkBg bg-gray-100 dark:text-gray-400 text-gray-500">RSA</span></div>
                     </div>
                 </article>
             </div>
         </div>
     </section>
 
-    <!-- ==================== FEATURED CODE ==================== -->
-    <section class="py-16 px-4 sm:px-6">
+    <!-- FEATURED CODE -->
+    <section class="py-12 sm:py-16 px-4 sm:px-6">
         <div class="max-w-6xl mx-auto">
-            <div class="dark:bg-darkSurface/40 bg-gray-50 rounded-2xl border dark:border-darkBorder border-lightBorder p-6 sm:p-10">
-                <div class="font-mono text-xs text-neonGreen mb-4 flex items-center gap-2">
-                    <span class="w-8 h-px bg-neonGreen"></span>
-                    ./featured-snippet
-                </div>
-                <h2 class="text-2xl sm:text-3xl font-bold dark:text-[#e6e6e6] text-gray-900 mb-2 tracking-tight">Code Snippet of the Week</h2>
-                <p class="dark:text-gray-500 text-gray-400 text-sm mb-6">WebSocket config for real-time lab result broadcasting in Spring Boot</p>
-                <div class="dark:bg-[#1a1a1a] bg-[#fafafa] rounded-xl border dark:border-darkBorder border-lightBorder overflow-hidden">
-                    <div class="flex items-center justify-between px-4 py-2.5 border-b dark:border-darkBorder border-lightBorder">
-                        <div class="flex items-center gap-1.5">
-                            <span class="w-3 h-3 rounded-full bg-red-500/70"></span>
-                            <span class="w-3 h-3 rounded-full bg-yellow-500/70"></span>
-                            <span class="w-3 h-3 rounded-full bg-green-500/70"></span>
-                        </div>
-                        <span class="text-[10px] font-mono dark:text-gray-500 text-gray-400">WebSocketConfig.java</span>
-                        <button onclick="copyCode(this)" class="text-[10px] font-mono dark:text-gray-500 text-gray-400 hover:text-neonGreen transition-colors flex items-center gap-1">
-                            <i data-lucide="copy" class="w-3 h-3"></i> Copy
-                        </button>
+            <div class="dark:bg-darkSurface/40 bg-gray-50 rounded-xl sm:rounded-2xl border dark:border-darkBorder border-lightBorder p-4 sm:p-8">
+                <div class="font-mono text-[10px] sm:text-xs text-neonGreen mb-3 flex items-center gap-2"><span class="w-6 sm:w-8 h-px bg-neonGreen"></span>./snippet</div>
+                <h2 class="text-xl sm:text-2xl md:text-3xl font-bold dark:text-[#e6e6e6] text-gray-900 mb-1.5 tracking-tight">Code Snippet of the Week</h2>
+                <p class="dark:text-gray-500 text-gray-400 text-xs sm:text-sm mb-4 sm:mb-6">WebSocket config for real-time lab result broadcasting</p>
+                <div class="dark:bg-[#1a1a1a] bg-[#fafafa] rounded-lg sm:rounded-xl border dark:border-darkBorder border-lightBorder overflow-hidden">
+                    <div class="flex items-center justify-between px-3 sm:px-4 py-2 sm:py-2.5 border-b dark:border-darkBorder border-lightBorder">
+                        <div class="flex items-center gap-1 sm:gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-red-500/70"></span><span class="w-2.5 h-2.5 rounded-full bg-yellow-500/70"></span><span class="w-2.5 h-2.5 rounded-full bg-green-500/70"></span></div>
+                        <span class="text-[9px] sm:text-[10px] font-mono dark:text-gray-500 text-gray-400">WebSocketConfig.java</span>
+                        <button onclick="copyCode(this)" class="text-[9px] sm:text-[10px] font-mono dark:text-gray-500 text-gray-400 hover:text-neonGreen transition-colors flex items-center gap-1"><i data-lucide="copy" class="w-3 h-3"></i><span class="hidden sm:inline">Copy</span></button>
                     </div>
-                    <div class="p-4 overflow-x-auto">
-                        <pre class="font-mono text-xs sm:text-sm leading-6"><code><span class="line-num"> 1</span><span class="token-annotation">@Configuration</span>
+                    <div class="p-3 sm:p-4 overflow-x-auto -mx-1">
+                        <pre class="font-mono text-[10px] sm:text-xs md:text-sm leading-5 sm:leading-6"><code><span class="line-num"> 1</span><span class="token-annotation">@Configuration</span>
 <span class="line-num"> 2</span><span class="token-annotation">@EnableWebSocketMessageBroker</span>
-<span class="line-num"> 3</span><span class="token-keyword">public class</span> <span class="token-type">WebSocketConfig</span> <span class="token-keyword">implements</span> <span class="token-type">WebSocketMessageBrokerConfigurer</span> <span class="token-paren">{</span>
-<span class="line-num"> 4</span>
-<span class="line-num"> 5</span>    <span class="token-annotation">@Override</span>
-<span class="line-num"> 6</span>    <span class="token-keyword">public void</span> <span class="token-function">configureMessageBroker</span><span class="token-paren">(</span><span class="token-type">MessageBrokerRegistry</span> config<span class="token-paren">)</span> <span class="token-paren">{</span>
-<span class="line-num"> 7</span>        config.<span class="token-function">enableSimpleBroker</span><span class="token-paren">(</span><span class="token-string">"/topic/results"</span><span class="token-paren">)</span>;
-<span class="line-num"> 8</span>        config.<span class="token-function">setApplicationDestinationPrefixes</span><span class="token-paren">(</span><span class="token-string">"/app"</span><span class="token-paren">)</span>;
-<span class="line-num"> 9</span>    <span class="token-paren">}</span>
-<span class="line-num">10</span>
-<span class="line-num">11</span>    <span class="token-annotation">@Override</span>
-<span class="line-num">12</span>    <span class="token-keyword">public void</span> <span class="token-function">registerStompEndpoints</span><span class="token-paren">(</span><span class="token-type">StompEndpointRegistry</span> registry<span class="token-paren">)</span> <span class="token-paren">{</span>
-<span class="line-num">13</span>        registry.<span class="token-function">addEndpoint</span><span class="token-paren">(</span><span class="token-string">"/ws/lab-results"</span><span class="token-paren">)</span>
-<span class="line-num">14</span>                .<span class="token-function">setAllowedOrigins</span><span class="token-paren">(</span><span class="token-string">"*"</span><span class="token-paren">)</span>;
-<span class="line-num">15</span>    <span class="token-paren">}</span>
-<span class="line-num">16</span><span class="token-paren">}</span></code></pre>
+<span class="line-num"> 3</span><span class="token-keyword">public class</span> <span class="token-type">WebSocketConfig</span>
+<span class="line-num"> 4</span>    <span class="token-keyword">implements</span> <span class="token-type">WebSocketMessageBrokerConfigurer</span> <span class="token-paren">{</span>
+<span class="line-num"> 5</span>
+<span class="line-num"> 6</span>  <span class="token-annotation">@Override</span>
+<span class="line-num"> 7</span>  <span class="token-keyword">public void</span> <span class="token-function">configureMessageBroker</span><span class="token-paren">(</span>
+<span class="line-num"> 8</span>      <span class="token-type">MessageBrokerRegistry</span> c<span class="token-paren">)</span> <span class="token-paren">{</span>
+<span class="line-num"> 9</span>    c.<span class="token-function">enableSimpleBroker</span><span class="token-paren">(</span><span class="token-string">"/topic/results"</span><span class="token-paren">)</span>;
+<span class="line-num">10</span>    c.<span class="token-function">setApplicationDestinationPrefixes</span><span class="token-paren">(</span><span class="token-string">"/app"</span><span class="token-paren">)</span>;
+<span class="line-num">11</span>  <span class="token-paren">}</span>
+<span class="line-num">12</span><span class="token-paren">}</span></code></pre>
                     </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- ==================== PROJECTS SECTION ==================== -->
-    <section id="projects" class="py-24 px-4 sm:px-6">
+    <!-- ==================== PROJECTS SECTION (FULLY RESPONSIVE) ==================== -->
+    <section id="projects" class="py-16 sm:py-24 px-4 sm:px-6">
         <div class="max-w-6xl mx-auto">
-            <div class="font-mono text-xs text-neonBlue mb-2 flex items-center gap-2">
-                <span class="w-8 h-px bg-neonBlue"></span>
-                ./projects
-            </div>
-            <h2 class="text-3xl sm:text-4xl font-bold dark:text-[#e6e6e6] text-gray-900 tracking-tight mb-2">Projects</h2>
-            <p class="dark:text-gray-500 text-gray-400 text-sm mb-10">Currently building & contributing to</p>
+            <div class="font-mono text-[10px] sm:text-xs text-neonBlue mb-1.5 flex items-center gap-2"><span class="w-6 sm:w-8 h-px bg-neonBlue"></span>./projects</div>
+            <h2 class="text-2xl sm:text-3xl md:text-4xl font-bold dark:text-[#e6e6e6] text-gray-900 tracking-tight mb-8 sm:mb-10">Projects</h2>
 
-            <!-- ===== MAIN PROJECT: LIS ===== -->
-            <div class="lis-border rounded-2xl mb-10">
-                <div class="dark:bg-darkSurface/80 bg-white rounded-2xl overflow-hidden">
-                    <!-- Hero Banner -->
-                    <div class="relative h-48 sm:h-56 overflow-hidden">
-                        <img src="https://picsum.photos/seed/laboratory-medical/1400/400.jpg" alt="Laboratory" class="w-full h-full object-cover">
+            <!-- ===== LIS HERO CARD ===== -->
+            <div class="lis-border rounded-xl sm:rounded-2xl mb-8 sm:mb-10">
+                <div class="dark:bg-darkSurface/80 bg-white rounded-xl sm:rounded-2xl overflow-hidden">
+                    <!-- Banner -->
+                    <div class="relative h-36 sm:h-48 md:h-56 overflow-hidden">
+                        <img src="https://picsum.photos/seed/laboratory-medical/1400/400.jpg" alt="Lab" class="w-full h-full object-cover">
                         <div class="absolute inset-0 bg-gradient-to-t dark:from-darkSurface via-darkSurface/60 to-transparent from-white via-white/60 to-transparent"></div>
-                        <!-- Status badges -->
-                        <div class="absolute top-4 right-4 flex gap-2">
-                            <span class="px-2.5 py-1 rounded-lg text-[10px] font-mono font-bold dark:bg-neonGreen/20 bg-green-100 text-neonGreen border border-neonGreen/30 flex items-center gap-1.5">
-                                <span class="w-1.5 h-1.5 rounded-full bg-neonGreen led-online"></span>
-                                IN PRODUCTION
+                        <div class="absolute top-3 right-3 sm:top-4 sm:right-4 flex gap-1.5 sm:gap-2">
+                            <span class="px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-lg text-[8px] sm:text-[10px] font-mono font-bold dark:bg-neonGreen/20 bg-green-100 text-neonGreen border border-neonGreen/30 flex items-center gap-1 sm:gap-1.5">
+                                <span class="w-1 sm:w-1.5 h-1 sm:h-1.5 rounded-full bg-neonGreen led-online"></span>PRODUCTION
                             </span>
-                            <span class="px-2.5 py-1 rounded-lg text-[10px] font-mono dark:bg-darkBg/80 bg-gray-100 dark:text-gray-300 text-gray-600 border dark:border-darkBorder border-lightBorder">
-                                v2.4.1
-                            </span>
+                            <span class="px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-lg text-[8px] sm:text-[10px] font-mono dark:bg-darkBg/80 bg-gray-100 dark:text-gray-300 text-gray-600 border dark:border-darkBorder border-lightBorder">v2.4.1</span>
                         </div>
-                        <div class="absolute bottom-4 left-6 right-6">
-                            <div class="flex items-center gap-2 mb-2">
-                                <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-neonGreen to-neonBlue flex items-center justify-center flex-shrink-0">
-                                    <i data-lucide="microscope" class="w-5 h-5 dark:text-black text-white"></i>
+                        <div class="absolute bottom-3 left-4 right-4 sm:bottom-4 sm:left-6 sm:right-6">
+                            <div class="flex items-center gap-2 sm:gap-3">
+                                <div class="w-8 h-8 sm:w-10 sm:h-10 rounded-xl bg-gradient-to-br from-neonGreen to-neonBlue flex items-center justify-center flex-shrink-0">
+                                    <i data-lucide="microscope" class="w-4 h-4 sm:w-5 sm:h-5 dark:text-black text-white"></i>
                                 </div>
                                 <div>
-                                    <h3 class="text-xl sm:text-2xl font-bold dark:text-[#e6e6e6] text-gray-900 tracking-tight">Laboratory Information System</h3>
-                                    <p class="text-xs font-mono dark:text-gray-400 text-gray-500">Full-featured LIS for clinical diagnostic laboratories</p>
+                                    <h3 class="text-base sm:text-xl md:text-2xl font-bold dark:text-[#e6e6e6] text-gray-900 tracking-tight leading-tight">Laboratory Information System</h3>
+                                    <p class="text-[10px] sm:text-xs font-mono dark:text-gray-400 text-gray-500">Full-featured LIS for clinical diagnostic labs</p>
                                 </div>
                             </div>
                         </div>
                     </div>
 
-                    <div class="p-6 sm:p-8">
+                    <div class="p-4 sm:p-6 md:p-8">
                         <!-- Description -->
-                        <p class="dark:text-gray-400 text-gray-500 text-sm leading-relaxed mb-8 max-w-3xl">
-                            A comprehensive Laboratory Information System that manages the complete workflow from sample reception to result reporting. Integrates with <strong class="dark:text-[#e6e6e6] text-gray-900">4 medical analyzers</strong> in real-time via bidirectional communication, supports multi-user license management, and delivers live results to client screens via WebSocket.
+                        <p class="dark:text-gray-400 text-gray-500 text-xs sm:text-sm leading-relaxed mb-6 sm:mb-8">
+                            A comprehensive LIS managing the complete workflow from sample reception to result reporting. Integrates <strong class="dark:text-[#e6e6e6] text-gray-900">4 medical analyzers</strong> in real-time via bidirectional communication, with multi-user license management and live WebSocket result delivery.
                         </p>
 
-                        <!-- ===== ARCHITECTURE DIAGRAM ===== -->
-                        <div class="mb-8">
-                            <h4 class="font-mono text-xs text-neonGreen mb-4 flex items-center gap-2">
-                                <i data-lucide="git-branch" class="w-3.5 h-3.5"></i>
-                                System Architecture
+                        <!-- ===== ARCHITECTURE — FULLY VERTICAL ON MOBILE ===== -->
+                        <div class="mb-6 sm:mb-8">
+                            <h4 class="font-mono text-[10px] sm:text-xs text-neonGreen mb-3 sm:mb-4 flex items-center gap-2">
+                                <i data-lucide="git-branch" class="w-3 sm:w-3.5 h-3 sm:h-3.5"></i>System Architecture
                             </h4>
 
-                            <div class="dark:bg-[#1a1a1a] bg-[#fafafa] rounded-xl border dark:border-darkBorder border-lightBorder p-5 sm:p-6 overflow-x-auto">
-                                <!-- Architecture Flow -->
-                                <div class="min-w-[640px]">
-                                    <!-- Row 1: Analyzers -->
-                                    <div class="font-mono text-[10px] dark:text-gray-500 text-gray-400 mb-3 uppercase tracking-wider">Analyzer Layer — HL7 / Serial / TCP Communication</div>
-                                    <div class="grid grid-cols-4 gap-3 mb-4">
-                                        <div class="arch-node dark:bg-darkSurface bg-white rounded-lg border dark:border-darkBorder border-lightBorder p-3 text-center analyzer-online">
-                                            <div class="w-8 h-8 mx-auto mb-2 rounded-lg bg-purple-500/10 flex items-center justify-center">
-                                                <i data-lucide="flask-conical" class="w-4 h-4 text-purple-400"></i>
-                                            </div>
-                                            <div class="text-xs font-bold dark:text-[#e6e6e6] text-gray-900">Mini VIDAS</div>
-                                            <div class="text-[9px] font-mono dark:text-gray-500 text-gray-400 mt-0.5">Immunology</div>
-                                            <div class="flex items-center justify-center gap-1 mt-1.5">
-                                                <span class="w-1.5 h-1.5 rounded-full bg-neonGreen"></span>
-                                                <span class="text-[8px] font-mono text-neonGreen">ONLINE</span>
-                                            </div>
+                            <div class="dark:bg-[#1a1a1a] bg-[#fafafa] rounded-lg sm:rounded-xl border dark:border-darkBorder border-lightBorder p-3 sm:p-5 md:p-6">
+
+                                <!-- LAYER 1: Analyzers — 2-col on mobile, 4-col on desktop -->
+                                <div class="font-mono text-[8px] sm:text-[10px] dark:text-gray-500 text-gray-400 mb-2 sm:mb-3 uppercase tracking-wider">Analyzer Layer — HL7 / Serial / TCP</div>
+                                <div class="grid grid-cols-2 md:grid-cols-4 gap-2 sm:gap-3 mb-3 sm:mb-4">
+                                    <div class="arch-node analyzer-online dark:bg-darkSurface bg-white rounded-lg border dark:border-darkBorder border-lightBorder p-2 sm:p-3 text-center">
+                                        <div class="w-6 h-6 sm:w-8 sm:h-8 mx-auto mb-1 sm:mb-2 rounded-lg bg-purple-500/10 flex items-center justify-center">
+                                            <i data-lucide="flask-conical" class="w-3 h-3 sm:w-4 sm:h-4 text-purple-400"></i>
                                         </div>
-                                        <div class="arch-node dark:bg-darkSurface bg-white rounded-lg border dark:border-darkBorder border-lightBorder p-3 text-center analyzer-online">
-                                            <div class="w-8 h-8 mx-auto mb-2 rounded-lg bg-blue-500/10 flex items-center justify-center">
-                                                <i data-lucide="beaker" class="w-4 h-4 text-blue-400"></i>
-                                            </div>
-                                            <div class="text-xs font-bold dark:text-[#e6e6e6] text-gray-900">Siemens EXL 200</div>
-                                            <div class="text-[9px] font-mono dark:text-gray-500 text-gray-400 mt-0.5">Clinical Chemistry</div>
-                                            <div class="flex items-center justify-center gap-1 mt-1.5">
-                                                <span class="w-1.5 h-1.5 rounded-full bg-neonGreen"></span>
-                                                <span class="text-[8px] font-mono text-neonGreen">ONLINE</span>
-                                            </div>
-                                        </div>
-                                        <div class="arch-node dark:bg-darkSurface bg-white rounded-lg border dark:border-darkBorder border-lightBorder p-3 text-center analyzer-online">
-                                            <div class="w-8 h-8 mx-auto mb-2 rounded-lg bg-red-500/10 flex items-center justify-center">
-                                                <i data-lucide="droplets" class="w-4 h-4 text-red-400"></i>
-                                            </div>
-                                            <div class="text-xs font-bold dark:text-[#e6e6e6] text-gray-900">Sysmex XN550</div>
-                                            <div class="text-[9px] font-mono dark:text-gray-500 text-gray-400 mt-0.5">Hematology</div>
-                                            <div class="flex items-center justify-center gap-1 mt-1.5">
-                                                <span class="w-1.5 h-1.5 rounded-full bg-neonGreen"></span>
-                                                <span class="text-[8px] font-mono text-neonGreen">ONLINE</span>
-                                            </div>
-                                        </div>
-                                        <div class="arch-node dark:bg-darkSurface bg-white rounded-lg border dark:border-darkBorder border-lightBorder p-3 text-center analyzer-online">
-                                            <div class="w-8 h-8 mx-auto mb-2 rounded-lg bg-amber-500/10 flex items-center justify-center">
-                                                <i data-lucide="test-tubes" class="w-4 h-4 text-amber-400"></i>
-                                            </div>
-                                            <div class="text-xs font-bold dark:text-[#e6e6e6] text-gray-900">Reaky Tech</div>
-                                            <div class="text-[9px] font-mono dark:text-gray-500 text-gray-400 mt-0.5">Biochemistry</div>
-                                            <div class="flex items-center justify-center gap-1 mt-1.5">
-                                                <span class="w-1.5 h-1.5 rounded-full bg-neonGreen"></span>
-                                                <span class="text-[8px] font-mono text-neonGreen">ONLINE</span>
-                                            </div>
+                                        <div class="text-[10px] sm:text-xs font-bold dark:text-[#e6e6e6] text-gray-900 leading-tight">Mini VIDAS</div>
+                                        <div class="text-[8px] sm:text-[9px] font-mono dark:text-gray-500 text-gray-400 mt-0.5">Immunology</div>
+                                        <div class="flex items-center justify-center gap-1 mt-1 sm:mt-1.5">
+                                            <span class="w-1 h-1 sm:w-1.5 sm:h-1.5 rounded-full bg-neonGreen"></span>
+                                            <span class="text-[7px] sm:text-[8px] font-mono text-neonGreen">ONLINE</span>
                                         </div>
                                     </div>
-
-                                    <!-- Flow arrows -->
-                                    <div class="flex justify-center my-2 relative">
-                                        <div class="flex flex-col items-center">
-                                            <div class="w-0.5 h-4 bg-gradient-to-b from-neonGreen to-neonBlue"></div>
-                                            <i data-lucide="chevrons-down" class="w-4 h-4 text-neonBlue"></i>
-                                            <div class="font-mono text-[9px] dark:text-gray-500 text-gray-400 mt-0.5">HL7 / ASTM / Serial RS-232</div>
+                                    <div class="arch-node analyzer-online dark:bg-darkSurface bg-white rounded-lg border dark:border-darkBorder border-lightBorder p-2 sm:p-3 text-center">
+                                        <div class="w-6 h-6 sm:w-8 sm:h-8 mx-auto mb-1 sm:mb-2 rounded-lg bg-blue-500/10 flex items-center justify-center">
+                                            <i data-lucide="beaker" class="w-3 h-3 sm:w-4 sm:h-4 text-blue-400"></i>
+                                        </div>
+                                        <div class="text-[10px] sm:text-xs font-bold dark:text-[#e6e6e6] text-gray-900 leading-tight">Siemens EXL</div>
+                                        <div class="text-[8px] sm:text-[9px] font-mono dark:text-gray-500 text-gray-400 mt-0.5">Chemistry</div>
+                                        <div class="flex items-center justify-center gap-1 mt-1 sm:mt-1.5">
+                                            <span class="w-1 h-1 sm:w-1.5 sm:h-1.5 rounded-full bg-neonGreen"></span>
+                                            <span class="text-[7px] sm:text-[8px] font-mono text-neonGreen">ONLINE</span>
                                         </div>
                                     </div>
-
-                                    <!-- Row 2: Spring Boot Core -->
-                                    <div class="font-mono text-[10px] dark:text-gray-500 text-gray-400 mb-3 mt-4 uppercase tracking-wider">Application Layer — Spring Boot 3 + Java 17</div>
-                                    <div class="dark:bg-neonGreen/5 bg-neonGreen/5 rounded-lg border border-neonGreen/20 p-4 mb-4">
-                                        <div class="flex items-center gap-2 mb-3">
-                                            <div class="w-6 h-6 rounded bg-neonGreen/20 flex items-center justify-center">
-                                                <i data-lucide="server" class="w-3.5 h-3.5 text-neonGreen"></i>
-                                            </div>
-                                            <span class="font-mono text-xs font-bold text-neonGreen">Spring Boot 3.2 — Core Application Server</span>
+                                    <div class="arch-node analyzer-online dark:bg-darkSurface bg-white rounded-lg border dark:border-darkBorder border-lightBorder p-2 sm:p-3 text-center">
+                                        <div class="w-6 h-6 sm:w-8 sm:h-8 mx-auto mb-1 sm:mb-2 rounded-lg bg-red-500/10 flex items-center justify-center">
+                                            <i data-lucide="droplets" class="w-3 h-3 sm:w-4 sm:h-4 text-red-400"></i>
                                         </div>
-                                        <div class="grid grid-cols-2 sm:grid-cols-4 gap-2">
-                                            <div class="dark:bg-darkBg/80 bg-white rounded-lg p-2.5 border dark:border-darkBorder border-lightBorder text-center">
-                                                <i data-lucide="radio" class="w-3.5 h-3.5 text-neonBlue mx-auto mb-1"></i>
-                                                <div class="text-[10px] font-mono dark:text-gray-300 text-gray-600">WebSocket Server</div>
-                                            </div>
-                                            <div class="dark:bg-darkBg/80 bg-white rounded-lg p-2.5 border dark:border-darkBorder border-lightBorder text-center">
-                                                <i data-lucide="key-round" class="w-3.5 h-3.5 text-amber-400 mx-auto mb-1"></i>
-                                                <div class="text-[10px] font-mono dark:text-gray-300 text-gray-600">License Manager</div>
-                                            </div>
-                                            <div class="dark:bg-darkBg/80 bg-white rounded-lg p-2.5 border dark:border-darkBorder border-lightBorder text-center">
-                                                <i data-lucide="file-text" class="w-3.5 h-3.5 text-purple-400 mx-auto mb-1"></i>
-                                                <div class="text-[10px] font-mono dark:text-gray-300 text-gray-600">HL7 Parser</div>
-                                            </div>
-                                            <div class="dark:bg-darkBg/80 bg-white rounded-lg p-2.5 border dark:border-darkBorder border-lightBorder text-center">
-                                                <i data-lucide="shield-check" class="w-3.5 h-3.5 text-red-400 mx-auto mb-1"></i>
-                                                <div class="text-[10px] font-mono dark:text-gray-300 text-gray-600">Result Validator</div>
-                                            </div>
+                                        <div class="text-[10px] sm:text-xs font-bold dark:text-[#e6e6e6] text-gray-900 leading-tight">Sysmex XN550</div>
+                                        <div class="text-[8px] sm:text-[9px] font-mono dark:text-gray-500 text-gray-400 mt-0.5">Hematology</div>
+                                        <div class="flex items-center justify-center gap-1 mt-1 sm:mt-1.5">
+                                            <span class="w-1 h-1 sm:w-1.5 sm:h-1.5 rounded-full bg-neonGreen"></span>
+                                            <span class="text-[7px] sm:text-[8px] font-mono text-neonGreen">ONLINE</span>
                                         </div>
                                     </div>
-
-                                    <!-- Flow arrows -->
-                                    <div class="flex justify-center my-2">
-                                        <div class="flex flex-col items-center">
-                                            <div class="w-0.5 h-4 bg-gradient-to-b from-neonBlue to-neonGreen"></div>
-                                            <i data-lucide="chevrons-down" class="w-4 h-4 text-neonGreen"></i>
-                                            <div class="font-mono text-[9px] dark:text-gray-500 text-gray-400 mt-0.5">JDBC / Stored Procedures</div>
+                                    <div class="arch-node analyzer-online dark:bg-darkSurface bg-white rounded-lg border dark:border-darkBorder border-lightBorder p-2 sm:p-3 text-center">
+                                        <div class="w-6 h-6 sm:w-8 sm:h-8 mx-auto mb-1 sm:mb-2 rounded-lg bg-amber-500/10 flex items-center justify-center">
+                                            <i data-lucide="test-tubes" class="w-3 h-3 sm:w-4 sm:h-4 text-amber-400"></i>
+                                        </div>
+                                        <div class="text-[10px] sm:text-xs font-bold dark:text-[#e6e6e6] text-gray-900 leading-tight">Reaky Tech</div>
+                                        <div class="text-[8px] sm:text-[9px] font-mono dark:text-gray-500 text-gray-400 mt-0.5">Biochemistry</div>
+                                        <div class="flex items-center justify-center gap-1 mt-1 sm:mt-1.5">
+                                            <span class="w-1 h-1 sm:w-1.5 sm:h-1.5 rounded-full bg-neonGreen"></span>
+                                            <span class="text-[7px] sm:text-[8px] font-mono text-neonGreen">ONLINE</span>
                                         </div>
                                     </div>
+                                </div>
 
-                                    <!-- Row 3: Database Layer -->
-                                    <div class="font-mono text-[10px] dark:text-gray-500 text-gray-400 mb-3 mt-4 uppercase tracking-wider">Data Layer — Dual Database Strategy</div>
-                                    <div class="grid grid-cols-2 gap-3">
-                                        <div class="arch-node dark:bg-darkSurface bg-white rounded-lg border dark:border-darkBorder border-lightBorder p-4">
-                                            <div class="flex items-center gap-2 mb-2">
-                                                <div class="w-7 h-7 rounded-lg bg-blue-500/10 flex items-center justify-center">
-                                                    <i data-lucide="database" class="w-4 h-4 text-blue-400"></i>
-                                                </div>
-                                                <div>
-                                                    <div class="text-xs font-bold dark:text-[#e6e6e6] text-gray-900">Oracle Database</div>
-                                                    <div class="text-[9px] font-mono dark:text-gray-500 text-gray-400">Transactional Data</div>
-                                                </div>
-                                            </div>
-                                            <div class="space-y-1">
-                                                <div class="text-[10px] font-mono dark:text-gray-400 text-gray-500 flex items-center gap-1.5">
-                                                    <span class="w-1 h-1 rounded-full bg-neonGreen"></span> Patient records
-                                                </div>
-                                                <div class="text-[10px] font-mono dark:text-gray-400 text-gray-500 flex items-center gap-1.5">
-                                                    <span class="w-1 h-1 rounded-full bg-neonGreen"></span> Lab results &amp; history
-                                                </div>
-                                                <div class="text-[10px] font-mono dark:text-gray-400 text-gray-500 flex items-center gap-1.5">
-                                                    <span class="w-1 h-1 rounded-full bg-neonBlue"></span> Stored procedures
-                                                </div>
-                                            </div>
+                                <!-- Flow Arrow Down -->
+                                <div class="flow-arrow-v">
+                                    <div class="arrow-line"></div>
+                                    <i data-lucide="chevrons-down" class="w-3 h-3 sm:w-4 sm:h-4 text-neonBlue -mt-0.5"></i>
+                                    <div class="arrow-label dark:text-gray-500 text-gray-400 mt-0.5">HL7 / ASTM / Serial RS-232</div>
+                                </div>
+
+                                <!-- LAYER 2: Spring Boot Core -->
+                                <div class="font-mono text-[8px] sm:text-[10px] dark:text-gray-500 text-gray-400 mb-2 sm:mb-3 mt-2 sm:mt-4 uppercase tracking-wider">Application Layer — Spring Boot 3 + Java 17</div>
+                                <div class="dark:bg-neonGreen/5 bg-neonGreen/5 rounded-lg sm:rounded-lg border border-neonGreen/20 p-3 sm:p-4 mb-3 sm:mb-4">
+                                    <div class="flex items-center gap-2 mb-2 sm:mb-3">
+                                        <div class="w-5 h-5 sm:w-6 sm:h-6 rounded bg-neonGreen/20 flex items-center justify-center flex-shrink-0">
+                                            <i data-lucide="server" class="w-3 h-3 sm:w-3.5 sm:h-3.5 text-neonGreen"></i>
                                         </div>
-                                        <div class="arch-node dark:bg-darkSurface bg-white rounded-lg border dark:border-darkBorder border-lightBorder p-4">
-                                            <div class="flex items-center gap-2 mb-2">
-                                                <div class="w-7 h-7 rounded-lg bg-amber-500/10 flex items-center justify-center">
-                                                    <i data-lucide="hard-drive" class="w-4 h-4 text-amber-400"></i>
-                                                </div>
-                                                <div>
-                                                    <div class="text-xs font-bold dark:text-[#e6e6e6] text-gray-900">SQLite</div>
-                                                    <div class="text-[9px] font-mono dark:text-gray-500 text-gray-400">Local Config &amp; Cache</div>
-                                                </div>
-                                            </div>
-                                            <div class="space-y-1">
-                                                <div class="text-[10px] font-mono dark:text-gray-400 text-gray-500 flex items-center gap-1.5">
-                                                    <span class="w-1 h-1 rounded-full bg-neonGreen"></span> License data
-                                                </div>
-                                                <div class="text-[10px] font-mono dark:text-gray-400 text-gray-500 flex items-center gap-1.5">
-                                                    <span class="w-1 h-1 rounded-full bg-neonGreen"></span> Analyzer config
-                                                </div>
-                                                <div class="text-[10px] font-mono dark:text-gray-400 text-gray-500 flex items-center gap-1.5">
-                                                    <span class="w-1 h-1 rounded-full bg-neonBlue"></span> Offline cache
-                                                </div>
-                                            </div>
+                                        <span class="font-mono text-[10px] sm:text-xs font-bold text-neonGreen">Spring Boot 3.2 — Core Server</span>
+                                    </div>
+                                    <div class="grid grid-cols-2 sm:grid-cols-4 gap-1.5 sm:gap-2">
+                                        <div class="dark:bg-darkBg/80 bg-white rounded-lg p-2 sm:p-2.5 border dark:border-darkBorder border-lightBorder text-center">
+                                            <i data-lucide="radio" class="w-3 h-3 sm:w-3.5 sm:h-3.5 text-neonBlue mx-auto mb-0.5 sm:mb-1"></i>
+                                            <div class="text-[8px] sm:text-[10px] font-mono dark:text-gray-300 text-gray-600">WebSocket</div>
+                                        </div>
+                                        <div class="dark:bg-darkBg/80 bg-white rounded-lg p-2 sm:p-2.5 border dark:border-darkBorder border-lightBorder text-center">
+                                            <i data-lucide="key-round" class="w-3 h-3 sm:w-3.5 sm:h-3.5 text-amber-400 mx-auto mb-0.5 sm:mb-1"></i>
+                                            <div class="text-[8px] sm:text-[10px] font-mono dark:text-gray-300 text-gray-600">License Mgr</div>
+                                        </div>
+                                        <div class="dark:bg-darkBg/80 bg-white rounded-lg p-2 sm:p-2.5 border dark:border-darkBorder border-lightBorder text-center">
+                                            <i data-lucide="file-text" class="w-3 h-3 sm:w-3.5 sm:h-3.5 text-purple-400 mx-auto mb-0.5 sm:mb-1"></i>
+                                            <div class="text-[8px] sm:text-[10px] font-mono dark:text-gray-300 text-gray-600">HL7 Parser</div>
+                                        </div>
+                                        <div class="dark:bg-darkBg/80 bg-white rounded-lg p-2 sm:p-2.5 border dark:border-darkBorder border-lightBorder text-center">
+                                            <i data-lucide="shield-check" class="w-3 h-3 sm:w-3.5 sm:h-3.5 text-red-400 mx-auto mb-0.5 sm:mb-1"></i>
+                                            <div class="text-[8px] sm:text-[10px] font-mono dark:text-gray-300 text-gray-600">Validator</div>
                                         </div>
                                     </div>
+                                </div>
 
-                                    <!-- Flow arrows up to clients -->
-                                    <div class="flex justify-center my-2">
-                                        <div class="flex flex-col items-center">
-                                            <div class="w-0.5 h-4 bg-gradient-to-b from-neonGreen to-neonBlue"></div>
-                                            <i data-lucide="chevrons-up" class="w-4 h-4 text-neonBlue"></i>
-                                            <div class="font-mono text-[9px] dark:text-gray-500 text-gray-400 mt-0.5">STOMP over WebSocket</div>
+                                <!-- Flow Arrow Down -->
+                                <div class="flow-arrow-v">
+                                    <div class="arrow-line"></div>
+                                    <i data-lucide="chevrons-down" class="w-3 h-3 sm:w-4 sm:h-4 text-neonGreen -mt-0.5"></i>
+                                    <div class="arrow-label dark:text-gray-500 text-gray-400 mt-0.5">JDBC / Stored Procedures</div>
+                                </div>
+
+                                <!-- LAYER 3: Database — stacked on mobile, side-by-side on sm+ -->
+                                <div class="font-mono text-[8px] sm:text-[10px] dark:text-gray-500 text-gray-400 mb-2 sm:mb-3 mt-2 sm:mt-4 uppercase tracking-wider">Data Layer — Dual Database</div>
+                                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-3 mb-3 sm:mb-4">
+                                    <div class="arch-node dark:bg-darkSurface bg-white rounded-lg border dark:border-darkBorder border-lightBorder p-3 sm:p-4">
+                                        <div class="flex items-center gap-2 sm:gap-2.5 mb-2">
+                                            <div class="w-6 h-6 sm:w-7 sm:h-7 rounded-lg bg-blue-500/10 flex items-center justify-center flex-shrink-0">
+                                                <i data-lucide="database" class="w-3.5 h-3.5 sm:w-4 sm:h-4 text-blue-400"></i>
+                                            </div>
+                                            <div>
+                                                <div class="text-[10px] sm:text-xs font-bold dark:text-[#e6e6e6] text-gray-900">Oracle Database</div>
+                                                <div class="text-[8px] sm:text-[9px] font-mono dark:text-gray-500 text-gray-400">Transactional Data</div>
+                                            </div>
+                                        </div>
+                                        <div class="space-y-0.5 sm:space-y-1">
+                                            <div class="text-[9px] sm:text-[10px] font-mono dark:text-gray-400 text-gray-500 flex items-center gap-1.5"><span class="w-1 h-1 rounded-full bg-neonGreen flex-shrink-0"></span>Patient records</div>
+                                            <div class="text-[9px] sm:text-[10px] font-mono dark:text-gray-400 text-gray-500 flex items-center gap-1.5"><span class="w-1 h-1 rounded-full bg-neonGreen flex-shrink-0"></span>Lab results & history</div>
+                                            <div class="text-[9px] sm:text-[10px] font-mono dark:text-gray-400 text-gray-500 flex items-center gap-1.5"><span class="w-1 h-1 rounded-full bg-neonBlue flex-shrink-0"></span>Stored procedures</div>
                                         </div>
                                     </div>
+                                    <div class="arch-node dark:bg-darkSurface bg-white rounded-lg border dark:border-darkBorder border-lightBorder p-3 sm:p-4">
+                                        <div class="flex items-center gap-2 sm:gap-2.5 mb-2">
+                                            <div class="w-6 h-6 sm:w-7 sm:h-7 rounded-lg bg-amber-500/10 flex items-center justify-center flex-shrink-0">
+                                                <i data-lucide="hard-drive" class="w-3.5 h-3.5 sm:w-4 sm:h-4 text-amber-400"></i>
+                                            </div>
+                                            <div>
+                                                <div class="text-[10px] sm:text-xs font-bold dark:text-[#e6e6e6] text-gray-900">SQLite</div>
+                                                <div class="text-[8px] sm:text-[9px] font-mono dark:text-gray-500 text-gray-400">Local Config & Cache</div>
+                                            </div>
+                                        </div>
+                                        <div class="space-y-0.5 sm:space-y-1">
+                                            <div class="text-[9px] sm:text-[10px] font-mono dark:text-gray-400 text-gray-500 flex items-center gap-1.5"><span class="w-1 h-1 rounded-full bg-neonGreen flex-shrink-0"></span>License data</div>
+                                            <div class="text-[9px] sm:text-[10px] font-mono dark:text-gray-400 text-gray-500 flex items-center gap-1.5"><span class="w-1 h-1 rounded-full bg-neonGreen flex-shrink-0"></span>Analyzer config</div>
+                                            <div class="text-[9px] sm:text-[10px] font-mono dark:text-gray-400 text-gray-500 flex items-center gap-1.5"><span class="w-1 h-1 rounded-full bg-neonBlue flex-shrink-0"></span>Offline cache</div>
+                                        </div>
+                                    </div>
+                                </div>
 
-                                    <!-- Row 4: Client Screens -->
-                                    <div class="font-mono text-[10px] dark:text-gray-500 text-gray-400 mb-3 mt-4 uppercase tracking-wider">Client Layer — Real-Time Display Screens</div>
-                                    <div class="grid grid-cols-3 gap-3">
-                                        <div class="arch-node dark:bg-darkSurface bg-white rounded-lg border dark:border-darkBorder border-lightBorder p-3 text-center">
-                                            <i data-lucide="monitor" class="w-4 h-4 text-neonBlue mx-auto mb-1.5"></i>
-                                            <div class="text-[10px] font-mono dark:text-gray-300 text-gray-600">Reception Desk</div>
-                                            <div class="text-[8px] font-mono dark:text-gray-500 text-gray-400">Sample tracking</div>
-                                        </div>
-                                        <div class="arch-node dark:bg-darkSurface bg-white rounded-lg border dark:border-darkBorder border-lightBorder p-3 text-center">
-                                            <i data-lucide="tv" class="w-4 h-4 text-neonGreen mx-auto mb-1.5"></i>
-                                            <div class="text-[10px] font-mono dark:text-gray-300 text-gray-600">Result Monitor</div>
-                                            <div class="text-[8px] font-mono dark:text-gray-500 text-gray-400">Live results wall</div>
-                                        </div>
-                                        <div class="arch-node dark:bg-darkSurface bg-white rounded-lg border dark:border-darkBorder border-lightBorder p-3 text-center">
-                                            <i data-lucide="printer" class="w-4 h-4 text-amber-400 mx-auto mb-1.5"></i>
-                                            <div class="text-[10px] font-mono dark:text-gray-300 text-gray-600">Report Printer</div>
-                                            <div class="text-[8px] font-mono dark:text-gray-500 text-gray-400">Auto-print queue</div>
-                                        </div>
+                                <!-- Flow Arrow Up to Clients -->
+                                <div class="flow-arrow-v">
+                                    <div class="arrow-line"></div>
+                                    <i data-lucide="chevrons-up" class="w-3 h-3 sm:w-4 sm:h-4 text-neonBlue -mt-0.5"></i>
+                                    <div class="arrow-label dark:text-gray-500 text-gray-400 mt-0.5">STOMP over WebSocket</div>
+                                </div>
+
+                                <!-- LAYER 4: Clients — 3-col on all sizes -->
+                                <div class="font-mono text-[8px] sm:text-[10px] dark:text-gray-500 text-gray-400 mb-2 sm:mb-3 mt-2 sm:mt-4 uppercase tracking-wider">Client Layer — Real-Time Screens</div>
+                                <div class="grid grid-cols-3 gap-1.5 sm:gap-3">
+                                    <div class="arch-node dark:bg-darkSurface bg-white rounded-lg border dark:border-darkBorder border-lightBorder p-2 sm:p-3 text-center">
+                                        <i data-lucide="monitor" class="w-3 h-3 sm:w-4 sm:h-4 text-neonBlue mx-auto mb-1 sm:mb-1.5"></i>
+                                        <div class="text-[8px] sm:text-[10px] font-mono dark:text-gray-300 text-gray-600 leading-tight">Reception</div>
+                                    </div>
+                                    <div class="arch-node dark:bg-darkSurface bg-white rounded-lg border dark:border-darkBorder border-lightBorder p-2 sm:p-3 text-center">
+                                        <i data-lucide="tv" class="w-3 h-3 sm:w-4 sm:h-4 text-neonGreen mx-auto mb-1 sm:mb-1.5"></i>
+                                        <div class="text-[8px] sm:text-[10px] font-mono dark:text-gray-300 text-gray-600 leading-tight">Result Wall</div>
+                                    </div>
+                                    <div class="arch-node dark:bg-darkSurface bg-white rounded-lg border dark:border-darkBorder border-lightBorder p-2 sm:p-3 text-center">
+                                        <i data-lucide="printer" class="w-3 h-3 sm:w-4 sm:h-4 text-amber-400 mx-auto mb-1 sm:mb-1.5"></i>
+                                        <div class="text-[8px] sm:text-[10px] font-mono dark:text-gray-300 text-gray-600 leading-tight">Auto Print</div>
                                     </div>
                                 </div>
                             </div>
                         </div>
 
-                        <!-- ===== KEY FEATURES GRID ===== -->
-                        <div class="mb-8">
-                            <h4 class="font-mono text-xs text-neonBlue mb-4 flex items-center gap-2">
-                                <i data-lucide="cpu" class="w-3.5 h-3.5"></i>
-                                Key Features
+                        <!-- ===== KEY FEATURES ===== -->
+                        <div class="mb-6 sm:mb-8">
+                            <h4 class="font-mono text-[10px] sm:text-xs text-neonBlue mb-3 sm:mb-4 flex items-center gap-2">
+                                <i data-lucide="cpu" class="w-3 sm:w-3.5 h-3 sm:h-3.5"></i>Key Features
                             </h4>
-                            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-                                <div class="dark:bg-darkBg/60 bg-gray-50 rounded-lg border dark:border-darkBorder border-lightBorder p-4 flex gap-3">
-                                    <div class="w-8 h-8 rounded-lg bg-neonGreen/10 flex items-center justify-center flex-shrink-0">
-                                        <i data-lucide="radio" class="w-4 h-4 text-neonGreen"></i>
+                            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2 sm:gap-3">
+                                <div class="dark:bg-darkBg/60 bg-gray-50 rounded-lg border dark:border-darkBorder border-lightBorder p-3 sm:p-4 flex gap-2.5 sm:gap-3">
+                                    <div class="w-7 h-7 sm:w-8 sm:h-8 rounded-lg bg-neonGreen/10 flex items-center justify-center flex-shrink-0">
+                                        <i data-lucide="radio" class="w-3.5 h-3.5 sm:w-4 sm:h-4 text-neonGreen"></i>
                                     </div>
                                     <div>
-                                        <div class="text-xs font-bold dark:text-[#e6e6e6] text-gray-900 mb-0.5">Real-Time WebSocket</div>
-                                        <div class="text-[11px] dark:text-gray-500 text-gray-400 leading-relaxed">STOMP over WebSocket pushes results to all connected screens instantly — zero polling.</div>
+                                        <div class="text-[11px] sm:text-xs font-bold dark:text-[#e6e6e6] text-gray-900 mb-0.5">Real-Time WebSocket</div>
+                                        <div class="text-[10px] sm:text-[11px] dark:text-gray-500 text-gray-400 leading-relaxed">STOMP pushes results to all screens instantly.</div>
                                     </div>
                                 </div>
-                                <div class="dark:bg-darkBg/60 bg-gray-50 rounded-lg border dark:border-darkBorder border-lightBorder p-4 flex gap-3">
-                                    <div class="w-8 h-8 rounded-lg bg-neonBlue/10 flex items-center justify-center flex-shrink-0">
-                                        <i data-lucide="key-round" class="w-4 h-4 text-neonBlue"></i>
+                                <div class="dark:bg-darkBg/60 bg-gray-50 rounded-lg border dark:border-darkBorder border-lightBorder p-3 sm:p-4 flex gap-2.5 sm:gap-3">
+                                    <div class="w-7 h-7 sm:w-8 sm:h-8 rounded-lg bg-neonBlue/10 flex items-center justify-center flex-shrink-0">
+                                        <i data-lucide="key-round" class="w-3.5 h-3.5 sm:w-4 sm:h-4 text-neonBlue"></i>
                                     </div>
                                     <div>
-                                        <div class="text-xs font-bold dark:text-[#e6e6e6] text-gray-900 mb-0.5">License System</div>
-                                        <div class="text-[11px] dark:text-gray-500 text-gray-400 leading-relaxed">Hardware-fingerprint based licensing with trial periods, expiry management, and RSA verification.</div>
+                                        <div class="text-[11px] sm:text-xs font-bold dark:text-[#e6e6e6] text-gray-900 mb-0.5">License System</div>
+                                        <div class="text-[10px] sm:text-[11px] dark:text-gray-500 text-gray-400 leading-relaxed">Hardware-fingerprint licensing with RSA verification.</div>
                                     </div>
                                 </div>
-                                <div class="dark:bg-darkBg/60 bg-gray-50 rounded-lg border dark:border-darkBorder border-lightBorder p-4 flex gap-3">
-                                    <div class="w-8 h-8 rounded-lg bg-purple-500/10 flex items-center justify-center flex-shrink-0">
-                                        <i data-lucide="cable" class="w-4 h-4 text-purple-400"></i>
+                                <div class="dark:bg-darkBg/60 bg-gray-50 rounded-lg border dark:border-darkBorder border-lightBorder p-3 sm:p-4 flex gap-2.5 sm:gap-3">
+                                    <div class="w-7 h-7 sm:w-8 sm:h-8 rounded-lg bg-purple-500/10 flex items-center justify-center flex-shrink-0">
+                                        <i data-lucide="cable" class="w-3.5 h-3.5 sm:w-4 sm:h-4 text-purple-400"></i>
                                     </div>
                                     <div>
-                                        <div class="text-xs font-bold dark:text-[#e6e6e6] text-gray-900 mb-0.5">Analyzer Integration</div>
-                                        <div class="text-[11px] dark:text-gray-500 text-gray-400 leading-relaxed">Bidirectional HL7/ASTM communication with 4 analyzers — auto-reconnection and error recovery.</div>
+                                        <div class="text-[11px] sm:text-xs font-bold dark:text-[#e6e6e6] text-gray-900 mb-0.5">Analyzer Integration</div>
+                                        <div class="text-[10px] sm:text-[11px] dark:text-gray-500 text-gray-400 leading-relaxed">Bidirectional HL7/ASTM with auto-reconnection.</div>
                                     </div>
                                 </div>
-                                <div class="dark:bg-darkBg/60 bg-gray-50 rounded-lg border dark:border-darkBorder border-lightBorder p-4 flex gap-3">
-                                    <div class="w-8 h-8 rounded-lg bg-blue-500/10 flex items-center justify-center flex-shrink-0">
-                                        <i data-lucide="database" class="w-4 h-4 text-blue-400"></i>
+                                <div class="dark:bg-darkBg/60 bg-gray-50 rounded-lg border dark:border-darkBorder border-lightBorder p-3 sm:p-4 flex gap-2.5 sm:gap-3">
+                                    <div class="w-7 h-7 sm:w-8 sm:h-8 rounded-lg bg-blue-500/10 flex items-center justify-center flex-shrink-0">
+                                        <i data-lucide="database" class="w-3.5 h-3.5 sm:w-4 sm:h-4 text-blue-400"></i>
                                     </div>
                                     <div>
-                                        <div class="text-xs font-bold dark:text-[#e6e6e6] text-gray-900 mb-0.5">Oracle Procedures</div>
-                                        <div class="text-[11px] dark:text-gray-500 text-gray-400 leading-relaxed">Critical business logic in Oracle stored procedures for data integrity and performance.</div>
+                                        <div class="text-[11px] sm:text-xs font-bold dark:text-[#e6e6e6] text-gray-900 mb-0.5">Oracle Procedures</div>
+                                        <div class="text-[10px] sm:text-[11px] dark:text-gray-500 text-gray-400 leading-relaxed">Business logic in stored procedures for integrity.</div>
                                     </div>
                                 </div>
-                                <div class="dark:bg-darkBg/60 bg-gray-50 rounded-lg border dark:border-darkBorder border-lightBorder p-4 flex gap-3">
-                                    <div class="w-8 h-8 rounded-lg bg-amber-500/10 flex items-center justify-center flex-shrink-0">
-                                        <i data-lucide="hard-drive" class="w-4 h-4 text-amber-400"></i>
+                                <div class="dark:bg-darkBg/60 bg-gray-50 rounded-lg border dark:border-darkBorder border-lightBorder p-3 sm:p-4 flex gap-2.5 sm:gap-3">
+                                    <div class="w-7 h-7 sm:w-8 sm:h-8 rounded-lg bg-amber-500/10 flex items-center justify-center flex-shrink-0">
+                                        <i data-lucide="hard-drive" class="w-3.5 h-3.5 sm:w-4 sm:h-4 text-amber-400"></i>
                                     </div>
                                     <div>
-                                        <div class="text-xs font-bold dark:text-[#e6e6e6] text-gray-900 mb-0.5">SQLite Local Store</div>
-                                        <div class="text-[11px] dark:text-gray-500 text-gray-400 leading-relaxed">Embedded SQLite for config, license, and offline cache — works without network connectivity.</div>
+                                        <div class="text-[11px] sm:text-xs font-bold dark:text-[#e6e6e6] text-gray-900 mb-0.5">SQLite Local Store</div>
+                                        <div class="text-[10px] sm:text-[11px] dark:text-gray-500 text-gray-400 leading-relaxed">Embedded DB for config, license, offline cache.</div>
                                     </div>
                                 </div>
-                                <div class="dark:bg-darkBg/60 bg-gray-50 rounded-lg border dark:border-darkBorder border-lightBorder p-4 flex gap-3">
-                                    <div class="w-8 h-8 rounded-lg bg-red-500/10 flex items-center justify-center flex-shrink-0">
-                                        <i data-lucide="shield-check" class="w-4 h-4 text-red-400"></i>
+                                <div class="dark:bg-darkBg/60 bg-gray-50 rounded-lg border dark:border-darkBorder border-lightBorder p-3 sm:p-4 flex gap-2.5 sm:gap-3">
+                                    <div class="w-7 h-7 sm:w-8 sm:h-8 rounded-lg bg-red-500/10 flex items-center justify-center flex-shrink-0">
+                                        <i data-lucide="shield-check" class="w-3.5 h-3.5 sm:w-4 sm:h-4 text-red-400"></i>
                                     </div>
                                     <div>
-                                        <div class="text-xs font-bold dark:text-[#e6e6e6] text-gray-900 mb-0.5">Result Validation</div>
-                                        <div class="text-[11px] dark:text-gray-500 text-gray-400 leading-relaxed">Auto-validates results against reference ranges, flags critical values with delta checks.</div>
+                                        <div class="text-[11px] sm:text-xs font-bold dark:text-[#e6e6e6] text-gray-900 mb-0.5">Result Validation</div>
+                                        <div class="text-[10px] sm:text-[11px] dark:text-gray-500 text-gray-400 leading-relaxed">Auto-validates against reference ranges & delta checks.</div>
                                     </div>
                                 </div>
                             </div>
                         </div>
 
-                        <!-- ===== TECH STACK BADGES ===== -->
-                        <div class="mb-8">
-                            <h4 class="font-mono text-xs text-neonGreen mb-4 flex items-center gap-2">
-                                <i data-lucide="layers" class="w-3.5 h-3.5"></i>
-                                Tech Stack
+                        <!-- ===== TECH STACK ===== -->
+                        <div class="mb-6 sm:mb-8">
+                            <h4 class="font-mono text-[10px] sm:text-xs text-neonGreen mb-3 sm:mb-4 flex items-center gap-2">
+                                <i data-lucide="layers" class="w-3 sm:w-3.5 h-3 sm:h-3.5"></i>Tech Stack
                             </h4>
-                            <div class="flex flex-wrap gap-2">
-                                <span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-mono dark:bg-darkBg bg-gray-100 dark:text-gray-300 text-gray-600 border dark:border-darkBorder border-lightBorder">
-                                    <span class="w-2 h-2 rounded-full bg-orange-500"></span> Java 17
-                                </span>
-                                <span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-mono dark:bg-darkBg bg-gray-100 dark:text-gray-300 text-gray-600 border dark:border-darkBorder border-lightBorder">
-                                    <span class="w-2 h-2 rounded-full bg-neonGreen"></span> Spring Boot 3.2
-                                </span>
-                                <span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-mono dark:bg-darkBg bg-gray-100 dark:text-gray-300 text-gray-600 border dark:border-darkBorder border-lightBorder">
-                                    <span class="w-2 h-2 rounded-full bg-neonBlue"></span> WebSocket / STOMP
-                                </span>
-                                <span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-mono dark:bg-darkBg bg-gray-100 dark:text-gray-300 text-gray-600 border dark:border-darkBorder border-lightBorder">
-                                    <span class="w-2 h-2 rounded-full bg-blue-500"></span> Oracle DB
-                                </span>
-                                <span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-mono dark:bg-darkBg bg-gray-100 dark:text-gray-300 text-gray-600 border dark:border-darkBorder border-lightBorder">
-                                    <span class="w-2 h-2 rounded-full bg-amber-500"></span> SQLite
-                                </span>
-                                <span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-mono dark:bg-darkBg bg-gray-100 dark:text-gray-300 text-gray-600 border dark:border-darkBorder border-lightBorder">
-                                    <span class="w-2 h-2 rounded-full bg-purple-400"></span> HL7 / ASTM
-                                </span>
-                                <span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-mono dark:bg-darkBg bg-gray-100 dark:text-gray-300 text-gray-600 border dark:border-darkBorder border-lightBorder">
-                                    <span class="w-2 h-2 rounded-full bg-red-400"></span> RSA License
-                                </span>
-                                <span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-mono dark:bg-darkBg bg-gray-100 dark:text-gray-300 text-gray-600 border dark:border-darkBorder border-lightBorder">
-                                    <span class="w-2 h-2 rounded-full bg-cyan-400"></span> Serial RS-232
-                                </span>
-                                <span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-mono dark:bg-darkBg bg-gray-100 dark:text-gray-300 text-gray-600 border dark:border-darkBorder border-lightBorder">
-                                    <span class="w-2 h-2 rounded-full bg-pink-400"></span> Jasper Reports
-                                </span>
+                            <div class="flex flex-wrap gap-1.5 sm:gap-2">
+                                <span class="inline-flex items-center gap-1 sm:gap-1.5 px-2 sm:px-3 py-1 sm:py-1.5 rounded-lg text-[9px] sm:text-xs font-mono dark:bg-darkBg bg-gray-100 dark:text-gray-300 text-gray-600 border dark:border-darkBorder border-lightBorder"><span class="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-orange-500"></span>Java 17</span>
+                                <span class="inline-flex items-center gap-1 sm:gap-1.5 px-2 sm:px-3 py-1 sm:py-1.5 rounded-lg text-[9px] sm:text-xs font-mono dark:bg-darkBg bg-gray-100 dark:text-gray-300 text-gray-600 border dark:border-darkBorder border-lightBorder"><span class="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-neonGreen"></span>Spring Boot 3.2</span>
+                                <span class="inline-flex items-center gap-1 sm:gap-1.5 px-2 sm:px-3 py-1 sm:py-1.5 rounded-lg text-[9px] sm:text-xs font-mono dark:bg-darkBg bg-gray-100 dark:text-gray-300 text-gray-600 border dark:border-darkBorder border-lightBorder"><span class="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-neonBlue"></span>WebSocket</span>
+                                <span class="inline-flex items-center gap-1 sm:gap-1.5 px-2 sm:px-3 py-1 sm:py-1.5 rounded-lg text-[9px] sm:text-xs font-mono dark:bg-darkBg bg-gray-100 dark:text-gray-300 text-gray-600 border dark:border-darkBorder border-lightBorder"><span class="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-blue-500"></span>Oracle DB</span>
+                                <span class="inline-flex items-center gap-1 sm:gap-1.5 px-2 sm:px-3 py-1 sm:py-1.5 rounded-lg text-[9px] sm:text-xs font-mono dark:bg-darkBg bg-gray-100 dark:text-gray-300 text-gray-600 border dark:border-darkBorder border-lightBorder"><span class="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-amber-500"></span>SQLite</span>
+                                <span class="inline-flex items-center gap-1 sm:gap-1.5 px-2 sm:px-3 py-1 sm:py-1.5 rounded-lg text-[9px] sm:text-xs font-mono dark:bg-darkBg bg-gray-100 dark:text-gray-300 text-gray-600 border dark:border-darkBorder border-lightBorder"><span class="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-purple-400"></span>HL7/ASTM</span>
+                                <span class="inline-flex items-center gap-1 sm:gap-1.5 px-2 sm:px-3 py-1 sm:py-1.5 rounded-lg text-[9px] sm:text-xs font-mono dark:bg-darkBg bg-gray-100 dark:text-gray-300 text-gray-600 border dark:border-darkBorder border-lightBorder"><span class="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-red-400"></span>RSA License</span>
+                                <span class="inline-flex items-center gap-1 sm:gap-1.5 px-2 sm:px-3 py-1 sm:py-1.5 rounded-lg text-[9px] sm:text-xs font-mono dark:bg-darkBg bg-gray-100 dark:text-gray-300 text-gray-600 border dark:border-darkBorder border-lightBorder"><span class="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-cyan-400"></span>Serial RS-232</span>
+                                <span class="inline-flex items-center gap-1 sm:gap-1.5 px-2 sm:px-3 py-1 sm:py-1.5 rounded-lg text-[9px] sm:text-xs font-mono dark:bg-darkBg bg-gray-100 dark:text-gray-300 text-gray-600 border dark:border-darkBorder border-lightBorder"><span class="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-pink-400"></span>Jasper Reports</span>
                             </div>
                         </div>
 
-                        <!-- ===== ANALYZER DETAIL CARDS ===== -->
+                        <!-- ===== ANALYZER DETAIL CARDS — 1 col mobile, 2 col sm+ ===== -->
                         <div>
-                            <h4 class="font-mono text-xs text-neonBlue mb-4 flex items-center gap-2">
-                                <i data-lucide="plug" class="w-3.5 h-3.5"></i>
-                                Connected Analyzers — Detail View
+                            <h4 class="font-mono text-[10px] sm:text-xs text-neonBlue mb-3 sm:mb-4 flex items-center gap-2">
+                                <i data-lucide="plug" class="w-3 sm:w-3.5 h-3 sm:h-3.5"></i>Connected Analyzers
                             </h4>
-                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
                                 <!-- Mini VIDAS -->
-                                <div class="dark:bg-darkBg/60 bg-gray-50 rounded-xl border dark:border-darkBorder border-lightBorder p-5 hover:border-purple-500/50 transition-colors">
-                                    <div class="flex items-start justify-between mb-3">
-                                        <div class="flex items-center gap-3">
-                                            <div class="w-10 h-10 rounded-xl bg-purple-500/10 border border-purple-500/20 flex items-center justify-center">
-                                                <i data-lucide="flask-conical" class="w-5 h-5 text-purple-400"></i>
+                                <div class="dark:bg-darkBg/60 bg-gray-50 rounded-xl border dark:border-darkBorder border-lightBorder p-3.5 sm:p-5 hover:border-purple-500/40 transition-colors">
+                                    <div class="flex items-start justify-between mb-2 sm:mb-3">
+                                        <div class="flex items-center gap-2 sm:gap-3">
+                                            <div class="w-8 h-8 sm:w-10 sm:h-10 rounded-xl bg-purple-500/10 border border-purple-500/20 flex items-center justify-center flex-shrink-0">
+                                                <i data-lucide="flask-conical" class="w-4 h-4 sm:w-5 sm:h-5 text-purple-400"></i>
                                             </div>
                                             <div>
-                                                <div class="text-sm font-bold dark:text-[#e6e6e6] text-gray-900">Mini VIDAS</div>
-                                                <div class="text-[10px] font-mono dark:text-gray-500 text-gray-400">bioMérieux — Immunoassay Analyzer</div>
+                                                <div class="text-xs sm:text-sm font-bold dark:text-[#e6e6e6] text-gray-900">Mini VIDAS</div>
+                                                <div class="text-[9px] sm:text-[10px] font-mono dark:text-gray-500 text-gray-400">bioMérieux — Immunoassay</div>
                                             </div>
                                         </div>
-                                        <span class="flex items-center gap-1 px-2 py-0.5 rounded text-[9px] font-mono bg-neonGreen/10 text-neonGreen border border-neonGreen/20">
-                                            <span class="w-1.5 h-1.5 rounded-full bg-neonGreen led-online"></span> Connected
+                                        <span class="flex items-center gap-1 px-1.5 py-0.5 sm:px-2 sm:py-0.5 rounded text-[8px] sm:text-[9px] font-mono bg-neonGreen/10 text-neonGreen border border-neonGreen/20 flex-shrink-0 mt-0.5">
+                                            <span class="w-1 sm:w-1.5 h-1 sm:h-1.5 rounded-full bg-neonGreen led-online"></span>Live
                                         </span>
                                     </div>
-                                    <div class="space-y-2 text-[11px] font-mono dark:text-gray-400 text-gray-500">
-                                        <div class="flex justify-between"><span>Protocol</span><span class="dark:text-gray-300 text-gray-600">HL7 v2.5.1</span></div>
-                                        <div class="flex justify-between"><span>Tests</span><span class="dark:text-gray-300 text-gray-600">HIV, HBsAg, HCV, TORCH</span></div>
-                                        <div class="flex justify-between"><span>Throughput</span><span class="dark:text-gray-300 text-gray-600">~24 samples/hr</span></div>
-                                        <div class="flex justify-between"><span>Interface</span><span class="dark:text-gray-300 text-gray-600">Serial RS-232</span></div>
+                                    <div class="space-y-1 sm:space-y-1.5 text-[10px] sm:text-[11px] font-mono dark:text-gray-400 text-gray-500">
+                                        <div class="flex justify-between gap-2"><span class="flex-shrink-0">Protocol</span><span class="dark:text-gray-300 text-gray-600 text-right">HL7 v2.5.1</span></div>
+                                        <div class="flex justify-between gap-2"><span class="flex-shrink-0">Tests</span><span class="dark:text-gray-300 text-gray-600 text-right">HIV, HBsAg, HCV, TORCH</span></div>
+                                        <div class="flex justify-between gap-2"><span class="flex-shrink-0">Speed</span><span class="dark:text-gray-300 text-gray-600">~24 samples/hr</span></div>
+                                        <div class="flex justify-between gap-2"><span class="flex-shrink-0">Port</span><span class="dark:text-gray-300 text-gray-600">Serial RS-232</span></div>
                                     </div>
                                 </div>
-
-                                <!-- Siemens Dimension EXL 200 -->
-                                <div class="dark:bg-darkBg/60 bg-gray-50 rounded-xl border dark:border-darkBorder border-lightBorder p-5 hover:border-blue-500/50 transition-colors">
-                                    <div class="flex items-start justify-between mb-3">
-                                        <div class="flex items-center gap-3">
-                                            <div class="w-10 h-10 rounded-xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center">
-                                                <i data-lucide="beaker" class="w-5 h-5 text-blue-400"></i>
+                                <!-- Siemens EXL -->
+                                <div class="dark:bg-darkBg/60 bg-gray-50 rounded-xl border dark:border-darkBorder border-lightBorder p-3.5 sm:p-5 hover:border-blue-500/40 transition-colors">
+                                    <div class="flex items-start justify-between mb-2 sm:mb-3">
+                                        <div class="flex items-center gap-2 sm:gap-3">
+                                            <div class="w-8 h-8 sm:w-10 sm:h-10 rounded-xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center flex-shrink-0">
+                                                <i data-lucide="beaker" class="w-4 h-4 sm:w-5 sm:h-5 text-blue-400"></i>
                                             </div>
                                             <div>
-                                                <div class="text-sm font-bold dark:text-[#e6e6e6] text-gray-900">Dimension EXL 200</div>
-                                                <div class="text-[10px] font-mono dark:text-gray-500 text-gray-400">Siemens Healthineers — Chemistry</div>
+                                                <div class="text-xs sm:text-sm font-bold dark:text-[#e6e6e6] text-gray-900">Dimension EXL 200</div>
+                                                <div class="text-[9px] sm:text-[10px] font-mono dark:text-gray-500 text-gray-400">Siemens — Chemistry</div>
                                             </div>
                                         </div>
-                                        <span class="flex items-center gap-1 px-2 py-0.5 rounded text-[9px] font-mono bg-neonGreen/10 text-neonGreen border border-neonGreen/20">
-                                            <span class="w-1.5 h-1.5 rounded-full bg-neonGreen led-online"></span> Connected
+                                        <span class="flex items-center gap-1 px-1.5 py-0.5 sm:px-2 sm:py-0.5 rounded text-[8px] sm:text-[9px] font-mono bg-neonGreen/10 text-neonGreen border border-neonGreen/20 flex-shrink-0 mt-0.5">
+                                            <span class="w-1 sm:w-1.5 h-1 sm:h-1.5 rounded-full bg-neonGreen led-online"></span>Live
                                         </span>
                                     </div>
-                                    <div class="space-y-2 text-[11px] font-mono dark:text-gray-400 text-gray-500">
-                                        <div class="flex justify-between"><span>Protocol</span><span class="dark:text-gray-300 text-gray-600">ASTM E1381</span></div>
-                                        <div class="flex justify-between"><span>Tests</span><span class="dark:text-gray-300 text-gray-600">Glucose, BUN, Creatinine, Lipids</span></div>
-                                        <div class="flex justify-between"><span>Throughput</span><span class="dark:text-gray-300 text-gray-600">~440 tests/hr</span></div>
-                                        <div class="flex justify-between"><span>Interface</span><span class="dark:text-gray-300 text-gray-600">Serial RS-232 / TCP</span></div>
+                                    <div class="space-y-1 sm:space-y-1.5 text-[10px] sm:text-[11px] font-mono dark:text-gray-400 text-gray-500">
+                                        <div class="flex justify-between gap-2"><span class="flex-shrink-0">Protocol</span><span class="dark:text-gray-300 text-gray-600 text-right">ASTM E1381</span></div>
+                                        <div class="flex justify-between gap-2"><span class="flex-shrink-0">Tests</span><span class="dark:text-gray-300 text-gray-600 text-right">Glucose, BUN, Lipids</span></div>
+                                        <div class="flex justify-between gap-2"><span class="flex-shrink-0">Speed</span><span class="dark:text-gray-300 text-gray-600">~440 tests/hr</span></div>
+                                        <div class="flex justify-between gap-2"><span class="flex-shrink-0">Port</span><span class="dark:text-gray-300 text-gray-600">RS-232 / TCP</span></div>
                                     </div>
                                 </div>
-
                                 <!-- Sysmex XN550 -->
-                                <div class="dark:bg-darkBg/60 bg-gray-50 rounded-xl border dark:border-darkBorder border-lightBorder p-5 hover:border-red-500/50 transition-colors">
-                                    <div class="flex items-start justify-between mb-3">
-                                        <div class="flex items-center gap-3">
-                                            <div class="w-10 h-10 rounded-xl bg-red-500/10 border border-red-500/20 flex items-center justify-center">
-                                                <i data-lucide="droplets" class="w-5 h-5 text-red-400"></i>
+                                <div class="dark:bg-darkBg/60 bg-gray-50 rounded-xl border dark:border-darkBorder border-lightBorder p-3.5 sm:p-5 hover:border-red-500/40 transition-colors">
+                                    <div class="flex items-start justify-between mb-2 sm:mb-3">
+                                        <div class="flex items-center gap-2 sm:gap-3">
+                                            <div class="w-8 h-8 sm:w-10 sm:h-10 rounded-xl bg-red-500/10 border border-red-500/20 flex items-center justify-center flex-shrink-0">
+                                                <i data-lucide="droplets" class="w-4 h-4 sm:w-5 sm:h-5 text-red-400"></i>
                                             </div>
                                             <div>
-                                                <div class="text-sm font-bold dark:text-[#e6e6e6] text-gray-900">Sysmex XN-550</div>
-                                                <div class="text-[10px] font-mono dark:text-gray-500 text-gray-400">Sysmex — Hematology Analyzer</div>
+                                                <div class="text-xs sm:text-sm font-bold dark:text-[#e6e6e6] text-gray-900">Sysmex XN-550</div>
+                                                <div class="text-[9px] sm:text-[10px] font-mono dark:text-gray-500 text-gray-400">Sysmex — Hematology</div>
                                             </div>
                                         </div>
-                                        <span class="flex items-center gap-1 px-2 py-0.5 rounded text-[9px] font-mono bg-neonGreen/10 text-neonGreen border border-neonGreen/20">
-                                            <span class="w-1.5 h-1.5 rounded-full bg-neonGreen led-online"></span> Connected
+                                        <span class="flex items-center gap-1 px-1.5 py-0.5 sm:px-2 sm:py-0.5 rounded text-[8px] sm:text-[9px] font-mono bg-neonGreen/10 text-neonGreen border border-neonGreen/20 flex-shrink-0 mt-0.5">
+                                            <span class="w-1 sm:w-1.5 h-1 sm:h-1.5 rounded-full bg-neonGreen led-online"></span>Live
                                         </span>
                                     </div>
-                                    <div class="space-y-2 text-[11px] font-mono dark:text-gray-400 text-gray-500">
-                                        <div class="flex justify-between"><span>Protocol</span><span class="dark:text-gray-300 text-gray-600">HL7 v2.4 / Sysmex DM</span></div>
-                                        <div class="flex justify-between"><span>Tests</span><span class="dark:text-gray-300 text-gray-600">CBC, Diff, Retic, PLT-F</span></div>
-                                        <div class="flex justify-between"><span>Throughput</span><span class="dark:text-gray-300 text-gray-600">~110 samples/hr</span></div>
-                                        <div class="flex justify-between"><span>Interface</span><span class="dark:text-gray-300 text-gray-600">TCP/IP (Port 5000)</span></div>
+                                    <div class="space-y-1 sm:space-y-1.5 text-[10px] sm:text-[11px] font-mono dark:text-gray-400 text-gray-500">
+                                        <div class="flex justify-between gap-2"><span class="flex-shrink-0">Protocol</span><span class="dark:text-gray-300 text-gray-600 text-right">HL7 v2.4 / DM</span></div>
+                                        <div class="flex justify-between gap-2"><span class="flex-shrink-0">Tests</span><span class="dark:text-gray-300 text-gray-600 text-right">CBC, Diff, Retic, PLT-F</span></div>
+                                        <div class="flex justify-between gap-2"><span class="flex-shrink-0">Speed</span><span class="dark:text-gray-300 text-gray-600">~110 samples/hr</span></div>
+                                        <div class="flex justify-between gap-2"><span class="flex-shrink-0">Port</span><span class="dark:text-gray-300 text-gray-600">TCP/IP :5000</span></div>
                                     </div>
                                 </div>
-
                                 <!-- Reaky Tech -->
-                                <div class="dark:bg-darkBg/60 bg-gray-50 rounded-xl border dark:border-darkBorder border-lightBorder p-5 hover:border-amber-500/50 transition-colors">
-                                    <div class="flex items-start justify-between mb-3">
-                                        <div class="flex items-center gap-3">
-                                            <div class="w-10 h-10 rounded-xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center">
-                                                <i data-lucide="test-tubes" class="w-5 h-5 text-amber-400"></i>
+                                <div class="dark:bg-darkBg/60 bg-gray-50 rounded-xl border dark:border-darkBorder border-lightBorder p-3.5 sm:p-5 hover:border-amber-500/40 transition-colors">
+                                    <div class="flex items-start justify-between mb-2 sm:mb-3">
+                                        <div class="flex items-center gap-2 sm:gap-3">
+                                            <div class="w-8 h-8 sm:w-10 sm:h-10 rounded-xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center flex-shrink-0">
+                                                <i data-lucide="test-tubes" class="w-4 h-4 sm:w-5 sm:h-5 text-amber-400"></i>
                                             </div>
                                             <div>
-                                                <div class="text-sm font-bold dark:text-[#e6e6e6] text-gray-900">Reaky Tech</div>
-                                                <div class="text-[10px] font-mono dark:text-gray-500 text-gray-400">Reaky Tech — Biochemistry Analyzer</div>
+                                                <div class="text-xs sm:text-sm font-bold dark:text-[#e6e6e6] text-gray-900">Realy Tech</div>
+                                                <div class="text-[9px] sm:text-[10px] font-mono dark:text-gray-500 text-gray-400">Realy Tech — Biochemistry</div>
                                             </div>
                                         </div>
-                                        <span class="flex items-center gap-1 px-2 py-0.5 rounded text-[9px] font-mono bg-neonGreen/10 text-neonGreen border border-neonGreen/20">
-                                            <span class="w-1.5 h-1.5 rounded-full bg-neonGreen led-online"></span> Connected
+                                        <span class="flex items-center gap-1 px-1.5 py-0.5 sm:px-2 sm:py-0.5 rounded text-[8px] sm:text-[9px] font-mono bg-neonGreen/10 text-neonGreen border border-neonGreen/20 flex-shrink-0 mt-0.5">
+                                            <span class="w-1 sm:w-1.5 h-1 sm:h-1.5 rounded-full bg-neonGreen led-online"></span>Live
                                         </span>
                                     </div>
-                                    <div class="space-y-2 text-[11px] font-mono dark:text-gray-400 text-gray-500">
-                                        <div class="flex justify-between"><span>Protocol</span><span class="dark:text-gray-300 text-gray-600">Custom Serial Protocol</span></div>
-                                        <div class="flex justify-between"><span>Tests</span><span class="dark:text-gray-300 text-gray-600">Liver, Kidney, Cardiac panels</span></div>
-                                        <div class="flex justify-between"><span>Throughput</span><span class="dark:text-gray-300 text-gray-600">~200 tests/hr</span></div>
-                                        <div class="flex justify-between"><span>Interface</span><span class="dark:text-gray-300 text-gray-600">Serial RS-232 (COM)</span></div>
+                                    <div class="space-y-1 sm:space-y-1.5 text-[10px] sm:text-[11px] font-mono dark:text-gray-400 text-gray-500">
+                                        <div class="flex justify-between gap-2"><span class="flex-shrink-0">Protocol</span><span class="dark:text-gray-300 text-gray-600 text-right">Custom Serial</span></div>
+                                        <div class="flex justify-between gap-2"><span class="flex-shrink-0">Tests</span><span class="dark:text-gray-300 text-gray-600 text-right">Liver, Kidney, Cardiac</span></div>
+                                        <div class="flex justify-between gap-2"><span class="flex-shrink-0">Speed</span><span class="dark:text-gray-300 text-gray-600">~200 tests/hr</span></div>
+                                        <div class="flex justify-between gap-2"><span class="flex-shrink-0">Port</span><span class="dark:text-gray-300 text-gray-600">Serial RS-232</span></div>
                                     </div>
                                 </div>
                             </div>
@@ -981,221 +739,125 @@
                 </div>
             </div>
 
-            <!-- ===== OTHER PROJECTS ===== -->
-            <div class="font-mono text-xs dark:text-gray-500 text-gray-400 mb-4 flex items-center gap-2">
-                <span class="w-8 h-px dark:bg-darkBorder bg-lightBorder"></span>
-                Other Repositories
-            </div>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
-                <div class="github-card dark:bg-darkSurface/60 bg-white rounded-xl border dark:border-darkBorder border-lightBorder p-5 hover:border-neonGreen/50 transition-all">
-                    <div class="flex items-start justify-between mb-3">
-                        <div class="flex items-center gap-2">
-                            <i data-lucide="book-open" class="w-4 h-4 text-neonGreen"></i>
-                            <a href="#" class="font-mono text-sm font-bold dark:text-neonBlue text-blue-600 hover:underline">spring-boot-starter-cache</a>
-                        </div>
-                        <span class="px-2 py-0.5 rounded text-[10px] font-mono dark:bg-neonGreen/10 bg-green-50 dark:text-neonGreen text-green-700 border dark:border-neonGreen/20 border-green-200">Public</span>
+            <!-- Other Repos -->
+            <div class="font-mono text-[10px] sm:text-xs dark:text-gray-500 text-gray-400 mb-3 sm:mb-4 flex items-center gap-2"><span class="w-6 sm:w-8 h-px dark:bg-darkBorder bg-lightBorder"></span>Other Repositories</div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-5 mb-8 sm:mb-10">
+                <div class="github-card dark:bg-darkSurface/60 bg-white rounded-xl border dark:border-darkBorder border-lightBorder p-4 sm:p-5 hover:border-neonGreen/50 transition-all">
+                    <div class="flex items-start justify-between mb-2 sm:mb-3">
+                        <div class="flex items-center gap-2"><i data-lucide="book-open" class="w-4 h-4 text-neonGreen flex-shrink-0"></i><a href="#" class="font-mono text-xs sm:text-sm font-bold dark:text-neonBlue text-blue-600 hover:underline">spring-boot-starter-cache</a></div>
+                        <span class="px-1.5 py-0.5 rounded text-[9px] sm:text-[10px] font-mono dark:bg-neonGreen/10 bg-green-50 dark:text-neonGreen text-green-700 border dark:border-neonGreen/20 border-green-200 flex-shrink-0">Public</span>
                     </div>
-                    <p class="text-sm dark:text-gray-400 text-gray-500 mb-4">Custom Spring Boot starter for multi-layer caching with Redis and Caffeine. Supports TTL, invalidation, and metrics.</p>
-                    <div class="flex items-center gap-4 text-xs font-mono dark:text-gray-500 text-gray-400">
-                        <span class="flex items-center gap-1"><span class="w-2.5 h-2.5 rounded-full bg-orange-500"></span> Java</span>
-                        <span class="flex items-center gap-1"><i data-lucide="star" class="w-3 h-3"></i> 248</span>
-                        <span class="flex items-center gap-1"><i data-lucide="git-fork" class="w-3 h-3"></i> 56</span>
+                    <p class="text-xs sm:text-sm dark:text-gray-400 text-gray-500 mb-3">Multi-layer caching with Redis & Caffeine.</p>
+                    <div class="flex items-center gap-3 sm:gap-4 text-[10px] sm:text-xs font-mono dark:text-gray-500 text-gray-400">
+                        <span class="flex items-center gap-1"><span class="w-2 h-2 sm:w-2.5 sm:h-2.5 rounded-full bg-orange-500"></span>Java</span>
+                        <span class="flex items-center gap-1"><i data-lucide="star" class="w-3 h-3"></i>248</span>
+                        <span class="flex items-center gap-1"><i data-lucide="git-fork" class="w-3 h-3"></i>56</span>
                     </div>
                 </div>
-                <div class="github-card dark:bg-darkSurface/60 bg-white rounded-xl border dark:border-darkBorder border-lightBorder p-5 hover:border-neonBlue/50 transition-all">
-                    <div class="flex items-start justify-between mb-3">
-                        <div class="flex items-center gap-2">
-                            <i data-lucide="zap" class="w-4 h-4 text-neonBlue"></i>
-                            <a href="#" class="font-mono text-sm font-bold dark:text-neonBlue text-blue-600 hover:underline">hl7-parser-java</a>
-                        </div>
-                        <span class="px-2 py-0.5 rounded text-[10px] font-mono dark:bg-neonGreen/10 bg-green-50 dark:text-neonGreen text-green-700 border dark:border-neonGreen/20 border-green-200">Public</span>
+                <div class="github-card dark:bg-darkSurface/60 bg-white rounded-xl border dark:border-darkBorder border-lightBorder p-4 sm:p-5 hover:border-neonBlue/50 transition-all">
+                    <div class="flex items-start justify-between mb-2 sm:mb-3">
+                        <div class="flex items-center gap-2"><i data-lucide="zap" class="w-4 h-4 text-neonBlue flex-shrink-0"></i><a href="#" class="font-mono text-xs sm:text-sm font-bold dark:text-neonBlue text-blue-600 hover:underline">hl7-parser-java</a></div>
+                        <span class="px-1.5 py-0.5 rounded text-[9px] sm:text-[10px] font-mono dark:bg-neonGreen/10 bg-green-50 dark:text-neonGreen text-green-700 border dark:border-neonGreen/20 border-green-200 flex-shrink-0">Public</span>
                     </div>
-                    <p class="text-sm dark:text-gray-400 text-gray-500 mb-4">Lightweight HL7 v2.x parser for Java. Pipe-delimited message parsing with segment extraction and validation.</p>
-                    <div class="flex items-center gap-4 text-xs font-mono dark:text-gray-500 text-gray-400">
-                        <span class="flex items-center gap-1"><span class="w-2.5 h-2.5 rounded-full bg-orange-500"></span> Java</span>
-                        <span class="flex items-center gap-1"><i data-lucide="star" class="w-3 h-3"></i> 124</span>
-                        <span class="flex items-center gap-1"><i data-lucide="git-fork" class="w-3 h-3"></i> 28</span>
+                    <p class="text-xs sm:text-sm dark:text-gray-400 text-gray-500 mb-3">Lightweight HL7 v2.x parser for Java.</p>
+                    <div class="flex items-center gap-3 sm:gap-4 text-[10px] sm:text-xs font-mono dark:text-gray-500 text-gray-400">
+                        <span class="flex items-center gap-1"><span class="w-2 h-2 sm:w-2.5 sm:h-2.5 rounded-full bg-orange-500"></span>Java</span>
+                        <span class="flex items-center gap-1"><i data-lucide="star" class="w-3 h-3"></i>124</span>
+                        <span class="flex items-center gap-1"><i data-lucide="git-fork" class="w-3 h-3"></i>28</span>
                     </div>
                 </div>
             </div>
 
-            <!-- GitHub Stats -->
-            <div class="mt-10 dark:bg-darkSurface/40 bg-gray-50 rounded-xl border dark:border-darkBorder border-lightBorder p-6">
-                <div class="grid grid-cols-2 sm:grid-cols-4 gap-6 text-center">
-                    <div>
-                        <div class="text-2xl sm:text-3xl font-bold text-neonGreen font-mono">42</div>
-                        <div class="text-xs dark:text-gray-500 text-gray-400 font-mono mt-1">Repositories</div>
-                    </div>
-                    <div>
-                        <div class="text-2xl sm:text-3xl font-bold text-neonBlue font-mono">1.2k</div>
-                        <div class="text-xs dark:text-gray-500 text-gray-400 font-mono mt-1">Stars Earned</div>
-                    </div>
-                    <div>
-                        <div class="text-2xl sm:text-3xl font-bold text-neonGreen font-mono">4</div>
-                        <div class="text-xs dark:text-gray-500 text-gray-400 font-mono mt-1">Analyzers Live</div>
-                    </div>
-                    <div>
-                        <div class="text-2xl sm:text-3xl font-bold text-neonBlue font-mono">24/7</div>
-                        <div class="text-xs dark:text-gray-500 text-gray-400 font-mono mt-1">System Uptime</div>
-                    </div>
+            <!-- Stats -->
+            <div class="dark:bg-darkSurface/40 bg-gray-50 rounded-xl sm:rounded-xl border dark:border-darkBorder border-lightBorder p-4 sm:p-6">
+                <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 sm:gap-6 text-center">
+                    <div><div class="text-xl sm:text-2xl md:text-3xl font-bold text-neonGreen font-mono">42</div><div class="text-[10px] sm:text-xs dark:text-gray-500 text-gray-400 font-mono mt-0.5">Repositories</div></div>
+                    <div><div class="text-xl sm:text-2xl md:text-3xl font-bold text-neonBlue font-mono">1.2k</div><div class="text-[10px] sm:text-xs dark:text-gray-500 text-gray-400 font-mono mt-0.5">Stars Earned</div></div>
+                    <div><div class="text-xl sm:text-2xl md:text-3xl font-bold text-neonGreen font-mono">4</div><div class="text-[10px] sm:text-xs dark:text-gray-500 text-gray-400 font-mono mt-0.5">Analyzers Live</div></div>
+                    <div><div class="text-xl sm:text-2xl md:text-3xl font-bold text-neonBlue font-mono">24/7</div><div class="text-[10px] sm:text-xs dark:text-gray-500 text-gray-400 font-mono mt-0.5">Uptime</div></div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- ==================== ABOUT SECTION ==================== -->
-    <section id="about" class="py-24 px-4 sm:px-6">
+    <!-- ABOUT -->
+    <section id="about" class="py-16 sm:py-24 px-4 sm:px-6">
         <div class="max-w-6xl mx-auto">
-            <div class="font-mono text-xs text-neonGreen mb-2 flex items-center gap-2">
-                <span class="w-8 h-px bg-neonGreen"></span>
-                ./about
-            </div>
-            <h2 class="text-3xl sm:text-4xl font-bold dark:text-[#e6e6e6] text-gray-900 tracking-tight mb-10">About Me</h2>
-            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                <div class="lg:col-span-2">
-                    <div class="dark:bg-darkSurface/60 bg-white rounded-xl border dark:border-darkBorder border-lightBorder p-6 sm:p-8 mb-6">
-                        <h3 class="font-bold text-lg dark:text-[#e6e6e6] text-gray-900 mb-4 flex items-center gap-2">
-                            <i data-lucide="user" class="w-5 h-5 text-neonGreen"></i> Who I Am
-                        </h3>
-                        <div class="dark:text-gray-400 text-gray-500 text-sm leading-relaxed space-y-3">
-                            <p>I'm <strong class="dark:text-[#e6e6e6] text-gray-900">Robiul Hossain</strong>, a Java developer with 5+ years of experience building scalable backend systems. I specialize in Spring Boot microservices, laboratory information systems, and real-time communication protocols.</p>
-                            <p>Currently, I'm the lead developer of a production Laboratory Information System serving clinical laboratories. The system integrates 4 medical analyzers (Mini VIDAS, Siemens Dimension EXL 200, Sysmex XN-550, and Reaky Tech) using HL7/ASTM protocols over serial and TCP connections, with real-time result broadcasting via WebSocket.</p>
-                            <p>I'm passionate about JVM internals, protocol parsing, and building systems that run 24/7 without intervention. When I'm not coding, I write technical articles and contribute to open source.</p>
+            <div class="font-mono text-[10px] sm:text-xs text-neonGreen mb-1.5 flex items-center gap-2"><span class="w-6 sm:w-8 h-px bg-neonGreen"></span>./about</div>
+            <h2 class="text-2xl sm:text-3xl md:text-4xl font-bold dark:text-[#e6e6e6] text-gray-900 tracking-tight mb-8 sm:mb-10">About Me</h2>
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-5 sm:gap-8">
+                <div class="lg:col-span-2 space-y-5 sm:space-y-6">
+                    <div class="dark:bg-darkSurface/60 bg-white rounded-xl border dark:border-darkBorder border-lightBorder p-4 sm:p-6 md:p-8">
+                        <h3 class="font-bold text-base sm:text-lg dark:text-[#e6e6e6] text-gray-900 mb-3 sm:mb-4 flex items-center gap-2"><i data-lucide="user" class="w-4 h-4 sm:w-5 sm:h-5 text-neonGreen"></i>Who I Am</h3>
+                        <div class="dark:text-gray-400 text-gray-500 text-xs sm:text-sm leading-relaxed space-y-2 sm:space-y-3">
+                            <p>I'm <strong class="dark:text-[#e6e6e6] text-gray-900">Robiul Hossain</strong>, a Java developer with 5+ years building scalable backend systems. I specialize in Spring Boot, laboratory information systems, and real-time protocols.</p>
+                            <p>Currently leading the development of a production LIS integrating 4 medical analyzers (Mini VIDAS, Siemens EXL 200, Sysmex XN-550, Reaky Tech) using HL7/ASTM protocols with real-time WebSocket result delivery.</p>
+                            <p>Passionate about JVM internals, protocol parsing, and systems that run 24/7 without intervention.</p>
                         </div>
                     </div>
-                    <div class="dark:bg-darkSurface/60 bg-white rounded-xl border dark:border-darkBorder border-lightBorder p-6 sm:p-8">
-                        <h3 class="font-bold text-lg dark:text-[#e6e6e6] text-gray-900 mb-6 flex items-center gap-2">
-                            <i data-lucide="briefcase" class="w-5 h-5 text-neonBlue"></i> Experience
-                        </h3>
-                        <div class="space-y-6 relative before:absolute before:left-[7px] before:top-2 before:bottom-2 before:w-px before:dark:bg-darkBorder before:bg-lightBorder">
-                            <div class="flex gap-4 relative">
-                                <div class="w-[15px] h-[15px] rounded-full bg-neonGreen mt-1 flex-shrink-0 z-10 ring-4 dark:ring-darkSurface ring-white"></div>
+                    <div class="dark:bg-darkSurface/60 bg-white rounded-xl border dark:border-darkBorder border-lightBorder p-4 sm:p-6 md:p-8">
+                        <h3 class="font-bold text-base sm:text-lg dark:text-[#e6e6e6] text-gray-900 mb-4 sm:mb-6 flex items-center gap-2"><i data-lucide="briefcase" class="w-4 h-4 sm:w-5 sm:h-5 text-neonBlue"></i>Experience</h3>
+                        <div class="space-y-5 sm:space-y-6 relative before:absolute before:left-[7px] before:top-2 before:bottom-2 before:w-px before:dark:bg-darkBorder before:bg-lightBorder">
+                            <div class="flex gap-3 sm:gap-4 relative">
+                                <div class="w-[15px] h-[15px] rounded-full bg-neonGreen mt-0.5 flex-shrink-0 z-10 ring-4 dark:ring-darkSurface ring-white"></div>
                                 <div>
-                                    <div class="font-mono text-xs text-neonGreen mb-1">2022 — Present</div>
-                                    <div class="font-bold dark:text-[#e6e6e6] text-gray-900 text-sm">Senior Java Developer — LIS Project</div>
-                                    <div class="dark:text-gray-500 text-gray-400 text-xs">HealthTech Solutions</div>
-                                    <p class="dark:text-gray-400 text-gray-500 text-xs mt-1">Building and maintaining Laboratory Information System with analyzer integration, WebSocket real-time push, license management, and dual-database architecture.</p>
+                                    <div class="font-mono text-[10px] sm:text-xs text-neonGreen mb-0.5 sm:mb-1">2022 — Present</div>
+                                    <div class="font-bold text-xs sm:text-sm dark:text-[#e6e6e6] text-gray-900">Senior Java Developer — LIS</div>
+                                    <div class="dark:text-gray-500 text-gray-400 text-[10px] sm:text-xs">HealthTech Solutions</div>
+                                    <p class="dark:text-gray-400 text-gray-500 text-[10px] sm:text-xs mt-1">Building LIS with analyzer integration, WebSocket push, license system, dual-database architecture.</p>
                                 </div>
                             </div>
-                            <div class="flex gap-4 relative">
-                                <div class="w-[15px] h-[15px] rounded-full bg-neonBlue mt-1 flex-shrink-0 z-10 ring-4 dark:ring-darkSurface ring-white"></div>
+                            <div class="flex gap-3 sm:gap-4 relative">
+                                <div class="w-[15px] h-[15px] rounded-full bg-neonBlue mt-0.5 flex-shrink-0 z-10 ring-4 dark:ring-darkSurface ring-white"></div>
                                 <div>
-                                    <div class="font-mono text-xs text-neonBlue mb-1">2020 — 2022</div>
-                                    <div class="font-bold dark:text-[#e6e6e6] text-gray-900 text-sm">Java Developer</div>
-                                    <div class="dark:text-gray-500 text-gray-400 text-xs">Digital Innovations Ltd — Dhaka</div>
-                                    <p class="dark:text-gray-400 text-gray-500 text-xs mt-1">Built REST APIs and migrated legacy monolith to Spring Cloud microservices architecture.</p>
+                                    <div class="font-mono text-[10px] sm:text-xs text-neonBlue mb-0.5 sm:mb-1">2020 — 2022</div>
+                                    <div class="font-bold text-xs sm:text-sm dark:text-[#e6e6e6] text-gray-900">Java Developer</div>
+                                    <div class="dark:text-gray-500 text-gray-400 text-[10px] sm:text-xs">Digital Innovations — Dhaka</div>
+                                    <p class="dark:text-gray-400 text-gray-500 text-[10px] sm:text-xs mt-1">REST APIs, monolith to microservices migration.</p>
                                 </div>
                             </div>
-                            <div class="flex gap-4 relative">
-                                <div class="w-[15px] h-[15px] rounded-full dark:bg-darkBorder bg-lightBorder mt-1 flex-shrink-0 z-10 ring-4 dark:ring-darkSurface ring-white"></div>
+                            <div class="flex gap-3 sm:gap-4 relative">
+                                <div class="w-[15px] h-[15px] rounded-full dark:bg-darkBorder bg-lightBorder mt-0.5 flex-shrink-0 z-10 ring-4 dark:ring-darkSurface ring-white"></div>
                                 <div>
-                                    <div class="font-mono text-xs dark:text-gray-500 text-gray-400 mb-1">2019 — 2020</div>
-                                    <div class="font-bold dark:text-[#e6e6e6] text-gray-900 text-sm">Junior Developer</div>
-                                    <div class="dark:text-gray-500 text-gray-400 text-xs">StartUp Hub — Dhaka</div>
-                                    <p class="dark:text-gray-400 text-gray-500 text-xs mt-1">Full-stack development with Java, Spring MVC, and basic React.</p>
+                                    <div class="font-mono text-[10px] sm:text-xs dark:text-gray-500 text-gray-400 mb-0.5 sm:mb-1">2019 — 2020</div>
+                                    <div class="font-bold text-xs sm:text-sm dark:text-[#e6e6e6] text-gray-900">Junior Developer</div>
+                                    <div class="dark:text-gray-500 text-gray-400 text-[10px] sm:text-xs">StartUp Hub — Dhaka</div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="space-y-6">
-                    <div class="dark:bg-darkSurface/60 bg-white rounded-xl border dark:border-darkBorder border-lightBorder p-6">
-                        <h3 class="font-bold text-lg dark:text-[#e6e6e6] text-gray-900 mb-5 flex items-center gap-2">
-                            <i data-lucide="layers" class="w-5 h-5 text-neonGreen"></i> Tech Stack
-                        </h3>
-                        <div class="space-y-4">
-                            <div>
-                                <div class="flex justify-between text-xs font-mono mb-1.5">
-                                    <span class="dark:text-gray-300 text-gray-600">Java / JVM</span>
-                                    <span class="text-neonGreen">95%</span>
-                                </div>
-                                <div class="h-1.5 dark:bg-darkBg bg-gray-100 rounded-full overflow-hidden">
-                                    <div class="skill-bar-fill h-full rounded-full bg-gradient-to-r from-neonGreen to-neonBlue" style="width: 95%"></div>
-                                </div>
-                            </div>
-                            <div>
-                                <div class="flex justify-between text-xs font-mono mb-1.5">
-                                    <span class="dark:text-gray-300 text-gray-600">Spring Boot / WebSocket</span>
-                                    <span class="text-neonGreen">92%</span>
-                                </div>
-                                <div class="h-1.5 dark:bg-darkBg bg-gray-100 rounded-full overflow-hidden">
-                                    <div class="skill-bar-fill h-full rounded-full bg-gradient-to-r from-neonGreen to-neonBlue" style="width: 92%"></div>
-                                </div>
-                            </div>
-                            <div>
-                                <div class="flex justify-between text-xs font-mono mb-1.5">
-                                    <span class="dark:text-gray-300 text-gray-600">HL7 / ASTM Protocols</span>
-                                    <span class="text-neonBlue">88%</span>
-                                </div>
-                                <div class="h-1.5 dark:bg-darkBg bg-gray-100 rounded-full overflow-hidden">
-                                    <div class="skill-bar-fill h-full rounded-full bg-gradient-to-r from-neonBlue to-neonGreen" style="width: 88%"></div>
-                                </div>
-                            </div>
-                            <div>
-                                <div class="flex justify-between text-xs font-mono mb-1.5">
-                                    <span class="dark:text-gray-300 text-gray-600">Oracle DB / Stored Procs</span>
-                                    <span class="text-neonBlue">85%</span>
-                                </div>
-                                <div class="h-1.5 dark:bg-darkBg bg-gray-100 rounded-full overflow-hidden">
-                                    <div class="skill-bar-fill h-full rounded-full bg-gradient-to-r from-neonBlue to-neonGreen" style="width: 85%"></div>
-                                </div>
-                            </div>
-                            <div>
-                                <div class="flex justify-between text-xs font-mono mb-1.5">
-                                    <span class="dark:text-gray-300 text-gray-600">Serial / TCP Communication</span>
-                                    <span class="text-neonGreen">82%</span>
-                                </div>
-                                <div class="h-1.5 dark:bg-darkBg bg-gray-100 rounded-full overflow-hidden">
-                                    <div class="skill-bar-fill h-full rounded-full bg-gradient-to-r from-neonGreen to-neonBlue" style="width: 82%"></div>
-                                </div>
-                            </div>
-                            <div>
-                                <div class="flex justify-between text-xs font-mono mb-1.5">
-                                    <span class="dark:text-gray-300 text-gray-600">TypeScript / React</span>
-                                    <span class="text-neonBlue">65%</span>
-                                </div>
-                                <div class="h-1.5 dark:bg-darkBg bg-gray-100 rounded-full overflow-hidden">
-                                    <div class="skill-bar-fill h-full rounded-full bg-gradient-to-r from-neonBlue to-neonGreen" style="width: 65%"></div>
-                                </div>
-                            </div>
+                <div class="space-y-4 sm:space-y-6">
+                    <div class="dark:bg-darkSurface/60 bg-white rounded-xl border dark:border-darkBorder border-lightBorder p-4 sm:p-6">
+                        <h3 class="font-bold text-sm sm:text-base dark:text-[#e6e6e6] text-gray-900 mb-3 sm:mb-5 flex items-center gap-2"><i data-lucide="layers" class="w-4 h-4 sm:w-5 sm:h-5 text-neonGreen"></i>Tech Stack</h3>
+                        <div class="space-y-3 sm:space-y-4">
+                            <div><div class="flex justify-between text-[10px] sm:text-xs font-mono mb-1"><span class="dark:text-gray-300 text-gray-600">Java / JVM</span><span class="text-neonGreen">95%</span></div><div class="h-1 sm:h-1.5 dark:bg-darkBg bg-gray-100 rounded-full overflow-hidden"><div class="skill-bar-fill h-full rounded-full bg-gradient-to-r from-neonGreen to-neonBlue" style="width:95%"></div></div></div>
+                            <div><div class="flex justify-between text-[10px] sm:text-xs font-mono mb-1"><span class="dark:text-gray-300 text-gray-600">Spring Boot / WebSocket</span><span class="text-neonGreen">92%</span></div><div class="h-1 sm:h-1.5 dark:bg-darkBg bg-gray-100 rounded-full overflow-hidden"><div class="skill-bar-fill h-full rounded-full bg-gradient-to-r from-neonGreen to-neonBlue" style="width:92%"></div></div></div>
+                            <div><div class="flex justify-between text-[10px] sm:text-xs font-mono mb-1"><span class="dark:text-gray-300 text-gray-600">HL7 / ASTM Protocols</span><span class="text-neonBlue">88%</span></div><div class="h-1 sm:h-1.5 dark:bg-darkBg bg-gray-100 rounded-full overflow-hidden"><div class="skill-bar-fill h-full rounded-full bg-gradient-to-r from-neonBlue to-neonGreen" style="width:88%"></div></div></div>
+                            <div><div class="flex justify-between text-[10px] sm:text-xs font-mono mb-1"><span class="dark:text-gray-300 text-gray-600">Oracle DB / Procs</span><span class="text-neonBlue">85%</span></div><div class="h-1 sm:h-1.5 dark:bg-darkBg bg-gray-100 rounded-full overflow-hidden"><div class="skill-bar-fill h-full rounded-full bg-gradient-to-r from-neonBlue to-neonGreen" style="width:85%"></div></div></div>
+                            <div><div class="flex justify-between text-[10px] sm:text-xs font-mono mb-1"><span class="dark:text-gray-300 text-gray-600">Serial / TCP Comm</span><span class="text-neonGreen">82%</span></div><div class="h-1 sm:h-1.5 dark:bg-darkBg bg-gray-100 rounded-full overflow-hidden"><div class="skill-bar-fill h-full rounded-full bg-gradient-to-r from-neonGreen to-neonBlue" style="width:82%"></div></div></div>
+                            <div><div class="flex justify-between text-[10px] sm:text-xs font-mono mb-1"><span class="dark:text-gray-300 text-gray-600">TypeScript / React</span><span class="text-neonBlue">65%</span></div><div class="h-1 sm:h-1.5 dark:bg-darkBg bg-gray-100 rounded-full overflow-hidden"><div class="skill-bar-fill h-full rounded-full bg-gradient-to-r from-neonBlue to-neonGreen" style="width:65%"></div></div></div>
                         </div>
                     </div>
-                    <div class="dark:bg-darkSurface/60 bg-white rounded-xl border dark:border-darkBorder border-lightBorder p-6">
-                        <h3 class="font-bold text-sm dark:text-[#e6e6e6] text-gray-900 mb-4 flex items-center gap-2">
-                            <i data-lucide="wrench" class="w-4 h-4 text-neonBlue"></i> Daily Tools
-                        </h3>
-                        <div class="flex flex-wrap gap-2">
-                            <span class="px-2.5 py-1 rounded-lg text-[11px] font-mono dark:bg-darkBg bg-gray-100 dark:text-gray-300 text-gray-600 border dark:border-darkBorder border-lightBorder">IntelliJ IDEA</span>
-                            <span class="px-2.5 py-1 rounded-lg text-[11px] font-mono dark:bg-darkBg bg-gray-100 dark:text-gray-300 text-gray-600 border dark:border-darkBorder border-lightBorder">Git</span>
-                            <span class="px-2.5 py-1 rounded-lg text-[11px] font-mono dark:bg-darkBg bg-gray-100 dark:text-gray-300 text-gray-600 border dark:border-darkBorder border-lightBorder">Oracle SQL Dev</span>
-                            <span class="px-2.5 py-1 rounded-lg text-[11px] font-mono dark:bg-darkBg bg-gray-100 dark:text-gray-300 text-gray-600 border dark:border-darkBorder border-lightBorder">Postman</span>
-                            <span class="px-2.5 py-1 rounded-lg text-[11px] font-mono dark:bg-darkBg bg-gray-100 dark:text-gray-300 text-gray-600 border dark:border-darkBorder border-lightBorder">DB Browser for SQLite</span>
-                            <span class="px-2.5 py-1 rounded-lg text-[11px] font-mono dark:bg-darkBg bg-gray-100 dark:text-gray-300 text-gray-600 border dark:border-darkBorder border-lightBorder">Advanced Serial Port</span>
-                            <span class="px-2.5 py-1 rounded-lg text-[11px] font-mono dark:bg-darkBg bg-gray-100 dark:text-gray-300 text-gray-600 border dark:border-darkBorder border-lightBorder">Wireshark</span>
-                            <span class="px-2.5 py-1 rounded-lg text-[11px] font-mono dark:bg-darkBg bg-gray-100 dark:text-gray-300 text-gray-600 border dark:border-darkBorder border-lightBorder">Gradle</span>
-                            <span class="px-2.5 py-1 rounded-lg text-[11px] font-mono dark:bg-darkBg bg-gray-100 dark:text-gray-300 text-gray-600 border dark:border-darkBorder border-lightBorder">JasperSoft</span>
+                    <div class="dark:bg-darkSurface/60 bg-white rounded-xl border dark:border-darkBorder border-lightBorder p-4 sm:p-6">
+                        <h3 class="font-bold text-xs sm:text-sm dark:text-[#e6e6e6] text-gray-900 mb-3 sm:mb-4 flex items-center gap-2"><i data-lucide="wrench" class="w-3.5 h-3.5 sm:w-4 sm:h-4 text-neonBlue"></i>Daily Tools</h3>
+                        <div class="flex flex-wrap gap-1.5 sm:gap-2">
+                            <span class="px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-lg text-[9px] sm:text-[11px] font-mono dark:bg-darkBg bg-gray-100 dark:text-gray-300 text-gray-600 border dark:border-darkBorder border-lightBorder">IntelliJ</span>
+                            <span class="px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-lg text-[9px] sm:text-[11px] font-mono dark:bg-darkBg bg-gray-100 dark:text-gray-300 text-gray-600 border dark:border-darkBorder border-lightBorder">Git</span>
+                            <span class="px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-lg text-[9px] sm:text-[11px] font-mono dark:bg-darkBg bg-gray-100 dark:text-gray-300 text-gray-600 border dark:border-darkBorder border-lightBorder">Oracle SQL Dev</span>
+                            <span class="px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-lg text-[9px] sm:text-[11px] font-mono dark:bg-darkBg bg-gray-100 dark:text-gray-300 text-gray-600 border dark:border-darkBorder border-lightBorder">Postman</span>
+                            <span class="px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-lg text-[9px] sm:text-[11px] font-mono dark:bg-darkBg bg-gray-100 dark:text-gray-300 text-gray-600 border dark:border-darkBorder border-lightBorder">DB Browser</span>
+                            <span class="px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-lg text-[9px] sm:text-[11px] font-mono dark:bg-darkBg bg-gray-100 dark:text-gray-300 text-gray-600 border dark:border-darkBorder border-lightBorder">Wireshark</span>
+                            <span class="px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-lg text-[9px] sm:text-[11px] font-mono dark:bg-darkBg bg-gray-100 dark:text-gray-300 text-gray-600 border dark:border-darkBorder border-lightBorder">Gradle</span>
+                            <span class="px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-lg text-[9px] sm:text-[11px] font-mono dark:bg-darkBg bg-gray-100 dark:text-gray-300 text-gray-600 border dark:border-darkBorder border-lightBorder">JasperSoft</span>
                         </div>
                     </div>
-                    <div class="dark:bg-darkSurface/60 bg-white rounded-xl border dark:border-darkBorder border-lightBorder p-6">
-                        <h3 class="font-bold text-sm dark:text-[#e6e6e6] text-gray-900 mb-4 flex items-center gap-2">
-                            <i data-lucide="mail" class="w-4 h-4 text-neonGreen"></i> Get in Touch
-                        </h3>
-                        <div class="space-y-3">
-                            <a href="mailto:robiul@example.com" class="flex items-center gap-2 text-xs font-mono dark:text-gray-400 text-gray-500 hover:text-neonGreen transition-colors group">
-                                <i data-lucide="mail" class="w-3.5 h-3.5"></i>
-                                robiul@example.com
-                                <i data-lucide="arrow-up-right" class="w-3 h-3 opacity-0 group-hover:opacity-100 transition-opacity"></i>
-                            </a>
-                            <a href="#" class="flex items-center gap-2 text-xs font-mono dark:text-gray-400 text-gray-500 hover:text-neonBlue transition-colors group">
-                                <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
-                                github.com/robiulhossain
-                                <i data-lucide="arrow-up-right" class="w-3 h-3 opacity-0 group-hover:opacity-100 transition-opacity"></i>
-                            </a>
-                            <a href="#" class="flex items-center gap-2 text-xs font-mono dark:text-gray-400 text-gray-500 hover:text-neonGreen transition-colors group">
-                                <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
-                                linkedin.com/in/robiulhossain
-                                <i data-lucide="arrow-up-right" class="w-3 h-3 opacity-0 group-hover:opacity-100 transition-opacity"></i>
-                            </a>
+                    <div class="dark:bg-darkSurface/60 bg-white rounded-xl border dark:border-darkBorder border-lightBorder p-4 sm:p-6">
+                        <h3 class="font-bold text-xs sm:text-sm dark:text-[#e6e6e6] text-gray-900 mb-3 sm:mb-4 flex items-center gap-2"><i data-lucide="mail" class="w-3.5 h-3.5 sm:w-4 sm:h-4 text-neonGreen"></i>Contact</h3>
+                        <div class="space-y-2 sm:space-y-3">
+                            <a href="mailto:robiulhossain0110@gmail.com" class="flex items-center gap-2 text-[10px] sm:text-xs font-mono dark:text-gray-400 text-gray-500 hover:text-neonGreen transition-colors"><i data-lucide="mail" class="w-3 h-3 sm:w-3.5 sm:h-3.5"></i>robiul@example.com</a>
+                            <a href="#" class="flex items-center gap-2 text-[10px] sm:text-xs font-mono dark:text-gray-400 text-gray-500 hover:text-neonBlue transition-colors"><svg class="w-3 h-3 sm:w-3.5 sm:h-3.5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>github.com/robiulhossain</a>
+                            <a href="#" class="flex items-center gap-2 text-[10px] sm:text-xs font-mono dark:text-gray-400 text-gray-500 hover:text-neonGreen transition-colors"><svg class="w-3 h-3 sm:w-3.5 sm:h-3.5" fill="currentColor" viewBox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>linkedin.com/in/robiulhossain</a>
                         </div>
                     </div>
                 </div>
@@ -1203,144 +865,41 @@
         </div>
     </section>
 
-    <!-- ==================== FOOTER ==================== -->
-    <footer class="border-t dark:border-darkBorder border-lightBorder py-10 px-4 sm:px-6">
-        <div class="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
-            <div class="font-mono text-xs dark:text-gray-500 text-gray-400 flex items-center gap-2">
-                <span class="text-neonGreen">$</span> echo "© 2024 Robiul Hossain. Built with ☕ and Java 17"
-            </div>
-            <div class="font-mono text-xs dark:text-gray-600 text-gray-300 flex items-center gap-1">
-                <span class="w-2 h-2 rounded-full bg-neonGreen animate-pulse"></span>
-                4 analyzers connected · All systems operational
-            </div>
+    <!-- FOOTER -->
+    <footer class="border-t dark:border-darkBorder border-lightBorder py-8 sm:py-10 px-4 sm:px-6">
+        <div class="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-3 sm:gap-4">
+            <div class="font-mono text-[10px] sm:text-xs dark:text-gray-500 text-gray-400"><span class="text-neonGreen">$</span> © 2024 Robiul Hossain · Built with ☕ & Java 17</div>
+            <div class="font-mono text-[10px] sm:text-xs dark:text-gray-600 text-gray-300 flex items-center gap-1"><span class="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-neonGreen animate-pulse"></span>4 analyzers connected</div>
         </div>
     </footer>
 
     <script>
         lucide.createIcons();
 
-        // ===== THEME TOGGLE =====
-        const html = document.documentElement;
-        const themeToggle = document.getElementById('theme-toggle');
-        
-        function setTheme(dark) {
-            if (dark) {
-                html.classList.add('dark');
-                html.classList.remove('light');
-                document.body.classList.remove('light-mode');
-            } else {
-                html.classList.remove('dark');
-                html.classList.add('light');
-                document.body.classList.add('light-mode');
-            }
-            localStorage.setItem('theme', dark ? 'dark' : 'light');
-        }
+        const html=document.documentElement,themeToggle=document.getElementById('theme-toggle');
+        function setTheme(d){if(d){html.classList.add('dark');html.classList.remove('light');document.body.classList.remove('light-mode')}else{html.classList.remove('dark');html.classList.add('light');document.body.classList.add('light-mode')}localStorage.setItem('theme',d?'dark':'light')}
+        if(localStorage.getItem('theme')==='light')setTheme(false);
+        themeToggle.addEventListener('click',()=>{setTheme(!html.classList.contains('dark'));lucide.createIcons()});
 
-        const savedTheme = localStorage.getItem('theme');
-        if (savedTheme === 'light') setTheme(false);
+        const mobileMenu=document.getElementById('mobile-menu'),mobileOverlay=document.getElementById('mobile-overlay');
+        function openMenu(){mobileMenu.classList.add('open');mobileOverlay.classList.remove('hidden')}
+        function closeMenu(){mobileMenu.classList.remove('open');mobileOverlay.classList.add('hidden')}
+        document.getElementById('mobile-menu-btn').addEventListener('click',openMenu);
+        document.getElementById('mobile-menu-close').addEventListener('click',closeMenu);
+        mobileOverlay.addEventListener('click',closeMenu);
+        document.querySelectorAll('.mobile-nav-link').forEach(l=>l.addEventListener('click',closeMenu));
 
-        themeToggle.addEventListener('click', () => {
-            setTheme(!html.classList.contains('dark'));
-            lucide.createIcons();
-        });
+        const sections=document.querySelectorAll('section[id]'),navLinks=document.querySelectorAll('.nav-link');
+        window.addEventListener('scroll',()=>{let c='';sections.forEach(s=>{if(scrollY>=s.offsetTop-100)c=s.id});navLinks.forEach(l=>{l.classList.remove('active','dark:text-[#e6e6e6]','text-gray-700');l.classList.add('dark:text-gray-400','text-gray-500');if(l.getAttribute('href')==='#'+c){l.classList.add('active','dark:text-[#e6e6e6]','text-gray-700');l.classList.remove('dark:text-gray-400','text-gray-500')}});document.getElementById('navbar').classList.toggle('shadow-lg',scrollY>10)});
 
-        // ===== MOBILE MENU =====
-        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
-        const mobileMenu = document.getElementById('mobile-menu');
-        const mobileMenuClose = document.getElementById('mobile-menu-close');
-        const mobileOverlay = document.getElementById('mobile-overlay');
+        const tagBtns=document.querySelectorAll('.tag-btn'),articleCards=document.querySelectorAll('.article-card');
+        tagBtns.forEach(btn=>{btn.addEventListener('click',()=>{tagBtns.forEach(b=>b.classList.remove('active-tag'));btn.classList.add('active-tag');const t=btn.dataset.tag;articleCards.forEach(c=>{if(t==='all'||c.dataset.tag===t){c.style.display='';c.style.opacity='0';c.style.transform='translateY(10px)';requestAnimationFrame(()=>{c.style.transition='opacity .3s ease,transform .3s ease';c.style.opacity='1';c.style.transform='translateY(0)'})}else c.style.display='none'})})});
 
-        function openMobileMenu() { mobileMenu.classList.add('open'); mobileOverlay.classList.remove('hidden'); }
-        function closeMobileMenu() { mobileMenu.classList.remove('open'); mobileOverlay.classList.add('hidden'); }
+        function copyCode(btn){const p=btn.closest('div').parentElement;navigator.clipboard.writeText(p.querySelector('code').innerText).then(()=>{showToast('Copied!');btn.innerHTML='<i data-lucide="check" class="w-3 h-3"></i>';lucide.createIcons();setTimeout(()=>{btn.innerHTML='<i data-lucide="copy" class="w-3 h-3"></i><span class="hidden sm:inline">Copy</span>';lucide.createIcons()},2000)})}
 
-        mobileMenuBtn.addEventListener('click', openMobileMenu);
-        mobileMenuClose.addEventListener('click', closeMobileMenu);
-        mobileOverlay.addEventListener('click', closeMobileMenu);
-        document.querySelectorAll('.mobile-nav-link').forEach(l => l.addEventListener('click', closeMobileMenu));
+        function showToast(m){const c=document.getElementById('toast-container'),d=html.classList.contains('dark'),t=document.createElement('div');t.className='toast-in flex items-center gap-2 px-3 sm:px-4 py-2 sm:py-2.5 rounded-lg text-[10px] sm:text-xs font-mono border '+(d?'bg-darkSurface border-darkBorder text-[#e6e6e6]':'bg-white border-lightBorder text-gray-900')+' shadow-xl';t.innerHTML='<i data-lucide="check-circle" class="w-3.5 h-3.5 sm:w-4 sm:h-4 text-neonGreen flex-shrink-0"></i>'+m;c.appendChild(t);lucide.createIcons();setTimeout(()=>{t.classList.replace('toast-in','toast-out');setTimeout(()=>t.remove(),300)},2500)}
 
-        // ===== NAV ACTIVE STATE =====
-        const sections = document.querySelectorAll('section[id]');
-        const navLinks = document.querySelectorAll('.nav-link');
-
-        window.addEventListener('scroll', () => {
-            let current = '';
-            sections.forEach(s => { if (scrollY >= s.offsetTop - 100) current = s.id; });
-            navLinks.forEach(link => {
-                link.classList.remove('active', 'dark:text-[#e6e6e6]', 'text-gray-700');
-                link.classList.add('dark:text-gray-400', 'text-gray-500');
-                if (link.getAttribute('href') === `#${current}`) {
-                    link.classList.add('active', 'dark:text-[#e6e6e6]', 'text-gray-700');
-                    link.classList.remove('dark:text-gray-400', 'text-gray-500');
-                }
-            });
-            document.getElementById('navbar').classList.toggle('shadow-lg', window.scrollY > 10);
-        });
-
-        // ===== TAG FILTERS =====
-        const tagBtns = document.querySelectorAll('.tag-btn');
-        const articleCards = document.querySelectorAll('.article-card');
-
-        tagBtns.forEach(btn => {
-            btn.addEventListener('click', () => {
-                tagBtns.forEach(b => b.classList.remove('active-tag'));
-                btn.classList.add('active-tag');
-                const tag = btn.dataset.tag;
-                articleCards.forEach(card => {
-                    if (tag === 'all' || card.dataset.tag === tag) {
-                        card.style.display = '';
-                        card.style.opacity = '0';
-                        card.style.transform = 'translateY(10px)';
-                        requestAnimationFrame(() => {
-                            card.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
-                            card.style.opacity = '1';
-                            card.style.transform = 'translateY(0)';
-                        });
-                    } else {
-                        card.style.display = 'none';
-                    }
-                });
-            });
-        });
-
-        // ===== COPY CODE =====
-        function copyCode(btn) {
-            const container = btn.closest('div').parentElement;
-            const code = container.querySelector('code').innerText;
-            navigator.clipboard.writeText(code).then(() => {
-                showToast('Code copied to clipboard!');
-                btn.innerHTML = '<i data-lucide="check" class="w-3 h-3"></i> Copied!';
-                lucide.createIcons();
-                setTimeout(() => { btn.innerHTML = '<i data-lucide="copy" class="w-3 h-3"></i> Copy'; lucide.createIcons(); }, 2000);
-            });
-        }
-
-        // ===== TOAST =====
-        function showToast(message) {
-            const container = document.getElementById('toast-container');
-            const isDark = html.classList.contains('dark');
-            const toast = document.createElement('div');
-            toast.className = `toast-in flex items-center gap-2 px-4 py-2.5 rounded-lg text-xs font-mono border ${isDark ? 'bg-darkSurface border-darkBorder text-[#e6e6e6]' : 'bg-white border-lightBorder text-gray-900'} shadow-xl`;
-            toast.innerHTML = `<i data-lucide="check-circle" class="w-4 h-4 text-neonGreen flex-shrink-0"></i>${message}`;
-            container.appendChild(toast);
-            lucide.createIcons();
-            setTimeout(() => { toast.classList.replace('toast-in', 'toast-out'); setTimeout(() => toast.remove(), 300); }, 2500);
-        }
-
-        // ===== PARTICLES =====
-        (function() {
-            const c = document.getElementById('particles');
-            const n = window.innerWidth < 768 ? 15 : 30;
-            for (let i = 0; i < n; i++) {
-                const p = document.createElement('div');
-                p.className = 'particle';
-                const s = Math.random() * 3 + 1;
-                p.style.cssText = `width:${s}px;height:${s}px;background:${Math.random()>.5?'#00FF00':'#00D7FF'};left:${Math.random()*100}%;top:${Math.random()*100}%;animation:float${i%3} ${10+Math.random()*20}s infinite linear;opacity:${Math.random()*.3+.1}`;
-                c.appendChild(p);
-            }
-            const st = document.createElement('style');
-            st.textContent = `@keyframes float0{0%{transform:translate(0,0)}25%{transform:translate(30px,-50px)}50%{transform:translate(-20px,-100px)}75%{transform:translate(40px,-50px)}100%{transform:translate(0,0)}}@keyframes float1{0%{transform:translate(0,0)}33%{transform:translate(-40px,-70px)}66%{transform:translate(20px,-30px)}100%{transform:translate(0,0)}}@keyframes float2{0%{transform:translate(0,0)}50%{transform:translate(50px,-80px)}100%{transform:translate(0,0)}}`;
-            document.head.appendChild(st);
-        })();
+        (function(){const c=document.getElementById('particles'),n=window.innerWidth<640?10:30;for(let i=0;i<n;i++){const p=document.createElement('div');p.className='particle';const s=Math.random()*3+1;p.style.cssText='width:'+s+'px;height:'+s+'px;background:'+(Math.random()>.5?'#00FF00':'#00D7FF')+';left:'+Math.random()*100+'%;top:'+Math.random()*100+'%;animation:float'+i%3+' '+(10+Math.random()*20)+'s infinite linear;opacity:'+(Math.random()*.3+.1);c.appendChild(p)}const st=document.createElement('style');st.textContent='@keyframes float0{0%{transform:translate(0,0)}25%{transform:translate(30px,-50px)}50%{transform:translate(-20px,-100px)}75%{transform:translate(40px,-50px)}100%{transform:translate(0,0)}}@keyframes float1{0%{transform:translate(0,0)}33%{transform:translate(-40px,-70px)}66%{transform:translate(20px,-30px)}100%{transform:translate(0,0)}}@keyframes float2{0%{transform:translate(0,0)}50%{transform:translate(50px,-80px)}100%{transform:translate(0,0)}}';document.head.appendChild(st)})()
     </script>
 </body>
 </html>
